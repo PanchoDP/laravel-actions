@@ -11,7 +11,7 @@ Make your Laravel actions classes fast and in a simple way.
 You can install the package via composer:
 
 ```bash
-composer require panchodp/laravel-actions
+composer require panchodp/laravel-actions --dev
 ```
 
 ## Usage
