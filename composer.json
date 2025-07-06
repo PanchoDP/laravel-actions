@@ -1,0 +1,52 @@
+{
+    "name": "panchodp/laravel-actions",
+    "description": "Make your Laravel actions classes fast and in a simple way.",
+    "keywords": ["php", "action", "make", "laravel", "actions"],
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Panchodp\\LaravelAction\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Panchodp\\LaravelAction\\Test\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Panchodp\\LaravelAction\\LaravelActionServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "Francisco de Pablo",
+            "email": "fcodepablo@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "orchestra/testbench": "^10.4",
+        "spatie/ray": "^1.42",
+        "laravel/pint": "^1.23",
+        "larastan/larastan": "^3.5.0",
+        "pestphp/pest": "^3.8.2"
+    },
+    "scripts": {
+        "test": [
+            "./vendor/bin/pest"
+        ],
+        "pint": [
+            "./vendor/bin/pint"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}

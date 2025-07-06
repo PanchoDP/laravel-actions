@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use Illuminate\Support\Facades\DB;
+{{ import_model }}
+use Throwable;
+
+class {{ class }}
+{
+         /**
+             * Handle the action.
+             *
+             {{ param }}
+             * @param array $attributes
+             * @return void
+             * @throws Throwable
+             */
+            public static function handle({{ user }}array $attributes): void
+            {
+                DB::transaction(function () use ($attributes) {
+                  // Logic to be executed within the transaction
+                });
+    }
+}
