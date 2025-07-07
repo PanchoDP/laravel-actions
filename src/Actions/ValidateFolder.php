@@ -14,13 +14,16 @@ final class ValidateFolder
      *
      * @throws Throwable
      */
-    public static function handle(?string $subfolder): void
+    public static function handle(?array $folders): void
     {
-        if (! empty($subfolder)) {
-            if (! preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $subfolder)) {
-                throw new InvalidArgumentException("Invalid folder name: {$subfolder}. 
+        foreach($folders as $folder){
+            if (! empty($folder)) {
+                if (! preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $folder)) {
+                    throw new InvalidArgumentException("Invalid folder name: {$folder}. 
         Folder names must start with a letter or underscore and can only contain letters, numbers, and underscores.");
+                }
             }
+
         }
 
     }

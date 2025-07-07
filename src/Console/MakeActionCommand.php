@@ -37,15 +37,15 @@ final class MakeActionCommand extends Command
 
         try {
             ValidateName::handle($name);
-            ValidateFolder::handle($subfolder);
-            $subfolder = PrepareSubfolder::handle($subfolder);
-            $path = PreparePath::handle($subfolder, $name);
-            $namespace = ObtainNamespace::handle($subfolder, $name);
-            $relative_path = dirname("Actions/{$subfolder}/{$name}.php");
+            $folders = PrepareSubfolder::handle($subfolder);
+            ValidateFolder::handle($folders);
+            $folder_path = $folder_path = implode(DIRECTORY_SEPARATOR, $folders);
+            $path = PreparePath::handle($folder_path, $name);
+            $namespace = ObtainNamespace::handle($folder_path, $name);
+            $relative_path = dirname("Actions/{$folder_path}/{$name}.php");
             CreateDirectory::handle($path);
 
         } catch (Throwable $e) {
-            ray('Error in MakeActionCommand: '.$e->getMessage());
             $this->error($e->getMessage());
 
             return 1;
@@ -62,6 +62,6 @@ final class MakeActionCommand extends Command
         file_put_contents($path, $stub);
         $this->info("Action {$filename} created successfully at app/{$relative_path} folder".$transaction);
 
-        return 0; // Exit with success code
+        return 0;
     }
 }

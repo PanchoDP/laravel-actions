@@ -6,13 +6,14 @@ namespace Panchodp\LaravelAction\Actions;
 
 final class PrepareSubfolder
 {
-    public static function handle(string $subfolder): string
+    public static function handle(string $subfolder): ?array
     {
         if (empty($subfolder)) {
-            return '';
+            return [];
         }
 
-        return str_replace(['/', '\\'], '', $subfolder);
+        $subfolder = str_replace(['/', '\\'], ' ', $subfolder);
+        return preg_split('/\s+/', $subfolder, -1, PREG_SPLIT_NO_EMPTY);
 
     }
 }

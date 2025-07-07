@@ -87,6 +87,13 @@ class MyAction
     }
 }
 ```
+Or you can use more than one subfolder like this:.
+
+```bash
+php artisan make:action MyAction Folder1/Folder2
+```
+This will create a new action class in the `app/Actions/Folder1/Folder2/` directory with the name `MyAction.php`.
+
 
 
 
