@@ -1,5 +1,5 @@
   <picture>
-    <img alt="Logo for pokio" src="art/header-light.png">
+    <img alt="Logo for Laravel Action" src="art/header-light.png">
   </picture>
 
 # Laravel Actions
