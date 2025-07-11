@@ -2,7 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2025-07-11
+
+### 🚀 Features
+
+- Add configuration file to change the principal default folder
+
+### 📚 Documentation
+
+- Add --dev to banner image
+- Update the Readme.md adding publish config
+
+### 🧪 Testing
+
+- Add test for new features
+
 ## [1.1.2] - 2025-07-10
+
+### 💼 Other
+
+- 1.1.2
 
 ### 📚 Documentation
 
