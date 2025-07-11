@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Feature;
+namespace Panchodp\LaravelAction\Test\Feature;
 
 use File;
 use Panchodp\LaravelAction\Test\TestCase;
@@ -186,7 +186,9 @@ final class LaravelActionDirectoryTest extends TestCase
     public function test_the_console_command_dont_create_a_repeat_user_simple_action_option_tu_in_a_directory(): void
     {
         File::deleteDirectory(app_path('Actions'));
+        @unlink(app_path('Actions/SimpleAction.php'));
         $this->assertFileDoesNotExist(app_path('Actions/SimpleAction.php'));
+
         $this->artisan('make:action', ['name' => 'SimpleAction', 'subfolder' => 'Posts', '--tu' => true])
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Actions/Posts/SimpleAction.php'));

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Feature;
+namespace Panchodp\LaravelAction\Test\Feature;
 
 use Illuminate\Support\Facades\File;
 use Orchestra\Testbench\TestCase;

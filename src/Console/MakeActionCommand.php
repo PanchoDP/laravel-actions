@@ -34,7 +34,7 @@ final class MakeActionCommand extends Command
 
         $name = ($this->argument('name')) ? mb_trim($this->argument('name')) : '';
         $subfolder = $this->argument('subfolder') ? mb_trim($this->argument('subfolder'), '/\\') : '';
-        $base_folder = config('laravel-actions.base_folder', 'Actions');
+        $base_folder = (string) config('laravel-actions.base_folder', 'Actions');
 
         try {
             ValidateName::handle($name);
