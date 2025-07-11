@@ -34,15 +34,16 @@ final class MakeActionCommand extends Command
 
         $name = ($this->argument('name')) ? mb_trim($this->argument('name')) : '';
         $subfolder = $this->argument('subfolder') ? mb_trim($this->argument('subfolder'), '/\\') : '';
+        $base_folder = config('laravel-actions.base_folder', 'Actions');
 
         try {
             ValidateName::handle($name);
             $folders = PrepareSubfolder::handle($subfolder);
             ValidateFolder::handle($folders);
-            $folder_path = $folder_path = implode(DIRECTORY_SEPARATOR, $folders);
-            $path = PreparePath::handle($folder_path, $name);
-            $namespace = ObtainNamespace::handle($folder_path, $name);
-            $relative_path = dirname("Actions/{$folder_path}/{$name}.php");
+            $folder_path = implode(DIRECTORY_SEPARATOR, $folders);
+            $path = PreparePath::handle($folder_path, $name, $base_folder);
+            $namespace = ObtainNamespace::handle($folder_path, $name, $base_folder);
+            $relative_path = dirname("{$base_folder}/{$folder_path}/{$name}.php");
             CreateDirectory::handle($path);
 
         } catch (Throwable $e) {

@@ -19,10 +19,22 @@ final class LaravelActionServiceProvider extends ServiceProvider
                 MakeActionCommand::class,
             ]);
         }
+
+        $this->publishes([
+            __DIR__.'/../config/laravel-actions.php' => config_path('laravel-actions.php'),
+        ], 'laravel-actions-config');
+
     }
 
     /**
      * Register the service provider.
      */
-    public function register(): void {}
+    public function register(): void
+    {
+
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/laravel-actions.php',
+            'laravel-actions'
+        );
+    }
 }

@@ -13,6 +13,7 @@ final class PrepareSubfolder
         }
 
         $subfolder = str_replace(['/', '\\'], ' ', $subfolder);
+
         return preg_split('/\s+/', $subfolder, -1, PREG_SPLIT_NO_EMPTY);
 
     }

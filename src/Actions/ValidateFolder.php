@@ -16,7 +16,7 @@ final class ValidateFolder
      */
     public static function handle(?array $folders): void
     {
-        foreach($folders as $folder){
+        foreach ($folders as $folder) {
             if (! empty($folder)) {
                 if (! preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $folder)) {
                     throw new InvalidArgumentException("Invalid folder name: {$folder}. 

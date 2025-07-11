@@ -6,12 +6,12 @@ namespace Panchodp\LaravelAction\Actions;
 
 final class ObtainNamespace
 {
-    public static function handle(?string $subfolder, string $name): string
+    public static function handle(?string $subfolder, string $name, string $base_folder): string
     {
         if (empty($subfolder)) {
-            return 'App\\Actions';
+            return 'App\\'.$base_folder;
         }
-        $relative_path = dirname("Actions/{$subfolder}/{$name}.php");
+        $relative_path = dirname("{$base_folder}/{$subfolder}/{$name}.php");
         $namespace_type = str_replace('/', '\\', $relative_path);
 
         return mb_rtrim(app()->getNamespace().$namespace_type);
