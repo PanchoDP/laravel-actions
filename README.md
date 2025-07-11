@@ -14,6 +14,13 @@ You can install the package via composer:
 composer require panchodp/laravel-actions --dev
 ```
 
+## Configuration
+You can publish the config file with and change the default Base Folder:
+
+```bash
+php artisan vendor:publish --provider="Panchodp\LaravelAction\LaravelActionServiceProvider" --tag="laravel-actions-config"
+```
+
 ## Usage
 
 1. To make an action class, you can use the `make:action` command:
