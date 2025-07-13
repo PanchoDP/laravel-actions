@@ -3,6 +3,7 @@
     "description": "Make your Laravel actions classes fast and in a simple way.",
     "keywords": ["php", "action", "make", "laravel", "actions"],
     "type": "library",
+    "default-require-dev": true,
     "license": "MIT",
     "minimum-stability": "dev",
     "prefer-stable": true,
