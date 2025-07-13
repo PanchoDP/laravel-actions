@@ -2,11 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.2] - 2025-07-13
+
+### 🐛 Bug Fixes
+
+- Minimum stability
+
 ## [1.2.1] - 2025-07-13
 
 ### 📚 Documentation
 
 - Add default-require-dev in composer
+- Update the Changelog to Version:1.2.1
 
 ## [1.2.0] - 2025-07-11
 
