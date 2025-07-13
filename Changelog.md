@@ -2,11 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.1] - 2025-07-13
+
+### 📚 Documentation
+
+- Add default-require-dev in composer
+
 ## [1.2.0] - 2025-07-11
 
 ### 🚀 Features
 
 - Add configuration file to change the principal default folder
+
+### 💼 Other
+
+- 1.2.0
 
 ### 📚 Documentation
 
