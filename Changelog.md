@@ -2,11 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.3] - 2025-07-14
+
+### 📚 Documentation
+
+- Update the readme file
+
+### ⚙️ Miscellaneous Tasks
+
+- Change to final classes
+
 ## [1.2.2] - 2025-07-13
 
 ### 🐛 Bug Fixes
 
 - Minimum stability
+
+### 💼 Other
+
+- 1.2.2
 
 ## [1.2.1] - 2025-07-13
 
