@@ -15,7 +15,7 @@ composer require panchodp/laravel-actions --dev
 ```
 
 ## Configuration
-You can publish the config file with and change the default Base Folder:
+You can publish the config file and change the default Base Folder for your actions classes, the default is in app and call `Actions`:
 
 ```bash
 php artisan vendor:publish --provider="Panchodp\LaravelAction\LaravelActionServiceProvider" --tag="laravel-actions-config"
@@ -41,7 +41,7 @@ namespace App\Actions;
 
 use Throwable;
 
-class MyAction
+final class MyAction
 {
             /**
              * Handle the action.
@@ -77,7 +77,7 @@ namespace App\Actions\Folder;
 
 use Throwable;
 
-class MyAction
+final class MyAction
 {
             /**
              * Handle the action.
@@ -123,7 +123,7 @@ use Illuminate\Support\Facades\DB;
 
 use Throwable;
 
-class MyAction
+final class MyAction
 {
          /**
              * Handle the action.
@@ -160,7 +160,7 @@ namespace App\Actions;
 use App\Models\User;
 use Throwable;
 
-class MyAction
+final class MyAction
 {
             /**
              * Handle the action.
@@ -195,7 +195,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Throwable;
 
-class MyAction
+final class MyAction
 {
          /**
              * Handle the action.
