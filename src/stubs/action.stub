@@ -7,7 +7,7 @@ namespace {{ namespace }};
 {{ import_model }}
 use Throwable;
 
-class {{ class }}
+final class {{ class }}
 {
             /**
              * Handle the action.
