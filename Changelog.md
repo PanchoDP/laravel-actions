@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.4] - 2025-07-15
+
+### 🐛 Bug Fixes
+
+- Add composer-require-dev: true
+
 ## [1.2.3] - 2025-07-14
 
 ### 📚 Documentation
@@ -11,6 +17,7 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Change to final classes
+- *(release)* Prepare for v1.2.3
 
 ## [1.2.2] - 2025-07-13
 
