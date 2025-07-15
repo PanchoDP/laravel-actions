@@ -1,7 +1,7 @@
 {
     "name": "panchodp/laravel-actions",
     "description": "Make your Laravel actions classes fast and in a simple way.",
-    "keywords": ["php", "action", "make", "laravel", "actions"],
+    "keywords": ["dev","php","command","laravel", "actions"],
     "type": "library",
     "license": "MIT",
     "minimum-stability": "stable",
