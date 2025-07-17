@@ -30,6 +30,9 @@
             "email": "fcodepablo@gmail.com"
         }
     ],
+    "require": {
+        "php": "^8.3.0 | ^8.4.0"
+    },
     "require-dev": {
         "orchestra/testbench": "^10.4",
         "spatie/ray": "^1.42",
