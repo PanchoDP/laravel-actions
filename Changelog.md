@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.5] - 2025-07-17
+
+### 📚 Documentation
+
+- Add dev keyword
+- Specify php versions
+
 ## [1.2.4] - 2025-07-15
 
 ### 🐛 Bug Fixes
@@ -10,7 +17,7 @@ All notable changes to this project will be documented in this file.
 
 ## [1.2.3] - 2025-07-14
 
-### 📚 Documentationº
+### 📚 Documentation
 
 - Update the readme file
 
