@@ -17,4 +17,15 @@ return [
 
     'base_folder' => 'Actions',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Principal Method Name
+    |--------------------------------------------------------------------------
+    |
+    | This option defines the method name that will be used in your action classes.
+    | By default, it is set to 'handle'. You can change it to any other name
+    */
+
+    'method_name' => 'handle',
+
 ];

@@ -10,7 +10,7 @@ use Throwable;
 final class {{ class }}
 {
             /**
-             * Handle the action.
+             * {{ name_action }} the action.
              *
              {{ param }}
              * @param array $attributes
@@ -18,7 +18,7 @@ final class {{ class }}
              * @throws Throwable
              */
 
-    public static function handle({{ user }}array $attributes): void
+    public static function {{ method }}({{ user }}array $attributes): void
     {
         // This is where the action logic will be implemented.
     }

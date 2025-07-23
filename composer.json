@@ -46,6 +46,12 @@
         ],
         "pint": [
             "./vendor/bin/pint"
+        ],
+        "analiyse": [
+            "./vendor/bin/phpstan analyse"
+        ],
+        "test:all": [
+            "@test","@pint","@analiyse"
         ]
     },
     "config": {

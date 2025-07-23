@@ -31,10 +31,12 @@ final class MakeActionCommand extends Command
      */
     public function handle(): int
     {
-
-        $name = ($this->argument('name')) ? mb_trim($this->argument('name')) : '';
-        $subfolder = $this->argument('subfolder') ? mb_trim($this->argument('subfolder'), '/\\') : '';
-        $base_folder = (string) config('laravel-actions.base_folder', 'Actions');
+        $nameArg = $this->argument('name');
+        $name = is_string($nameArg) ? mb_trim($nameArg) : '';
+        $subfolderArg = $this->argument('subfolder');
+        $subfolder = is_string($subfolderArg) ? mb_trim($subfolderArg, '/\\') : '';
+        $base_folder = is_string(config('laravel-actions.base_folder')) ? config('laravel-actions.base_folder')
+                                                                                : 'Actions';
 
         try {
             ValidateName::handle($name);

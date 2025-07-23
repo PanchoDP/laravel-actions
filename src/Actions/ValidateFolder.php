@@ -12,9 +12,11 @@ final class ValidateFolder
     /**
      * Handle the action.
      *
+     * @param  array<string>  $folders
+     *
      * @throws Throwable
      */
-    public static function handle(?array $folders): void
+    public static function handle(array $folders): void
     {
         foreach ($folders as $folder) {
             if (! empty($folder)) {

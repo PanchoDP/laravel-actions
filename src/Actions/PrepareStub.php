@@ -27,6 +27,11 @@ final class PrepareStub
 
             $stub = str_replace('{{ class }}', $filename, (string) $stub);
             $stub = str_replace('{{ namespace }}', $namespace, (string) $stub);
+
+            $methodName = is_string(config('laravel-actions.method_name', 'handle')) ? config('laravel-actions.method_name', 'handle') : '';
+            $stub = str_replace('{{ method }}', $methodName, (string) $stub);
+            $stub = str_replace('{{ name_action }}', ucfirst($methodName), (string) $stub);
+
         } catch (Throwable $e) {
             throw new RuntimeException('Error preparing the stub: '.$e->getMessage());
         }
