@@ -15,11 +15,23 @@ composer require panchodp/laravel-actions --dev
 ```
 
 ## Configuration
-You can publish the config file and change the default Base Folder for your actions classes, the default is in app and call `Actions`:
 
+Use the following command to publish the configuration file:
 ```bash
 php artisan vendor:publish --provider="Panchodp\LaravelAction\LaravelActionServiceProvider" --tag="laravel-actions-config"
 ```
+This will create a `config/laravel-actions.php` file in your application.
+
+```php
+
+return [
+    'base_folder' => 'Actions',
+    'method_name' => 'handle',
+];
+```
+There are two configuration options available: 
+- `base_folder`: This is the base folder where your action classes will be created. By default, it is set to `Actions`, which means your action classes will be created in the `app/Actions` directory.
+- `method_name`: This is the name of the method that will be created in your action classes. By default, it is set to `handle`, which means your action classes will have a `handle` method where you can implement your action logic.
 
 ## Usage
 
