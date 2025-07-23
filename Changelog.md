@@ -2,12 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2025-07-23
+
+### 🚀 Features
+
+- New configuration for method name
+
+### 📚 Documentation
+
+- Document the configuration file in readme
+
 ## [1.2.5] - 2025-07-17
 
 ### 📚 Documentation
 
 - Add dev keyword
 - Specify php versions
+
+### ⚙️ Miscellaneous Tasks
+
+- *(release)* Version 1.2.5
 
 ## [1.2.4] - 2025-07-15
 
