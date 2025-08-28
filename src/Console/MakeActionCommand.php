@@ -10,6 +10,7 @@ use Panchodp\LaravelAction\Actions\ObtainNamespace;
 use Panchodp\LaravelAction\Actions\PreparePath;
 use Panchodp\LaravelAction\Actions\PrepareStub;
 use Panchodp\LaravelAction\Actions\PrepareSubfolder;
+use Panchodp\LaravelAction\Actions\ValidateConfiguration;
 use Panchodp\LaravelAction\Actions\ValidateFolder;
 use Panchodp\LaravelAction\Actions\ValidateName;
 use Throwable;
@@ -35,18 +36,24 @@ final class MakeActionCommand extends Command
         $name = is_string($nameArg) ? mb_trim($nameArg) : '';
         $subfolderArg = $this->argument('subfolder');
         $subfolder = is_string($subfolderArg) ? mb_trim($subfolderArg, '/\\') : '';
-        $base_folder = is_string(config('laravel-actions.base_folder')) ? config('laravel-actions.base_folder')
-                                                                                : 'Actions';
+        
+        $configuredBaseFolder = config('laravel-actions.base_folder');
+        $configuredMethodName = config('laravel-actions.method_name');
 
         try {
             ValidateName::handle($name);
+            
+            // Security: Validate configuration values
+            $validatedConfig = ValidateConfiguration::handle($configuredBaseFolder, $configuredMethodName);
+            $base_folder = $validatedConfig['base_folder'];
             $folders = PrepareSubfolder::handle($subfolder);
             ValidateFolder::handle($folders);
             $folder_path = implode(DIRECTORY_SEPARATOR, $folders);
             $path = PreparePath::handle($folder_path, $name, $base_folder);
             $namespace = ObtainNamespace::handle($folder_path, $name, $base_folder);
             $relative_path = dirname("{$base_folder}/{$folder_path}/{$name}.php");
-            CreateDirectory::handle($path);
+            $permissions = is_int(config('laravel-actions.directory_permissions')) ? config('laravel-actions.directory_permissions') : 0750;
+            CreateDirectory::handle($path, $permissions);
 
         } catch (Throwable $e) {
             $this->error($e->getMessage());

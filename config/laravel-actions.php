@@ -28,4 +28,16 @@ return [
 
     'method_name' => 'handle',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Directory Permissions
+    |--------------------------------------------------------------------------
+    |
+    | This option defines the permissions for newly created directories.
+    | By default, it is set to 0750 (owner: read/write/execute, group: read/execute, others: none).
+    | You can change it to 0755 for more permissive access if needed.
+    */
+
+    'directory_permissions' => 0750,
+
 ];
