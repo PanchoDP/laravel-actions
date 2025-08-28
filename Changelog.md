@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.1] - 2025-08-28
+
+### 🚜 Refactor
+
+- Refactor MakeActionCommand class
+
 ## [1.4.0] - 2025-08-28
 
 ### 🚀 Features
