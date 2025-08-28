@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2025-08-28
+
+### 🚀 Features
+
+- Implement comprehensive security enhancements
+
 ## [1.3.0] - 2025-07-23
 
 ### 🚀 Features
@@ -11,6 +17,10 @@ All notable changes to this project will be documented in this file.
 ### 📚 Documentation
 
 - Document the configuration file in readme
+
+### ⚙️ Miscellaneous Tasks
+
+- *(release)* Version 1.3.0
 
 ## [1.2.5] - 2025-07-17
 
