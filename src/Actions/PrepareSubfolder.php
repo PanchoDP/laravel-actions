@@ -13,6 +13,7 @@ final class PrepareSubfolder
      *
      * @param  string  $subfolder  The subfolder string to process.
      * @return array<string> An array of subfolder names.
+     *
      * @throws InvalidArgumentException
      */
     public static function handle(string $subfolder): array
@@ -34,15 +35,12 @@ final class PrepareSubfolder
 
     /**
      * Check if the path contains path traversal sequences.
-     *
-     * @param string $path
-     * @return bool
      */
     private static function containsPathTraversal(string $path): bool
     {
         // Normalize the path to detect various path traversal attempts
         $normalizedPath = str_replace('\\', '/', $path);
-        
+
         // Check for common path traversal patterns
         $dangerousPatterns = [
             '../',     // Standard path traversal
@@ -54,7 +52,7 @@ final class PrepareSubfolder
         ];
 
         foreach ($dangerousPatterns as $pattern) {
-            if (stripos($normalizedPath, $pattern) !== false) {
+            if (mb_stripos($normalizedPath, $pattern) !== false) {
                 return true;
             }
         }

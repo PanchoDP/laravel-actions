@@ -13,14 +13,14 @@ final class PrepareStub
     {
         try {
             $stubFile = $tFlag ? __DIR__.'/../stubs/action_transaction.stub' : __DIR__.'/../stubs/action.stub';
-            
+
             // Security: Validate stub file exists before reading
-            if (!file_exists($stubFile) || !is_readable($stubFile)) {
+            if (! file_exists($stubFile) || ! is_readable($stubFile)) {
                 throw new RuntimeException("Stub file not found or not readable: {$stubFile}");
             }
-            
+
             $stub = file_get_contents($stubFile);
-            
+
             if ($stub === false) {
                 throw new RuntimeException("Failed to read stub file: {$stubFile}");
             }
@@ -38,7 +38,7 @@ final class PrepareStub
             // Security: Sanitize filename and namespace for template injection
             $safeFilename = self::sanitizeForTemplate($filename);
             $safeNamespace = self::sanitizeForTemplate($namespace, true); // Allow backslashes for namespaces
-            
+
             $stub = str_replace('{{ class }}', $safeFilename, $stub);
             $stub = str_replace('{{ namespace }}', $safeNamespace, $stub);
 
@@ -58,9 +58,7 @@ final class PrepareStub
     /**
      * Sanitize input for template usage to prevent template injection.
      *
-     * @param string $input
-     * @param bool $allowBackslashes Allow backslashes (for namespaces)
-     * @return string
+     * @param  bool  $allowBackslashes  Allow backslashes (for namespaces)
      */
     private static function sanitizeForTemplate(string $input, bool $allowBackslashes = false): string
     {
@@ -71,12 +69,12 @@ final class PrepareStub
             // Remove potential PHP tags and dangerous characters including backslashes
             $sanitized = preg_replace('/[<>\'"`\$\\\]/', '', $input);
         }
-        
+
         // Ensure the result is still valid for its intended use
         if ($sanitized === null) {
             throw new RuntimeException('Input sanitization failed');
         }
-        
+
         return $sanitized;
     }
 }
