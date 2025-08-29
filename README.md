@@ -1,6 +1,14 @@
-  <picture>
-    <img alt="Logo for Laravel Action" src="art/header-light.png">
-  </picture>
+
+<p align="center"><a target="_blank"> <img alt="Logo for Laravel Action" src="art/header-light.webp"></a></p>
+
+<p align="center">
+<a ><img src="https://img.shields.io/badge/PHP-8.3%2B-blue" alt="Php"></a>
+<a ><img src="https://img.shields.io/packagist/dt/panchodp/laravel-actions?" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/panchodp/laravel-actions"><img src="https://img.shields.io/packagist/v/panchodp/laravel-actions.svg?" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/panchodp/laravel-actions"><img src="https://img.shields.io/badge/License-MIT-green" alt="License"></a>
+</p>
+
+
 
 # Laravel Actions
 
@@ -27,12 +35,13 @@ This will create a `config/laravel-actions.php` file in your application.
 return [
     'base_folder' => 'Actions',
     'method_name' => 'handle',
+    'directory_permissions' => 0750,
 ];
 ```
 There are two configuration options available: 
 - `base_folder`: This is the base folder where your action classes will be created. By default, it is set to `Actions`, which means your action classes will be created in the `app/Actions` directory.
 - `method_name`: This is the name of the method that will be created in your action classes. By default, it is set to `handle`, which means your action classes will have a `handle` method where you can implement your action logic.
-
+- `directory_permissions`: This option defines the permissions for newly created actions folders This option defines the permissions for newly directories created by the package.
 ## Usage
 
 1. To make an action class, you can use the `make:action` command:
