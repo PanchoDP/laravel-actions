@@ -6,7 +6,6 @@ namespace {{ namespace }};
 
 use Illuminate\Support\Facades\DB;
 {{ import_model }}
-use Throwable;
 
 final class {{ class }}
 {

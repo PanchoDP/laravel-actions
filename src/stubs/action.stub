@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace {{ namespace }};
 
 {{ import_model }}
-use Throwable;
 
 final class {{ class }}
 {
