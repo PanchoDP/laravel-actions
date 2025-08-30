@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.3] - 2025-08-30
+
+### 🐛 Bug Fixes
+
+- Delete PhpDocs for params
+- Delete use Throw
+
 ## [1.4.2] - 2025-08-29
 
 ### 📚 Documentation
