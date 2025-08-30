@@ -102,6 +102,7 @@ final class MyAction
 Or you can use more than one subfolder like this:.
 
 ```bash
+
 php artisan make:action MyAction Folder1/Folder2
 ```
 This will create a new action class in the `app/Actions/Folder1/Folder2/` directory with the name `MyAction.php`.
@@ -195,6 +196,78 @@ final class MyAction
 
  
 ```
+
+- `--r` This flag generates a Laravel Request class and injects it into the action method.
+
+For example, if you want to create an action class with Request injection, you can use:
+
+```bash
+php artisan make:action MyAction --r
+```
+This will generate both an Action class and a Request class (`MyActionRequest`), and will result in:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Actions;
+
+use App\Http\Requests\MyActionRequest;
+
+final class MyAction
+{
+    public static function handle(MyActionRequest $request): void
+    {
+        // This is where the action logic will be implemented.
+    }
+}
+```
+
+### Advanced Flag Combinations
+
+You can combine multiple flags to create actions with different features. All possible combinations are supported:
+
+**Two-flag combinations:**
+- `--tr` or `--rt`: Database transactions with Request injection
+- `--ur` or `--ru`: User injection with Request injection  
+- `--tu` or `--ut`: Database transactions with User injection (as shown above)
+
+**Three-flag combinations (all features):**
+- `--tur`, `--tru`, `--utr`, `--urt`, `--rtu`, `--rut`: All features combined
+
+For example:
+```bash
+php artisan make:action CompleteAction --tur
+```
+
+This will generate:
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Actions;
+
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use App\Http\Requests\CompleteActionRequest;
+
+final class CompleteAction
+{
+    public static function handle(User $user, CompleteActionRequest $request): void
+    {
+        DB::transaction(function () use ($request) {
+            // Logic to be executed within the transaction
+        });
+    }
+}
+```
+
+**Individual flags are also supported:**
+- `--t`: Only database transactions
+- `--u`: Only user injection  
+- `--r`: Only request injection
 
 
 ## Contributing

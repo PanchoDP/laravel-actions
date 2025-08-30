@@ -9,10 +9,11 @@ use Throwable;
 
 final class PrepareStub
 {
-    public static function handle(bool $tuFlag, bool $tFlag, bool $uFlag, string $filename, string $namespace): string
+    public static function handle(bool $tFlag, bool $uFlag, bool $rFlag, string $filename, string $namespace): string
     {
         try {
-            $stubFile = $tFlag ? __DIR__.'/../stubs/action_transaction.stub' : __DIR__.'/../stubs/action.stub';
+            // Select appropriate stub based on flags
+            $stubFile = self::selectStubFile($tFlag, $rFlag);
 
             // Security: Validate stub file exists before reading
             if (! file_exists($stubFile) || ! is_readable($stubFile)) {
@@ -23,6 +24,13 @@ final class PrepareStub
 
             if ($stub === false) {
                 throw new RuntimeException("Failed to read stub file: {$stubFile}");
+            }
+
+            // Handle Request class injection
+            if ($rFlag) {
+                $requestClass = $filename.'Request';
+                $safeRequestClass = self::sanitizeForTemplate($requestClass);
+                $stub = str_replace('{{ request_class }}', $safeRequestClass, $stub);
             }
 
             if ($uFlag) {
@@ -51,6 +59,28 @@ final class PrepareStub
 
         return $stub;
 
+    }
+
+    /**
+     * Select the appropriate stub file based on flags
+     */
+    private static function selectStubFile(bool $tFlag, bool $rFlag): string
+    {
+        $baseDir = __DIR__.'/../stubs/';
+
+        if ($tFlag && $rFlag) {
+            return $baseDir.'action_transaction_request.stub';
+        }
+
+        if ($rFlag) {
+            return $baseDir.'action_request.stub';
+        }
+
+        if ($tFlag) {
+            return $baseDir.'action_transaction.stub';
+        }
+
+        return $baseDir.'action.stub';
     }
 
     /**

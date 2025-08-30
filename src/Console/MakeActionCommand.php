@@ -7,6 +7,7 @@ namespace Panchodp\LaravelAction\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Panchodp\LaravelAction\Actions\CreateDirectory;
+use Panchodp\LaravelAction\Actions\GenerateRequest;
 use Panchodp\LaravelAction\Actions\ObtainNamespace;
 use Panchodp\LaravelAction\Actions\PreparePath;
 use Panchodp\LaravelAction\Actions\PrepareStub;
@@ -20,9 +21,20 @@ final class MakeActionCommand extends Command
 {
     protected $signature = 'make:action {name} {subfolder?} 
     {--t : Make a DB transaction action } 
-    {--tu : Make a DB transaction action } 
-    {--ut : Make a DB transaction action } 
-    {--u : Make a User injection}';
+    {--u : Make a User injection}
+    {--r : Generate a Request class and inject it into the action}
+    {--tu : Make a DB transaction action with User injection}
+    {--ut : Make a DB transaction action with User injection}
+    {--tr : Make a DB transaction action with Request injection}
+    {--rt : Make a DB transaction action with Request injection}
+    {--ur : Make a User injection with Request injection}
+    {--ru : Make a User injection with Request injection}
+    {--tur : Make a DB transaction action with User and Request injection}
+    {--tru : Make a DB transaction action with User and Request injection}
+    {--utr : Make a DB transaction action with User and Request injection}
+    {--urt : Make a DB transaction action with User and Request injection}
+    {--rtu : Make a DB transaction action with User and Request injection}
+    {--rut : Make a DB transaction action with User and Request injection}';
 
     protected $description = 'Create a new action class';
 
@@ -37,6 +49,12 @@ final class MakeActionCommand extends Command
             $input = $this->processInputs();
             $config = $this->validateAndPrepareConfig($input);
             $this->createDirectoryStructure($config);
+
+            // Generate Request class if --r flag is present
+            if ($config['rFlag'] ?? false) {
+                $this->generateRequestFile($config);
+            }
+
             $this->generateActionFile($config);
             $this->displaySuccessMessages($config);
 
@@ -50,6 +68,7 @@ final class MakeActionCommand extends Command
 
     /**
      * Process and sanitize command inputs.
+     *
      * @return array<string, mixed>
      */
     private function processInputs(): array
@@ -60,28 +79,38 @@ final class MakeActionCommand extends Command
         $subfolder = $this->argument('subfolder');
         $subfolder = is_string($subfolder) ? mb_trim($subfolder, '/\\') : '';
 
-        $tuFlag = (bool) ($this->option('tu') || $this->option('ut'));
-        $tFlag = (bool) ($this->option('t') || $tuFlag);
-        $uFlag = (bool) ($this->option('u') || $tuFlag);
+        // Check for combination flags first
+        $turFlag = (bool) ($this->option('tur') || $this->option('tru') ||
+                          $this->option('utr') || $this->option('urt') ||
+                          $this->option('rtu') || $this->option('rut'));
+
+        $tuFlag = (bool) ($this->option('tu') || $this->option('ut') || $turFlag);
+        $trFlag = (bool) ($this->option('tr') || $this->option('rt') || $turFlag);
+        $urFlag = (bool) ($this->option('ur') || $this->option('ru') || $turFlag);
+
+        // Individual flags or derived from combinations
+        $tFlag = (bool) ($this->option('t') || $tuFlag || $trFlag);
+        $uFlag = (bool) ($this->option('u') || $tuFlag || $urFlag);
+        $rFlag = (bool) ($this->option('r') || $trFlag || $urFlag);
 
         return [
             'name' => $name,
             'subfolder' => $subfolder,
-            'tuFlag' => $tuFlag,
             'tFlag' => $tFlag,
             'uFlag' => $uFlag,
+            'rFlag' => $rFlag,
         ];
     }
 
     /**
-     * @param array<string, mixed> $input
+     * @param  array<string, mixed>  $input
      * @return array<string, mixed>
      */
     private function validateAndPrepareConfig(array $input): array
     {
         $name = is_string($input['name']) ? $input['name'] : '';
         $subfolder = is_string($input['subfolder']) ? $input['subfolder'] : '';
-        
+
         ValidateName::handle($name);
 
         // Security: Validate configuration values
@@ -111,7 +140,7 @@ final class MakeActionCommand extends Command
     }
 
     /**
-     * @param array<string, mixed> $config
+     * @param  array<string, mixed>  $config
      */
     private function createDirectoryStructure(array $config): void
     {
@@ -121,27 +150,38 @@ final class MakeActionCommand extends Command
 
         $path = is_string($config['path']) ? $config['path'] : '';
         $relativePath = is_string($config['relative_path']) ? $config['relative_path'] : '';
-        
+
         CreateDirectory::handle($path, $permissions);
         $this->info("Directory {$relativePath} created successfully...");
     }
 
     /**
-     * @param array<string, mixed> $config
+     * @param  array<string, mixed>  $config
+     */
+    private function generateRequestFile(array $config): void
+    {
+        $filename = is_string($config['filename']) ? $config['filename'] : '';
+
+        $requestName = GenerateRequest::handle($filename);
+        $this->info("Request {$requestName} created successfully...");
+    }
+
+    /**
+     * @param  array<string, mixed>  $config
      */
     private function generateActionFile(array $config): void
     {
-        $tuFlag = is_bool($config['tuFlag']) ? $config['tuFlag'] : false;
         $tFlag = is_bool($config['tFlag']) ? $config['tFlag'] : false;
         $uFlag = is_bool($config['uFlag']) ? $config['uFlag'] : false;
+        $rFlag = is_bool($config['rFlag']) ? $config['rFlag'] : false;
         $filename = is_string($config['filename']) ? $config['filename'] : '';
         $namespace = is_string($config['namespace']) ? $config['namespace'] : '';
         $path = is_string($config['path']) ? $config['path'] : '';
-        
+
         $stub = PrepareStub::handle(
-            $tuFlag,
             $tFlag,
             $uFlag,
+            $rFlag,
             $filename,
             $namespace
         );
@@ -150,15 +190,28 @@ final class MakeActionCommand extends Command
     }
 
     /**
-     * @param array<string, mixed> $config
+     * @param  array<string, mixed>  $config
      */
     private function displaySuccessMessages(array $config): void
     {
         $tFlag = is_bool($config['tFlag']) ? $config['tFlag'] : false;
+        $uFlag = is_bool($config['uFlag']) ? $config['uFlag'] : false;
+        $rFlag = is_bool($config['rFlag']) ? $config['rFlag'] : false;
         $filename = is_string($config['filename']) ? $config['filename'] : '';
         $relativePath = is_string($config['relative_path']) ? $config['relative_path'] : '';
-        
-        $transaction = $tFlag ? ' with DB transaction' : '.';
-        $this->info("Action {$filename} created successfully at app/{$relativePath} folder".$transaction);
+
+        $features = [];
+        if ($tFlag) {
+            $features[] = 'DB transaction';
+        }
+        if ($uFlag) {
+            $features[] = 'User injection';
+        }
+        if ($rFlag) {
+            $features[] = 'Request injection';
+        }
+
+        $featuresText = empty($features) ? '.' : ' with '.implode(', ', $features).'.';
+        $this->info("Action {$filename} created successfully at app/{$relativePath} folder{$featuresText}");
     }
 }

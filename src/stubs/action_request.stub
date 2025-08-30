@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use App\Http\Requests\{{ request_class }};
+{{ import_model }}
+
+final class {{ class }}
+{
+    public static function {{ method }}({{ user }}{{ request_class }} $request): void
+    {
+        // This is where the action logic will be implemented.
+    }
+}

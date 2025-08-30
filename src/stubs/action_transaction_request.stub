@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\{{ request_class }};
+{{ import_model }}
+
+final class {{ class }}
+{
+            public static function {{ method }}({{ user }}{{ request_class }} $request): void
+            {
+                DB::transaction(function () use ($request) {
+                  // Logic to be executed within the transaction
+                });
+    }
+}
