@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.1] - 2025-08-30
+
+### ⚙️ Miscellaneous Tasks
+
+- Add badge status in the package readme
+
+### 🏗️ Build
+
+- Add actions for test package in github
+
 ## [1.5.0] - 2025-08-30
 
 ### 🚀 Features
