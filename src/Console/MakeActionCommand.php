@@ -48,13 +48,17 @@ final class MakeActionCommand extends Command
         }
     }
 
+    /**
+     * Process and sanitize command inputs.
+     * @return array<string, mixed>
+     */
     private function processInputs(): array
     {
-        $name = (string) $this->argument('name');
-        $name = mb_trim($name);
+        $name = $this->argument('name');
+        $name = is_string($name) ? mb_trim($name) : '';
 
-        $subfolder = (string) $this->argument('subfolder');
-        $subfolder = mb_trim($subfolder, '/\\');
+        $subfolder = $this->argument('subfolder');
+        $subfolder = is_string($subfolder) ? mb_trim($subfolder, '/\\') : '';
 
         $tuFlag = (bool) ($this->option('tu') || $this->option('ut'));
         $tFlag = (bool) ($this->option('t') || $tuFlag);
@@ -69,23 +73,32 @@ final class MakeActionCommand extends Command
         ];
     }
 
+    /**
+     * @param array<string, mixed> $input
+     * @return array<string, mixed>
+     */
     private function validateAndPrepareConfig(array $input): array
     {
-        ValidateName::handle($input['name']);
+        $name = is_string($input['name']) ? $input['name'] : '';
+        $subfolder = is_string($input['subfolder']) ? $input['subfolder'] : '';
+        
+        ValidateName::handle($name);
 
         // Security: Validate configuration values
+        $baseFolder = config('laravel-actions.base_folder');
+        $methodName = config('laravel-actions.method_name');
         $validatedConfig = ValidateConfiguration::handle(
-            config('laravel-actions.base_folder'),
-            config('laravel-actions.method_name')
+            is_string($baseFolder) ? $baseFolder : null,
+            is_string($methodName) ? $methodName : null
         );
 
-        $folders = PrepareSubfolder::handle($input['subfolder']);
+        $folders = PrepareSubfolder::handle($subfolder);
         ValidateFolder::handle($folders);
 
         $folder_path = implode(DIRECTORY_SEPARATOR, $folders);
-        $path = PreparePath::handle($folder_path, $input['name'], $validatedConfig['base_folder']);
-        $namespace = ObtainNamespace::handle($folder_path, $input['name'], $validatedConfig['base_folder']);
-        $relative_path = dirname("{$validatedConfig['base_folder']}/$folder_path/{$input['name']}.php");
+        $path = PreparePath::handle($folder_path, $name, $validatedConfig['base_folder']);
+        $namespace = ObtainNamespace::handle($folder_path, $name, $validatedConfig['base_folder']);
+        $relative_path = dirname("{$validatedConfig['base_folder']}/$folder_path/{$name}.php");
 
         return array_merge($input, [
             'base_folder' => $validatedConfig['base_folder'],
@@ -97,32 +110,55 @@ final class MakeActionCommand extends Command
         ]);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     private function createDirectoryStructure(array $config): void
     {
         $permissions = is_int(config('laravel-actions.directory_permissions'))
             ? config('laravel-actions.directory_permissions')
             : 0750;
 
-        CreateDirectory::handle($config['path'], $permissions);
-        $this->info("Directory {$config['relative_path']} created successfully...");
+        $path = is_string($config['path']) ? $config['path'] : '';
+        $relativePath = is_string($config['relative_path']) ? $config['relative_path'] : '';
+        
+        CreateDirectory::handle($path, $permissions);
+        $this->info("Directory {$relativePath} created successfully...");
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     private function generateActionFile(array $config): void
     {
+        $tuFlag = is_bool($config['tuFlag']) ? $config['tuFlag'] : false;
+        $tFlag = is_bool($config['tFlag']) ? $config['tFlag'] : false;
+        $uFlag = is_bool($config['uFlag']) ? $config['uFlag'] : false;
+        $filename = is_string($config['filename']) ? $config['filename'] : '';
+        $namespace = is_string($config['namespace']) ? $config['namespace'] : '';
+        $path = is_string($config['path']) ? $config['path'] : '';
+        
         $stub = PrepareStub::handle(
-            $config['tuFlag'],
-            $config['tFlag'],
-            $config['uFlag'],
-            $config['filename'],
-            $config['namespace']
+            $tuFlag,
+            $tFlag,
+            $uFlag,
+            $filename,
+            $namespace
         );
 
-        File::put($config['path'], $stub);
+        File::put($path, $stub);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     private function displaySuccessMessages(array $config): void
     {
-        $transaction = $config['tFlag'] ? ' with DB transaction' : '.';
-        $this->info("Action {$config['filename']} created successfully at app/{$config['relative_path']} folder".$transaction);
+        $tFlag = is_bool($config['tFlag']) ? $config['tFlag'] : false;
+        $filename = is_string($config['filename']) ? $config['filename'] : '';
+        $relativePath = is_string($config['relative_path']) ? $config['relative_path'] : '';
+        
+        $transaction = $tFlag ? ' with DB transaction' : '.';
+        $this->info("Action {$filename} created successfully at app/{$relativePath} folder".$transaction);
     }
 }

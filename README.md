@@ -64,15 +64,7 @@ use Throwable;
 
 final class MyAction
 {
-            /**
-             * Handle the action.
-             *
-             *
-             * @param array $attributes
-             * @return void
-             * @throws Throwable
-             */
-
+         
     public static function handle(array $attributes): void
     {
         // This is where the action logic will be implemented.
@@ -100,15 +92,7 @@ use Throwable;
 
 final class MyAction
 {
-            /**
-             * Handle the action.
-             *
-             *
-             * @param array $attributes
-             * @return void
-             * @throws Throwable
-             */
-
+       
     public static function handle(array $attributes): void
     {
         // This is where the action logic will be implemented.
@@ -146,14 +130,6 @@ use Throwable;
 
 final class MyAction
 {
-         /**
-             * Handle the action.
-             *
-             *
-             * @param array $attributes
-             * @return void
-             * @throws Throwable
-             */
             public static function handle(array $attributes): void
             {
                 DB::transaction(function () use ($attributes) {
@@ -183,15 +159,6 @@ use Throwable;
 
 final class MyAction
 {
-            /**
-             * Handle the action.
-             *
-              * @param User $user
-             * @param array $attributes
-             * @return void
-             * @throws Throwable
-             */
-
     public static function handle(User $user,array $attributes): void
     {
         // This is where the action logic will be implemented.
@@ -218,14 +185,6 @@ use Throwable;
 
 final class MyAction
 {
-         /**
-             * Handle the action.
-             *
-              * @param User $user
-             * @param array $attributes
-             * @return void
-             * @throws Throwable
-             */
             public static function handle(User $user,array $attributes): void
             {
                 DB::transaction(function () use ($attributes) {

@@ -10,14 +10,6 @@ use Throwable;
 
 final class {{ class }}
 {
-         /**
-             * {{ name_action }} the action.
-             *
-             {{ param }}
-             * @param array $attributes
-             * @return void
-             * @throws Throwable
-             */
             public static function {{ method }}({{ user }}array $attributes): void
             {
                 DB::transaction(function () use ($attributes) {

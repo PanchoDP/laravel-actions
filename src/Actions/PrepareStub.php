@@ -27,11 +27,9 @@ final class PrepareStub
 
             if ($uFlag) {
                 $stub = str_replace('{{ import_model }}', 'use App\Models\User;', $stub);
-                $stub = str_replace('{{ param }}', ' * @param User $user', $stub);
                 $stub = str_replace('{{ user }}', 'User $user,', $stub);
             } else {
                 $stub = str_replace('{{ import_model }}', '', $stub);
-                $stub = str_replace('{{ param }}', '*', $stub);
                 $stub = str_replace('{{ user }}', '', $stub);
             }
 
