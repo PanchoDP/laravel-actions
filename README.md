@@ -6,6 +6,7 @@
 <a ><img src="https://img.shields.io/packagist/dt/panchodp/laravel-actions?" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/panchodp/laravel-actions"><img src="https://img.shields.io/packagist/v/panchodp/laravel-actions.svg?" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/panchodp/laravel-actions"><img src="https://img.shields.io/badge/License-MIT-green" alt="License"></a>
+<a href="https://github.com/PanchoDP/laravel-actions/actions/workflows/tests.yml"><img src="https://github.com/PanchoDP/laravel-actions/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
 </p>
 
 
