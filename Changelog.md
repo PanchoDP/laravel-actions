@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2025-08-30
+
+### 🚀 Features
+
+- Add request injection
+
 ## [1.4.3] - 2025-08-30
 
 ### 🐛 Bug Fixes
