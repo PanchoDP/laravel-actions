@@ -6,6 +6,7 @@ namespace Panchodp\LaravelAction;
 
 use Illuminate\Support\ServiceProvider;
 use Panchodp\LaravelAction\Console\MakeActionCommand;
+use Panchodp\LaravelAction\Console\MakeActionListCommand;
 
 final class LaravelActionServiceProvider extends ServiceProvider
 {
@@ -17,6 +18,7 @@ final class LaravelActionServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 MakeActionCommand::class,
+                MakeActionListCommand::class,
             ]);
         }
 
