@@ -13,7 +13,7 @@ it('displays empty actions directory tree when no actions exist', function () {
         File::deleteDirectory($actionsPath);
     }
 
-    Artisan::call('list:actions');
+    Artisan::call('actions:list');
     $output = Artisan::output();
 
     expect($output)->toContain('Actions directory not found');
@@ -35,7 +35,7 @@ it('displays actions directory tree with sample actions', function () {
     // Create a non-PHP file that should be filtered out
     File::put($actionsPath.'/readme.txt', 'This is a readme file');
 
-    Artisan::call('list:actions');
+    Artisan::call('actions:list');
     $output = Artisan::output();
 
     expect($output)->toContain('Actions Directory Tree:');
@@ -64,7 +64,7 @@ it('properly filters non-action php files', function () {
     File::put($actionsPath.'/readme.txt', 'This is a readme file');
     File::put($actionsPath.'/config.json', '{"setting": "value"}');
 
-    Artisan::call('list:actions');
+    Artisan::call('actions:list');
     $output = Artisan::output();
 
     expect($output)->toContain('ValidAction');
