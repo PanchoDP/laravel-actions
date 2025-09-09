@@ -270,6 +270,27 @@ final class CompleteAction
 - `--u`: Only user injection  
 - `--r`: Only request injection
 
+## Other Userfull Commands:
+
+You can show the Actions directory tree in the terminal with the following command:
+
+```bash
+php artisan actions:list
+```
+This will display the structure of the `app/Actions` or the base directory specified in the config file, showing all action classes and their subdirectories.
+
+```bash
+Actions/
+├── Folder1/
+│   ├── SecondAction
+│   └── ThirdAction
+├── Folder2/
+│   └── FourthAction
+├── FirstAction
+└── LastAction
+```
+
+
 
 ## Contributing
 
