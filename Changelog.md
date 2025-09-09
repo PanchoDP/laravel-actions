@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.0] - 2025-09-09
+
+### 🚀 Features
+
+- Add command to list the actions
+
+### 📚 Documentation
+
+- Update Readme with php artisan actions:list command information
+
 ## [1.5.1] - 2025-08-30
 
 ### ⚙️ Miscellaneous Tasks
