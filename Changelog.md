@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7.0] - 2025-09-27
+
+### 🚀 Features
+
+- Add option for make method static or a instance
+
+### 📚 Documentation
+
+- Add information about new features and options
+
 ## [1.6.1] - 2025-09-09
 
 ### 🐛 Bug Fixes
