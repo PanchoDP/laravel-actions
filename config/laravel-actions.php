@@ -40,4 +40,16 @@ return [
 
     'directory_permissions' => 0750,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Method Static
+    |--------------------------------------------------------------------------
+    |
+    | This option defines whether the action methods should be static by default.
+    | By default, it is set to true (static methods). You can set it to false
+    | to make instance methods the default behavior.
+    */
+
+    'method_static' => true,
+
 ];

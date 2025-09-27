@@ -10,7 +10,7 @@ use App\Http\Requests\{{ request_class }};
 
 final class {{ class }}
 {
-            public static function {{ method }}({{ user }}{{ request_class }} $request): void
+            public {{ method_type }}function {{ method }}({{ user }}{{ request_class }} $request): void
             {
                 DB::transaction(function () use ($request) {
                   // Logic to be executed within the transaction

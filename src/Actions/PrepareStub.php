@@ -9,7 +9,7 @@ use Throwable;
 
 final class PrepareStub
 {
-    public static function handle(bool $tFlag, bool $uFlag, bool $rFlag, string $filename, string $namespace): string
+    public static function handle(bool $tFlag, bool $uFlag, bool $rFlag, bool $iFlag, string $filename, string $namespace): string
     {
         try {
             // Select appropriate stub based on flags
@@ -47,6 +47,12 @@ final class PrepareStub
 
             $stub = str_replace('{{ class }}', $safeFilename, $stub);
             $stub = str_replace('{{ namespace }}', $safeNamespace, $stub);
+
+            // Handle method static/instance logic
+            $methodStatic = is_bool(config('laravel-actions.method_static', true)) ? config('laravel-actions.method_static', true) : true;
+            $isStatic = $methodStatic && ! $iFlag; // Static by default unless --i flag is used
+            $methodType = $isStatic ? 'static ' : '';
+            $stub = str_replace('{{ method_type }}', $methodType, $stub);
 
             $methodName = is_string(config('laravel-actions.method_name', 'handle')) ? config('laravel-actions.method_name', 'handle') : 'handle';
             $safeMethodName = self::sanitizeForTemplate($methodName);

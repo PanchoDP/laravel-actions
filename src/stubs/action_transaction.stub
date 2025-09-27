@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 final class {{ class }}
 {
-            public static function {{ method }}({{ user }}array $attributes): void
+            public {{ method_type }}function {{ method }}({{ user }}array $attributes): void
             {
                 DB::transaction(function () use ($attributes) {
                   // Logic to be executed within the transaction
