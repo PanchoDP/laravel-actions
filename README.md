@@ -37,32 +37,18 @@ return [
     'base_folder' => 'Actions',
     'method_name' => 'handle',
     'directory_permissions' => 0750,
-    'method_static' => true,
 ];
 ```
-There are four configuration options available:
+There are three configuration options available:
 - `base_folder`: This is the base folder where your action classes will be created. By default, it is set to `Actions`, which means your action classes will be created in the `app/Actions` directory.
 - `method_name`: This is the name of the method that will be created in your action classes. By default, it is set to `handle`, which means your action classes will have a `handle` method where you can implement your action logic.
 - `directory_permissions`: This option defines the permissions for newly created actions folders. This option defines the permissions for newly directories created by the package.
-- `method_static`: Controls whether action methods are static by default. When set to `true` (default), methods are generated as static. When set to `false`, methods are generated as instance methods. This can be overridden using the `--i` flag.
 
 ## Method Types
 
-By default, Laravel Actions generates **static methods** for better performance and simpler usage. However, you can create **instance methods** when needed for dependency injection or other use cases.
+By default, Laravel Actions generates **instance methods** for better flexibility and dependency injection support. However, you can create **static methods** when needed for simpler usage.
 
-### Static Methods (Default)
-```php
-// Usage
-MyAction::handle($attributes);
-
-// Generated code
-public static function handle(array $attributes): void
-{
-    // Implementation
-}
-```
-
-### Instance Methods
+### Instance Methods (Default)
 ```php
 // Usage
 $action = new MyAction();
@@ -70,6 +56,18 @@ $action->handle($attributes);
 
 // Generated code
 public function handle(array $attributes): void
+{
+    // Implementation
+}
+```
+
+### Static Methods
+```php
+// Usage
+MyAction::handle($attributes);
+
+// Generated code
+public static function handle(array $attributes): void
 {
     // Implementation
 }
@@ -97,8 +95,8 @@ use Throwable;
 
 final class MyAction
 {
-         
-    public static function handle(array $attributes): void
+
+    public function handle(array $attributes): void
     {
         // This is where the action logic will be implemented.
     }
@@ -125,8 +123,8 @@ use Throwable;
 
 final class MyAction
 {
-       
-    public static function handle(array $attributes): void
+
+    public function handle(array $attributes): void
     {
         // This is where the action logic will be implemented.
     }
@@ -164,7 +162,7 @@ use Throwable;
 
 final class MyAction
 {
-            public static function handle(array $attributes): void
+            public function handle(array $attributes): void
             {
                 DB::transaction(function () use ($attributes) {
                   // Logic to be executed within the transaction
@@ -193,7 +191,7 @@ use Throwable;
 
 final class MyAction
 {
-    public static function handle(User $user,array $attributes): void
+    public function handle(User $user,array $attributes): void
     {
         // This is where the action logic will be implemented.
     }
@@ -219,7 +217,7 @@ use Throwable;
 
 final class MyAction
 {
-            public static function handle(User $user,array $attributes): void
+            public function handle(User $user,array $attributes): void
             {
                 DB::transaction(function () use ($attributes) {
                   // Logic to be executed within the transaction
@@ -250,19 +248,19 @@ use App\Http\Requests\MyActionRequest;
 
 final class MyAction
 {
-    public static function handle(MyActionRequest $request): void
+    public function handle(MyActionRequest $request): void
     {
         // This is where the action logic will be implemented.
     }
 }
 ```
 
-- `--i` This flag generates instance methods instead of static methods.
+- `--s` This flag generates static methods instead of instance methods.
 
-For example, if you want to create an action class with instance methods, you can use:
+For example, if you want to create an action class with static methods, you can use:
 
 ```bash
-php artisan make:action MyAction --i
+php artisan make:action MyAction --s
 ```
 will result in the following action class:
 ```php
@@ -274,7 +272,7 @@ namespace App\Actions;
 
 final class MyAction
 {
-    public function handle(array $attributes): void
+    public static function handle(array $attributes): void
     {
         // This is where the action logic will be implemented.
     }
@@ -289,54 +287,26 @@ You can combine multiple flags to create actions with different features. All po
 - `--tr` or `--rt`: Database transactions with Request injection
 - `--ur` or `--ru`: User injection with Request injection
 - `--tu` or `--ut`: Database transactions with User injection (as shown above)
-- `--ti` or `--it`: Database transactions with instance method
-- `--ui` or `--iu`: User injection with instance method
-- `--ri` or `--ir`: Request injection with instance method
+- `--ts` or `--st`: Database transactions with static method
+- `--us` or `--su`: User injection with static method
+- `--rs` or `--sr`: Request injection with static method
 
 **Three-flag combinations:**
-- `--tur`, `--tru`, `--utr`, `--urt`, `--rtu`, `--rut`: All features combined (static)
-- `--tui`, `--tiu`, `--uti`, `--uit`, `--itu`, `--iut`: Transactions + User + Instance
-- `--tri`, `--tir`, `--rti`, `--rit`, `--itr`, `--irt`: Transactions + Request + Instance
-- `--uri`, `--uir`, `--rui`, `--riu`, `--iru`, `--iur`: User + Request + Instance
+- `--tur`, `--tru`, `--utr`, `--urt`, `--rtu`, `--rut`: All features combined (instance)
+- `--tus`, `--tsu`, `--uts`, `--ust`, `--stu`, `--sut`: Transactions + User + Static
+- `--trs`, `--tsr`, `--rts`, `--rst`, `--str`, `--srt`: Transactions + Request + Static
+- `--urs`, `--usr`, `--rus`, `--rsu`, `--sru`, `--sur`: User + Request + Static
 
 **Four-flag combinations (all features):**
-- `--turi`, `--triu`, `--utri`, `--urti`, `--rtui`, `--ruti`: All features with instance method
-- `--itru`, `--itur`, `--iutr`, `--iurt`, `--irtu`, `--irut`: All permutations supported
+- `--turs`, `--trsu`, `--utrs`, `--urts`, `--rtus`, `--ruts`: All features with static method
+- `--stru`, `--stur`, `--sutr`, `--surt`, `--srtu`, `--srut`: All permutations supported
 
-For example with static method (default):
+For example with instance method (default):
 ```bash
 php artisan make:action CompleteAction --tur
 ```
 
 This will generate:
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Actions;
-
-use Illuminate\Support\Facades\DB;
-use App\Models\User;
-use App\Http\Requests\CompleteActionRequest;
-
-final class CompleteAction
-{
-    public static function handle(User $user, CompleteActionRequest $request): void
-    {
-        DB::transaction(function () use ($request) {
-            // Logic to be executed within the transaction
-        });
-    }
-}
-```
-
-For example with instance method:
-```bash
-php artisan make:action CompleteAction --turi
-```
-
-This will generate an instance method with all features:
 ```php
 <?php
 
@@ -359,29 +329,50 @@ final class CompleteAction
 }
 ```
 
+For example with static method:
+```bash
+php artisan make:action CompleteAction --turs
+```
+
+This will generate a static method with all features:
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Actions;
+
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use App\Http\Requests\CompleteActionRequest;
+
+final class CompleteAction
+{
+    public static function handle(User $user, CompleteActionRequest $request): void
+    {
+        DB::transaction(function () use ($request) {
+            // Logic to be executed within the transaction
+        });
+    }
+}
+```
+
 **Individual flags are also supported:**
 - `--t`: Only database transactions
 - `--u`: Only user injection
 - `--r`: Only request injection
-- `--i`: Only instance method (non-static)
+- `--s`: Only static method
 
-## Configuration vs Flags
+## Default Behavior
 
-You can control the default behavior through configuration and override it with flags:
-
-```php
-// config/laravel-actions.php
-'method_static' => false,  // Makes instance methods default
-```
+By default, actions are generated as **instance methods**. Use the `--s` flag to generate static methods:
 
 ```bash
-# With method_static = false
-php artisan make:action MyAction        # Creates instance method
-php artisan make:action MyAction --i    # Still creates instance method (redundant)
+# Creates instance method (default)
+php artisan make:action MyAction
 
-# With method_static = true (default)
-php artisan make:action MyAction        # Creates static method
-php artisan make:action MyAction --i    # Creates instance method (override)
+# Creates static method
+php artisan make:action MyAction --s
 ```
 
 ## Other Userfull Commands:

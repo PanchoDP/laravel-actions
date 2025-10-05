@@ -23,55 +23,55 @@ final class MakeActionCommand extends Command
     {--t : Make a DB transaction action }
     {--u : Make a User injection}
     {--r : Generate a Request class and inject it into the action}
-    {--i : Make a non-static instance method}
+    {--s : Make a static method}
     {--tu : Make a DB transaction action with User injection}
     {--ut : Make a DB transaction action with User injection}
     {--tr : Make a DB transaction action with Request injection}
     {--rt : Make a DB transaction action with Request injection}
     {--ur : Make a User injection with Request injection}
     {--ru : Make a User injection with Request injection}
-    {--ti : Make a DB transaction action with instance method}
-    {--it : Make a DB transaction action with instance method}
-    {--ui : Make a User injection with instance method}
-    {--iu : Make a User injection with instance method}
-    {--ri : Make a Request injection with instance method}
-    {--ir : Make a Request injection with instance method}
+    {--ts : Make a DB transaction action with static method}
+    {--st : Make a DB transaction action with static method}
+    {--us : Make a User injection with static method}
+    {--su : Make a User injection with static method}
+    {--rs : Make a Request injection with static method}
+    {--sr : Make a Request injection with static method}
     {--tur : Make a DB transaction action with User and Request injection}
     {--tru : Make a DB transaction action with User and Request injection}
     {--utr : Make a DB transaction action with User and Request injection}
     {--urt : Make a DB transaction action with User and Request injection}
     {--rtu : Make a DB transaction action with User and Request injection}
     {--rut : Make a DB transaction action with User and Request injection}
-    {--tui : Make a DB transaction action with User injection and instance method}
-    {--tiu : Make a DB transaction action with User injection and instance method}
-    {--uti : Make a DB transaction action with User injection and instance method}
-    {--uit : Make a DB transaction action with User injection and instance method}
-    {--itu : Make a DB transaction action with User injection and instance method}
-    {--iut : Make a DB transaction action with User injection and instance method}
-    {--tri : Make a DB transaction action with Request injection and instance method}
-    {--tir : Make a DB transaction action with Request injection and instance method}
-    {--rti : Make a DB transaction action with Request injection and instance method}
-    {--rit : Make a DB transaction action with Request injection and instance method}
-    {--itr : Make a DB transaction action with Request injection and instance method}
-    {--irt : Make a DB transaction action with Request injection and instance method}
-    {--uri : Make a User injection with Request injection and instance method}
-    {--uir : Make a User injection with Request injection and instance method}
-    {--rui : Make a User injection with Request injection and instance method}
-    {--riu : Make a User injection with Request injection and instance method}
-    {--iru : Make a User injection with Request injection and instance method}
-    {--iur : Make a User injection with Request injection and instance method}
-    {--turi : Make a DB transaction action with User, Request injection and instance method}
-    {--triu : Make a DB transaction action with User, Request injection and instance method}
-    {--utri : Make a DB transaction action with User, Request injection and instance method}
-    {--urti : Make a DB transaction action with User, Request injection and instance method}
-    {--rtui : Make a DB transaction action with User, Request injection and instance method}
-    {--ruti : Make a DB transaction action with User, Request injection and instance method}
-    {--itru : Make a DB transaction action with User, Request injection and instance method}
-    {--itur : Make a DB transaction action with User, Request injection and instance method}
-    {--iutr : Make a DB transaction action with User, Request injection and instance method}
-    {--iurt : Make a DB transaction action with User, Request injection and instance method}
-    {--irtu : Make a DB transaction action with User, Request injection and instance method}
-    {--irut : Make a DB transaction action with User, Request injection and instance method}';
+    {--tus : Make a DB transaction action with User injection and static method}
+    {--tsu : Make a DB transaction action with User injection and static method}
+    {--uts : Make a DB transaction action with User injection and static method}
+    {--ust : Make a DB transaction action with User injection and static method}
+    {--stu : Make a DB transaction action with User injection and static method}
+    {--sut : Make a DB transaction action with User injection and static method}
+    {--trs : Make a DB transaction action with Request injection and static method}
+    {--tsr : Make a DB transaction action with Request injection and static method}
+    {--rts : Make a DB transaction action with Request injection and static method}
+    {--rst : Make a DB transaction action with Request injection and static method}
+    {--str : Make a DB transaction action with Request injection and static method}
+    {--srt : Make a DB transaction action with Request injection and static method}
+    {--urs : Make a User injection with Request injection and static method}
+    {--usr : Make a User injection with Request injection and static method}
+    {--rus : Make a User injection with Request injection and static method}
+    {--rsu : Make a User injection with Request injection and static method}
+    {--sru : Make a User injection with Request injection and static method}
+    {--sur : Make a User injection with Request injection and static method}
+    {--turs : Make a DB transaction action with User, Request injection and static method}
+    {--trsu : Make a DB transaction action with User, Request injection and static method}
+    {--utrs : Make a DB transaction action with User, Request injection and static method}
+    {--urts : Make a DB transaction action with User, Request injection and static method}
+    {--rtus : Make a DB transaction action with User, Request injection and static method}
+    {--ruts : Make a DB transaction action with User, Request injection and static method}
+    {--stru : Make a DB transaction action with User, Request injection and static method}
+    {--stur : Make a DB transaction action with User, Request injection and static method}
+    {--sutr : Make a DB transaction action with User, Request injection and static method}
+    {--surt : Make a DB transaction action with User, Request injection and static method}
+    {--srtu : Make a DB transaction action with User, Request injection and static method}
+    {--srut : Make a DB transaction action with User, Request injection and static method}';
 
     protected $description = 'Create a new action class';
 
@@ -117,44 +117,44 @@ final class MakeActionCommand extends Command
         $subfolder = is_string($subfolder) ? mb_trim($subfolder, '/\\') : '';
 
         // Check for 4-flag combinations first
-        $turiFlag = (bool) ($this->option('turi') || $this->option('triu') ||
-                           $this->option('utri') || $this->option('urti') ||
-                           $this->option('rtui') || $this->option('ruti') ||
-                           $this->option('itru') || $this->option('itur') ||
-                           $this->option('iutr') || $this->option('iurt') ||
-                           $this->option('irtu') || $this->option('irut'));
+        $tursFlag = (bool) ($this->option('turs') || $this->option('trsu') ||
+                           $this->option('utrs') || $this->option('urts') ||
+                           $this->option('rtus') || $this->option('ruts') ||
+                           $this->option('stru') || $this->option('stur') ||
+                           $this->option('sutr') || $this->option('surt') ||
+                           $this->option('srtu') || $this->option('srut'));
 
         // Check for 3-flag combinations + inherit from 4-flag
-        $tuiFlag = (bool) ($this->option('tui') || $this->option('tiu') ||
-                          $this->option('uti') || $this->option('uit') ||
-                          $this->option('itu') || $this->option('iut') || $turiFlag);
+        $tusFlag = (bool) ($this->option('tus') || $this->option('tsu') ||
+                          $this->option('uts') || $this->option('ust') ||
+                          $this->option('stu') || $this->option('sut') || $tursFlag);
 
-        $triFlag = (bool) ($this->option('tri') || $this->option('tir') ||
-                          $this->option('rti') || $this->option('rit') ||
-                          $this->option('itr') || $this->option('irt') || $turiFlag);
+        $trsFlag = (bool) ($this->option('trs') || $this->option('tsr') ||
+                          $this->option('rts') || $this->option('rst') ||
+                          $this->option('str') || $this->option('srt') || $tursFlag);
 
-        $uriFlag = (bool) ($this->option('uri') || $this->option('uir') ||
-                          $this->option('rui') || $this->option('riu') ||
-                          $this->option('iru') || $this->option('iur') || $turiFlag);
+        $ursFlag = (bool) ($this->option('urs') || $this->option('usr') ||
+                          $this->option('rus') || $this->option('rsu') ||
+                          $this->option('sru') || $this->option('sur') || $tursFlag);
 
         $turFlag = (bool) ($this->option('tur') || $this->option('tru') ||
                           $this->option('utr') || $this->option('urt') ||
-                          $this->option('rtu') || $this->option('rut') || $turiFlag);
+                          $this->option('rtu') || $this->option('rut') || $tursFlag);
 
         // Check for 2-flag combinations + inherit from 3-flag
-        $tiFlag = (bool) ($this->option('ti') || $this->option('it') || $tuiFlag || $triFlag);
-        $uiFlag = (bool) ($this->option('ui') || $this->option('iu') || $tuiFlag || $uriFlag);
-        $riFlag = (bool) ($this->option('ri') || $this->option('ir') || $triFlag || $uriFlag);
+        $tsFlag = (bool) ($this->option('ts') || $this->option('st') || $tusFlag || $trsFlag);
+        $usFlag = (bool) ($this->option('us') || $this->option('su') || $tusFlag || $ursFlag);
+        $rsFlag = (bool) ($this->option('rs') || $this->option('sr') || $trsFlag || $ursFlag);
 
-        $tuFlag = (bool) ($this->option('tu') || $this->option('ut') || $turFlag || $tuiFlag);
-        $trFlag = (bool) ($this->option('tr') || $this->option('rt') || $turFlag || $triFlag);
-        $urFlag = (bool) ($this->option('ur') || $this->option('ru') || $turFlag || $uriFlag);
+        $tuFlag = (bool) ($this->option('tu') || $this->option('ut') || $turFlag || $tusFlag);
+        $trFlag = (bool) ($this->option('tr') || $this->option('rt') || $turFlag || $trsFlag);
+        $urFlag = (bool) ($this->option('ur') || $this->option('ru') || $turFlag || $ursFlag);
 
         // Individual flags or derived from combinations
-        $tFlag = (bool) ($this->option('t') || $tuFlag || $trFlag || $tiFlag);
-        $uFlag = (bool) ($this->option('u') || $tuFlag || $urFlag || $uiFlag);
-        $rFlag = (bool) ($this->option('r') || $trFlag || $urFlag || $riFlag);
-        $iFlag = (bool) ($this->option('i') || $tiFlag || $uiFlag || $riFlag);
+        $tFlag = (bool) ($this->option('t') || $tuFlag || $trFlag || $tsFlag);
+        $uFlag = (bool) ($this->option('u') || $tuFlag || $urFlag || $usFlag);
+        $rFlag = (bool) ($this->option('r') || $trFlag || $urFlag || $rsFlag);
+        $sFlag = (bool) ($this->option('s') || $tsFlag || $usFlag || $rsFlag);
 
         return [
             'name' => $name,
@@ -162,7 +162,7 @@ final class MakeActionCommand extends Command
             'tFlag' => $tFlag,
             'uFlag' => $uFlag,
             'rFlag' => $rFlag,
-            'iFlag' => $iFlag,
+            'sFlag' => $sFlag,
         ];
     }
 
@@ -238,7 +238,7 @@ final class MakeActionCommand extends Command
         $tFlag = is_bool($config['tFlag']) ? $config['tFlag'] : false;
         $uFlag = is_bool($config['uFlag']) ? $config['uFlag'] : false;
         $rFlag = is_bool($config['rFlag']) ? $config['rFlag'] : false;
-        $iFlag = is_bool($config['iFlag']) ? $config['iFlag'] : false;
+        $sFlag = is_bool($config['sFlag']) ? $config['sFlag'] : false;
         $filename = is_string($config['filename']) ? $config['filename'] : '';
         $namespace = is_string($config['namespace']) ? $config['namespace'] : '';
         $path = is_string($config['path']) ? $config['path'] : '';
@@ -247,7 +247,7 @@ final class MakeActionCommand extends Command
             $tFlag,
             $uFlag,
             $rFlag,
-            $iFlag,
+            $sFlag,
             $filename,
             $namespace
         );
@@ -263,7 +263,7 @@ final class MakeActionCommand extends Command
         $tFlag = is_bool($config['tFlag']) ? $config['tFlag'] : false;
         $uFlag = is_bool($config['uFlag']) ? $config['uFlag'] : false;
         $rFlag = is_bool($config['rFlag']) ? $config['rFlag'] : false;
-        $iFlag = is_bool($config['iFlag']) ? $config['iFlag'] : false;
+        $sFlag = is_bool($config['sFlag']) ? $config['sFlag'] : false;
         $filename = is_string($config['filename']) ? $config['filename'] : '';
         $relativePath = is_string($config['relative_path']) ? $config['relative_path'] : '';
 
@@ -277,8 +277,8 @@ final class MakeActionCommand extends Command
         if ($rFlag) {
             $features[] = 'Request injection';
         }
-        if ($iFlag) {
-            $features[] = 'instance method';
+        if ($sFlag) {
+            $features[] = 'static method';
         }
 
         $featuresText = empty($features) ? '.' : ' with '.implode(', ', $features).'.';

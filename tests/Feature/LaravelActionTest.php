@@ -28,7 +28,7 @@ final class LaravelActionTest extends TestCase
         );
 
         $this->assertStringContainsString(
-            'public static function handle(array $attributes): void',
+            'public function handle(array $attributes): void',
             file_get_contents(app_path('Actions/SimpleAction.php'))
         );
     }
@@ -68,7 +68,7 @@ final class LaravelActionTest extends TestCase
         );
 
         $this->assertStringContainsString(
-            'public static function handle(User $user,array $attributes): void',
+            'public function handle(User $user,array $attributes): void',
             file_get_contents(app_path('Actions/SimpleAction.php'))
         );
     }
@@ -97,7 +97,7 @@ final class LaravelActionTest extends TestCase
         );
 
         $this->assertStringContainsString(
-            'public static function handle(User $user,array $attributes): void',
+            'public function handle(User $user,array $attributes): void',
             file_get_contents(app_path('Actions/SimpleAction.php'))
         );
 
@@ -131,7 +131,7 @@ final class LaravelActionTest extends TestCase
         );
 
         $this->assertStringContainsString(
-            'public static function handle(User $user,array $attributes): void',
+            'public function handle(User $user,array $attributes): void',
             file_get_contents(app_path('Actions/SimpleAction.php'))
         );
 
@@ -176,7 +176,7 @@ final class LaravelActionTest extends TestCase
         );
 
         $this->assertStringContainsString(
-            'public static function handle(User $user,array $attributes): void',
+            'public function handle(User $user,array $attributes): void',
             file_get_contents(app_path('Actions/SimpleAction.php'))
         );
 
@@ -195,6 +195,29 @@ final class LaravelActionTest extends TestCase
         $this->assertFileExists(app_path('Actions/SimpleAction.php'));
         $this->artisan('make:action', ['name' => 'SimpleAction'])
             ->assertExitCode(1);
+    }
+
+    public function test_the_console_command_create_a_static_simple_action(): void
+    {
+        File::deleteDirectory(app_path('Actions'));
+
+        $this->artisan('make:action', ['name' => 'SimpleAction', '--s' => true])
+            ->assertExitCode(0);
+        $this->assertFileExists(app_path('Actions/SimpleAction.php'));
+
+        $this->assertStringContainsString(
+            'namespace App\Actions;',
+            file_get_contents(app_path('Actions/SimpleAction.php'))
+        );
+        $this->assertStringContainsString(
+            'class SimpleAction',
+            file_get_contents(app_path('Actions/SimpleAction.php'))
+        );
+
+        $this->assertStringContainsString(
+            'public static function handle(array $attributes): void',
+            file_get_contents(app_path('Actions/SimpleAction.php'))
+        );
     }
 
     protected function getPackageProviders($app): array
