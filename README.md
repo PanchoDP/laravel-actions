@@ -1,5 +1,5 @@
 
-<p align="center"><a target="_blank"> <img alt="Logo for Laravel Action" src="art/header-light.webp"></a></p>
+<p align="center"><a target="_blank"> <img alt="Logo for Laravel Action" src="art/laravel-action.webp"></a></p>
 
 <p align="center">
 <a ><img src="https://img.shields.io/badge/PHP-8.3%2B-blue" alt="Php"></a>
