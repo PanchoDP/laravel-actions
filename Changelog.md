@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2026-01-10
+
+### 🚀 Features
+
+- Improve directory and subdirectory creation
+
+
+### 🐛 Bug Fixes
+
+- Update the readme file
+
+
 ## [2.0.2] - 2025-10-15
 
 ### 🎨 Styling
