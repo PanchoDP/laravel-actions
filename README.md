@@ -75,68 +75,52 @@ public static function handle(array $attributes): void
 
 ## Usage
 
-1. To make an action class, you can use the `make:action` command:
+### Creating Actions
 
+To create an action class, use the `make:action` command. You can specify the full path using forward slashes `/` or backslashes `\` (Laravel-style syntax):
+
+**Basic action:**
 ```bash
 php artisan make:action MyAction
 ```
-This will create a new action class in the `app/Actions` directory with the name `MyAction.php`.
+This creates a new action class in the `app/Actions` directory.
 
-The class will have a `handle` method where you can implement your action logic.
+**Action in a subfolder:**
+```bash
+php artisan make:action User/CreateAccount
+```
+This creates the action in `app/Actions/User/CreateAccount.php`.
+
+**Action in nested subfolders:**
+```bash
+php artisan make:action User/Auth/Login
+```
+This creates the action in `app/Actions/User/Auth/Login.php`.
+
+**Using backslashes (alternative syntax):**
+```bash
+php artisan make:action Admin\DeletePost
+```
+This creates the action in `app/Actions/Admin/DeletePost.php`.
+
+The generated class will have a `handle` method where you can implement your action logic:
 ```php
 <?php
 
 declare(strict_types=1);
 
-namespace App\Actions;
-
+namespace App\Actions\User;
 
 use Throwable;
 
-final class MyAction
+final class CreateAccount
 {
-
     public function handle(array $attributes): void
     {
         // This is where the action logic will be implemented.
     }
 }
 ```
-
-
-2. To make an action class in a specific subfolder of Action, you can use:
-
-```bash
-php artisan make:action MyAction Folder
-```
-This will create a new action class in the `app/Actions/Folder` directory with the name `MyAction.php`.
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Actions\Folder;
-
-
-use Throwable;
-
-final class MyAction
-{
-
-    public function handle(array $attributes): void
-    {
-        // This is where the action logic will be implemented.
-    }
-}
-```
-Or you can use more than one subfolder like this:.
-
-```bash
-
-php artisan make:action MyAction Folder1/Folder2
-```
-This will create a new action class in the `app/Actions/Folder1/Folder2/` directory with the name `MyAction.php`.
 
 
 
