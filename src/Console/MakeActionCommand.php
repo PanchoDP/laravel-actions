@@ -116,6 +116,32 @@ final class MakeActionCommand extends Command
         $subfolder = $this->argument('subfolder');
         $subfolder = is_string($subfolder) ? mb_trim($subfolder, '/\\') : '';
 
+        // Support Laravel-style syntax (e.g., Top/Topisima or Top\Topisima)
+        // This allows both "make:action Top/Topisima" and "make:action Topisima Top"
+        if (preg_match('#[/\\\\]#', $name)) {
+            // Split by forward or backward slashes
+            $parts = preg_split('#[/\\\\]+#', $name, -1, PREG_SPLIT_NO_EMPTY);
+
+            if ($parts !== false && count($parts) > 1) {
+                // Last part is the class name
+                $className = array_pop($parts);
+                // Remaining parts form the subdirectory path
+                $pathFromName = implode('/', $parts);
+
+                // Combine with existing subfolder argument if present
+                if (! empty($subfolder)) {
+                    $subfolder = $pathFromName.'/'.$subfolder;
+                } else {
+                    $subfolder = $pathFromName;
+                }
+
+                $name = $className;
+            }
+        }
+
+        // Trim subfolder again after potential concatenation
+        $subfolder = mb_trim($subfolder, '/\\');
+
         // Check for 4-flag combinations first
         $tursFlag = (bool) ($this->option('turs') || $this->option('trsu') ||
                            $this->option('utrs') || $this->option('urts') ||
