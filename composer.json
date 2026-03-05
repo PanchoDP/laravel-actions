@@ -38,7 +38,8 @@
         "spatie/ray": "^1.47",
         "laravel/pint": "^1.27.1",
         "larastan/larastan": "^3.9.2",
-        "pestphp/pest": "^3.8.5"
+        "pestphp/pest": "^3.8.5",
+        "rector/rector": "^2.3"
     },
     "scripts": {
         "test": [
@@ -50,8 +51,9 @@
         "analyse": [
             "./vendor/bin/phpstan analyse"
         ],
+        "dry": ["vendor/bin/rector process --dry-run --ansi"],
         "test:all": [
-            "@test","@pint","@analyse"
+            "@test","@pint","@analyse","@dry"
         ]
     },
     "config": {
