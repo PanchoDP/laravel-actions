@@ -25,22 +25,31 @@ composer require panchodp/laravel-actions --dev
 
 ## Configuration
 
-Use the following command to publish the configuration file:
+Publish the configuration file:
 ```bash
 php artisan vendor:publish --provider="Panchodp\LaravelAction\LaravelActionServiceProvider" --tag="laravel-actions-config"
 ```
-This will create a `config/laravel-actions.php` file in your application.
+This creates `config/laravel-actions.php`:
 
 ```php
-
 return [
     'base_folder' => 'Actions',
     'method_name' => 'handle',
 ];
 ```
-There are two configuration options available:
+
 - `base_folder`: Base folder where action classes are created. Defaults to `Actions` (`app/Actions`).
 - `method_name`: Method name generated in action classes. Defaults to `handle`.
+
+## Customizing Stubs
+
+You can publish and edit the stub templates used to generate action classes:
+
+```bash
+php artisan vendor:publish --provider="Panchodp\LaravelAction\LaravelActionServiceProvider" --tag="laravel-actions-stubs"
+```
+
+This publishes the 4 stubs to `resources/stubs/vendor/laravel-actions/`. Once published, the package will use your custom stubs instead of the defaults. You can customize each stub independently — any stub not found in your published directory will fall back to the package default.
 
 ## Method Types
 

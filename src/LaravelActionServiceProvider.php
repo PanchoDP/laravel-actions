@@ -26,6 +26,10 @@ final class LaravelActionServiceProvider extends ServiceProvider
             __DIR__.'/../config/laravel-actions.php' => config_path('laravel-actions.php'),
         ], 'laravel-actions-config');
 
+        $this->publishes([
+            __DIR__.'/../stubs' => resource_path('stubs/vendor/laravel-actions'),
+        ], 'laravel-actions-stubs');
+
     }
 
     /**

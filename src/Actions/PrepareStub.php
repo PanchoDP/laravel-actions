@@ -67,25 +67,24 @@ final class PrepareStub
     }
 
     /**
-     * Select the appropriate stub file based on flags
+     * Select the appropriate stub file based on flags.
+     * Checks for published user stubs first, falls back to package stubs.
      */
     private static function selectStubFile(bool $tFlag, bool $rFlag): string
     {
-        $baseDir = __DIR__.'/../stubs/';
-
         if ($tFlag && $rFlag) {
-            return $baseDir.'action_transaction_request.stub';
+            $stubName = 'action_transaction_request.stub';
+        } elseif ($rFlag) {
+            $stubName = 'action_request.stub';
+        } elseif ($tFlag) {
+            $stubName = 'action_transaction.stub';
+        } else {
+            $stubName = 'action.stub';
         }
 
-        if ($rFlag) {
-            return $baseDir.'action_request.stub';
-        }
+        $publishedStub = resource_path('stubs/vendor/laravel-actions/'.$stubName);
 
-        if ($tFlag) {
-            return $baseDir.'action_transaction.stub';
-        }
-
-        return $baseDir.'action.stub';
+        return file_exists($publishedStub) ? $publishedStub : __DIR__.'/../stubs/'.$stubName;
     }
 
     /**
