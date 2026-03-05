@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.0] - 2026-03-05
+
+### 🚀 Features
+
+- Add customizing Stubs
+
+- Add --force option
+
+- Interactive make:action
+
+
+### 📚 Documentation
+
+- Simplify the readme.md file
+
+
+### ⚙️ Miscellaneous Tasks
+
+- Delete de config permision for make directory
+
+
 ## [2.1.1] - 2026-02-25
 
 ### 🏗️ Build
