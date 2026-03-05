@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 
-it('displays empty actions directory tree when no actions exist', function () {
+it('displays empty actions directory tree when no actions exist', function (): void {
     $actionsPath = app_path('Actions');
 
     // Ensure directory doesn't exist
@@ -19,7 +19,7 @@ it('displays empty actions directory tree when no actions exist', function () {
     expect($output)->toContain('Actions directory not found');
 });
 
-it('displays actions directory tree with sample actions', function () {
+it('displays actions directory tree with sample actions', function (): void {
     $actionsPath = app_path('Actions');
 
     // Create test directory structure
@@ -51,7 +51,7 @@ it('displays actions directory tree with sample actions', function () {
     File::deleteDirectory($actionsPath);
 });
 
-it('properly filters non-action php files', function () {
+it('properly filters non-action php files', function (): void {
     $actionsPath = app_path('Actions');
 
     // Create test directory

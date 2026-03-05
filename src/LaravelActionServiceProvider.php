@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Panchodp\LaravelAction;
 
 use Illuminate\Support\ServiceProvider;
+use Override;
 use Panchodp\LaravelAction\Console\MakeActionCommand;
 use Panchodp\LaravelAction\Console\MakeActionListCommand;
 
@@ -35,6 +36,7 @@ final class LaravelActionServiceProvider extends ServiceProvider
     /**
      * Register the service provider.
      */
+    #[Override]
     public function register(): void
     {
 

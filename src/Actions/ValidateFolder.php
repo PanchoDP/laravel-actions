@@ -19,11 +19,9 @@ final class ValidateFolder
     public static function handle(array $folders): void
     {
         foreach ($folders as $folder) {
-            if (! empty($folder)) {
-                if (! preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $folder)) {
-                    throw new InvalidArgumentException("Invalid folder name: {$folder}. 
+            if (! empty($folder) && ! preg_match('/^[A-Za-z_]\w*$/', $folder)) {
+                throw new InvalidArgumentException("Invalid folder name: {$folder}. 
         Folder names must start with a letter or underscore and can only contain letters, numbers, and underscores.");
-                }
             }
 
         }

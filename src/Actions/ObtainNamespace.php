@@ -8,7 +8,7 @@ final class ObtainNamespace
 {
     public static function handle(?string $subfolder, string $name, string $base_folder): string
     {
-        if (empty($subfolder)) {
+        if (in_array($subfolder, [null, '', '0'], true)) {
             return 'App\\'.$base_folder;
         }
         $relative_path = dirname("{$base_folder}/{$subfolder}/{$name}.php");

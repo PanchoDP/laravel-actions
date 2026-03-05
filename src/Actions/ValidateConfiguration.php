@@ -41,7 +41,7 @@ final class ValidateConfiguration
             throw new InvalidArgumentException('Invalid base folder: path traversal sequences are not allowed.');
         }
 
-        if (! preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/', $baseFolder)) {
+        if (! preg_match('/^[a-zA-Z]\w*$/', $baseFolder)) {
             throw new InvalidArgumentException('Invalid base folder: must start with a letter and contain only letters, numbers, and underscores.');
         }
 
@@ -59,7 +59,7 @@ final class ValidateConfiguration
             return 'handle';
         }
 
-        if (! preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $methodName)) {
+        if (! preg_match('/^[a-zA-Z_]\w*$/', $methodName)) {
             throw new InvalidArgumentException('Invalid method name: must be a valid PHP method name.');
         }
 
@@ -92,10 +92,6 @@ final class ValidateConfiguration
         }
 
         // Check for absolute paths
-        if (preg_match('/^([a-z]:|\/)/i', $normalizedPath)) {
-            return true;
-        }
-
-        return false;
+        return (bool) preg_match('/^([a-z]:|\/)/i', $normalizedPath);
     }
 }

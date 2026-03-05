@@ -19,7 +19,7 @@ final class GenerateRequest
      */
     public static function handle(string $actionName): string
     {
-        if (empty($actionName)) {
+        if ($actionName === '' || $actionName === '0') {
             throw new InvalidArgumentException('Action name cannot be empty.');
         }
 
@@ -40,7 +40,7 @@ final class GenerateRequest
 
             return $requestName;
         } catch (Throwable $e) {
-            throw new InvalidArgumentException('Error generating Request class: '.$e->getMessage());
+            throw new InvalidArgumentException('Error generating Request class: '.$e->getMessage(), $e->getCode(), $e);
         }
     }
 }

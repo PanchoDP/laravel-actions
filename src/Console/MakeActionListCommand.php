@@ -45,13 +45,11 @@ final class MakeActionListCommand extends Command
 
         if ($depth === 0) {
             $this->line("<fg=green>{$baseName}/</>");
+        } elseif (is_dir($path)) {
+            $this->line("{$prefix}{$connector}<fg=green>{$baseName}/</>");
         } else {
-            if (is_dir($path)) {
-                $this->line("{$prefix}{$connector}<fg=green>{$baseName}/</>");
-            } else {
-                $className = $this->extractClassName($path);
-                $this->line("{$prefix}{$connector}<fg=cyan>{$className}</>");
-            }
+            $className = $this->extractClassName($path);
+            $this->line("{$prefix}{$connector}<fg=cyan>{$className}</>");
         }
 
         if (is_dir($path)) {
@@ -96,7 +94,7 @@ final class MakeActionListCommand extends Command
         }
 
         // Sort: directories first, then files
-        usort($items, function ($a, $b) {
+        usort($items, function ($a, $b): int {
             $aIsDir = is_dir($a);
             $bIsDir = is_dir($b);
 
@@ -139,7 +137,7 @@ final class MakeActionListCommand extends Command
             return pathinfo($path, PATHINFO_FILENAME);
         }
 
-        if (preg_match('/class\s+([A-Za-z0-9_]+)/', $content, $matches)) {
+        if (preg_match('/class\s+(\w+)/', $content, $matches)) {
             return $matches[1];
         }
 

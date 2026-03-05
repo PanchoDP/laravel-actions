@@ -53,7 +53,7 @@ final class PrepareStub
             $stub = str_replace('{{ name_action }}', ucfirst($safeMethodName), $stub);
 
         } catch (Throwable $e) {
-            throw new RuntimeException('Error preparing the stub: '.$e->getMessage());
+            throw new RuntimeException('Error preparing the stub: '.$e->getMessage(), $e->getCode(), $e);
         }
 
         return $stub;
@@ -88,11 +88,7 @@ final class PrepareStub
      */
     private static function sanitizeForTemplate(string $input, bool $allowBackslashes = false): string
     {
-        if ($allowBackslashes) {
-            $sanitized = preg_replace('/[<>\'"`\$]/', '', $input);
-        } else {
-            $sanitized = preg_replace('/[<>\'"`\$\\\]/', '', $input);
-        }
+        $sanitized = $allowBackslashes ? preg_replace('/[<>\'"`\$]/', '', $input) : preg_replace('/[<>\'"`\$\\\]/', '', $input);
 
         if ($sanitized === null) {
             throw new RuntimeException('Input sanitization failed');

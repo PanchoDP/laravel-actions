@@ -7,65 +7,65 @@ use Panchodp\LaravelAction\Actions\PrepareStub;
 use Panchodp\LaravelAction\Actions\PrepareSubfolder;
 use Panchodp\LaravelAction\Actions\ValidateConfiguration;
 
-test('PrepareSubfolder prevents path traversal attacks', function () {
+test('PrepareSubfolder prevents path traversal attacks', function (): void {
     // Test basic path traversal
-    expect(fn () => PrepareSubfolder::handle('../'))
+    expect(fn (): array => PrepareSubfolder::handle('../'))
         ->toThrow(InvalidArgumentException::class, 'Invalid subfolder path: path traversal sequences are not allowed.');
 
     // Test Windows path traversal
-    expect(fn () => PrepareSubfolder::handle('..\\'))
+    expect(fn (): array => PrepareSubfolder::handle('..\\'))
         ->toThrow(InvalidArgumentException::class);
 
     // Test URL encoded path traversal
-    expect(fn () => PrepareSubfolder::handle('..%2f'))
+    expect(fn (): array => PrepareSubfolder::handle('..%2f'))
         ->toThrow(InvalidArgumentException::class);
 
     // Test double URL encoded
-    expect(fn () => PrepareSubfolder::handle('..%252f'))
+    expect(fn (): array => PrepareSubfolder::handle('..%252f'))
         ->toThrow(InvalidArgumentException::class);
 
     // Test absolute paths
-    expect(fn () => PrepareSubfolder::handle('/etc/passwd'))
+    expect(fn (): array => PrepareSubfolder::handle('/etc/passwd'))
         ->toThrow(InvalidArgumentException::class);
 
-    expect(fn () => PrepareSubfolder::handle('C:\\Windows'))
+    expect(fn (): array => PrepareSubfolder::handle('C:\\Windows'))
         ->toThrow(InvalidArgumentException::class);
 });
 
-test('PrepareSubfolder allows safe paths', function () {
+test('PrepareSubfolder allows safe paths', function (): void {
     // Test valid subfolders
     expect(PrepareSubfolder::handle('User/Auth'))->toBe(['User', 'Auth']);
     expect(PrepareSubfolder::handle('Admin'))->toBe(['Admin']);
     expect(PrepareSubfolder::handle(''))->toBe([]);
 });
 
-test('ValidateConfiguration prevents dangerous base folder names', function () {
+test('ValidateConfiguration prevents dangerous base folder names', function (): void {
     // Test path traversal in base folder
-    expect(fn () => ValidateConfiguration::handle('../Actions', 'handle'))
+    expect(fn (): array => ValidateConfiguration::handle('../Actions', 'handle'))
         ->toThrow(InvalidArgumentException::class, 'Invalid base folder: path traversal sequences are not allowed.');
 
     // Test invalid folder name format
-    expect(fn () => ValidateConfiguration::handle('123Actions', 'handle'))
+    expect(fn (): array => ValidateConfiguration::handle('123Actions', 'handle'))
         ->toThrow(InvalidArgumentException::class, 'Invalid base folder: must start with a letter');
 });
 
-test('ValidateConfiguration prevents dangerous method names', function () {
+test('ValidateConfiguration prevents dangerous method names', function (): void {
     // Test dangerous method names
-    expect(fn () => ValidateConfiguration::handle('Actions', '__construct'))
+    expect(fn (): array => ValidateConfiguration::handle('Actions', '__construct'))
         ->toThrow(InvalidArgumentException::class, 'Method name \'__construct\' is not allowed for security reasons.');
 
-    expect(fn () => ValidateConfiguration::handle('Actions', 'eval'))
+    expect(fn (): array => ValidateConfiguration::handle('Actions', 'eval'))
         ->toThrow(InvalidArgumentException::class, 'Method name \'eval\' is not allowed for security reasons.');
 
-    expect(fn () => ValidateConfiguration::handle('Actions', 'exec'))
+    expect(fn (): array => ValidateConfiguration::handle('Actions', 'exec'))
         ->toThrow(InvalidArgumentException::class, 'Method name \'exec\' is not allowed for security reasons.');
 
     // Test invalid method name format
-    expect(fn () => ValidateConfiguration::handle('Actions', '123method'))
+    expect(fn (): array => ValidateConfiguration::handle('Actions', '123method'))
         ->toThrow(InvalidArgumentException::class, 'Invalid method name: must be a valid PHP method name.');
 });
 
-test('ValidateConfiguration allows safe configuration values', function () {
+test('ValidateConfiguration allows safe configuration values', function (): void {
     $result = ValidateConfiguration::handle('MyActions', 'execute');
     expect($result)->toBe([
         'base_folder' => 'MyActions',
@@ -80,20 +80,19 @@ test('ValidateConfiguration allows safe configuration values', function () {
     ]);
 });
 
-test('PrepareStub validates stub file existence', function () {
+test('PrepareStub validates stub file existence', function (): void {
     // Mock missing stub file by using an invalid path
     $reflection = new ReflectionClass(PrepareStub::class);
 
     // This test checks that the method properly validates file existence
-    expect(fn () => PrepareStub::handle(false, false, false, 'TestAction', 'App\\Actions'))
+    expect(fn (): string => PrepareStub::handle(false, false, false, 'TestAction', 'App\\Actions'))
         ->not->toThrow(Exception::class);
 });
 
-test('PrepareStub sanitizes template variables', function () {
+test('PrepareStub sanitizes template variables', function (): void {
     // Test that dangerous characters are removed from template variables
     $reflection = new ReflectionClass(PrepareStub::class);
     $method = $reflection->getMethod('sanitizeForTemplate');
-    $method->setAccessible(true);
 
     expect($method->invoke(null, 'TestAction<?php'))->toBe('TestAction?php');
     expect($method->invoke(null, 'Test$Action'))->toBe('TestAction');
@@ -105,7 +104,7 @@ test('PrepareStub sanitizes template variables', function () {
     expect($method->invoke(null, 'App\\Actions<?php', true))->toBe('App\\Actions?php');
 });
 
-test('CreateDirectory creates the directory', function () {
+test('CreateDirectory creates the directory', function (): void {
     $tempDir = sys_get_temp_dir().'/test_actions_security_'.uniqid();
     $testFile = $tempDir.'/TestAction.php';
 

@@ -135,11 +135,7 @@ final class MakeActionCommand extends Command
                 $className = array_pop($parts);
                 $pathFromName = implode('/', $parts);
 
-                if (! empty($subfolder)) {
-                    $subfolder = $pathFromName.'/'.$subfolder;
-                } else {
-                    $subfolder = $pathFromName;
-                }
+                $subfolder = $subfolder === '' || $subfolder === '0' ? $pathFromName : $pathFromName.'/'.$subfolder;
 
                 $name = $className;
             }
@@ -147,41 +143,41 @@ final class MakeActionCommand extends Command
 
         $subfolder = mb_trim($subfolder, '/\\');
 
-        $tursFlag = (bool) ($this->option('turs') || $this->option('trsu') ||
+        $tursFlag = $this->option('turs') || $this->option('trsu') ||
                            $this->option('utrs') || $this->option('urts') ||
                            $this->option('rtus') || $this->option('ruts') ||
                            $this->option('stru') || $this->option('stur') ||
                            $this->option('sutr') || $this->option('surt') ||
-                           $this->option('srtu') || $this->option('srut'));
+                           $this->option('srtu') || $this->option('srut');
 
-        $tusFlag = (bool) ($this->option('tus') || $this->option('tsu') ||
+        $tusFlag = $this->option('tus') || $this->option('tsu') ||
                           $this->option('uts') || $this->option('ust') ||
-                          $this->option('stu') || $this->option('sut') || $tursFlag);
+                          $this->option('stu') || $this->option('sut') || $tursFlag;
 
-        $trsFlag = (bool) ($this->option('trs') || $this->option('tsr') ||
+        $trsFlag = $this->option('trs') || $this->option('tsr') ||
                           $this->option('rts') || $this->option('rst') ||
-                          $this->option('str') || $this->option('srt') || $tursFlag);
+                          $this->option('str') || $this->option('srt') || $tursFlag;
 
-        $ursFlag = (bool) ($this->option('urs') || $this->option('usr') ||
+        $ursFlag = $this->option('urs') || $this->option('usr') ||
                           $this->option('rus') || $this->option('rsu') ||
-                          $this->option('sru') || $this->option('sur') || $tursFlag);
+                          $this->option('sru') || $this->option('sur') || $tursFlag;
 
-        $turFlag = (bool) ($this->option('tur') || $this->option('tru') ||
+        $turFlag = $this->option('tur') || $this->option('tru') ||
                           $this->option('utr') || $this->option('urt') ||
-                          $this->option('rtu') || $this->option('rut') || $tursFlag);
+                          $this->option('rtu') || $this->option('rut') || $tursFlag;
 
-        $tsFlag = (bool) ($this->option('ts') || $this->option('st') || $tusFlag || $trsFlag);
-        $usFlag = (bool) ($this->option('us') || $this->option('su') || $tusFlag || $ursFlag);
-        $rsFlag = (bool) ($this->option('rs') || $this->option('sr') || $trsFlag || $ursFlag);
+        $tsFlag = $this->option('ts') || $this->option('st') || $tusFlag || $trsFlag;
+        $usFlag = $this->option('us') || $this->option('su') || $tusFlag || $ursFlag;
+        $rsFlag = $this->option('rs') || $this->option('sr') || $trsFlag || $ursFlag;
 
-        $tuFlag = (bool) ($this->option('tu') || $this->option('ut') || $turFlag || $tusFlag);
-        $trFlag = (bool) ($this->option('tr') || $this->option('rt') || $turFlag || $trsFlag);
-        $urFlag = (bool) ($this->option('ur') || $this->option('ru') || $turFlag || $ursFlag);
+        $tuFlag = $this->option('tu') || $this->option('ut') || $turFlag || $tusFlag;
+        $trFlag = $this->option('tr') || $this->option('rt') || $turFlag || $trsFlag;
+        $urFlag = $this->option('ur') || $this->option('ru') || $turFlag || $ursFlag;
 
-        $tFlag = (bool) ($this->option('t') || $tuFlag || $trFlag || $tsFlag);
-        $uFlag = (bool) ($this->option('u') || $tuFlag || $urFlag || $usFlag);
-        $rFlag = (bool) ($this->option('r') || $trFlag || $urFlag || $rsFlag);
-        $sFlag = (bool) ($this->option('s') || $tsFlag || $usFlag || $rsFlag);
+        $tFlag = $this->option('t') || $tuFlag || $trFlag || $tsFlag;
+        $uFlag = $this->option('u') || $tuFlag || $urFlag || $usFlag;
+        $rFlag = $this->option('r') || $trFlag || $urFlag || $rsFlag;
+        $sFlag = $this->option('s') || $tsFlag || $usFlag || $rsFlag;
 
         return [
             'name' => $name,
@@ -217,7 +213,7 @@ final class MakeActionCommand extends Command
         ValidateFolder::handle($folders);
 
         $folder_path = implode(DIRECTORY_SEPARATOR, $folders);
-        $force = is_bool($input['force']) ? $input['force'] : false;
+        $force = is_bool($input['force']) && $input['force'];
         $path = PreparePath::handle($folder_path, $name, $validatedConfig['base_folder'], $force);
         $namespace = ObtainNamespace::handle($folder_path, $name, $validatedConfig['base_folder']);
         $relative_path = dirname("{$validatedConfig['base_folder']}/$folder_path/{$name}.php");
@@ -260,10 +256,10 @@ final class MakeActionCommand extends Command
      */
     private function generateActionFile(array $config): void
     {
-        $tFlag = is_bool($config['tFlag']) ? $config['tFlag'] : false;
-        $uFlag = is_bool($config['uFlag']) ? $config['uFlag'] : false;
-        $rFlag = is_bool($config['rFlag']) ? $config['rFlag'] : false;
-        $sFlag = is_bool($config['sFlag']) ? $config['sFlag'] : false;
+        $tFlag = is_bool($config['tFlag']) && $config['tFlag'];
+        $uFlag = is_bool($config['uFlag']) && $config['uFlag'];
+        $rFlag = is_bool($config['rFlag']) && $config['rFlag'];
+        $sFlag = is_bool($config['sFlag']) && $config['sFlag'];
         $filename = is_string($config['filename']) ? $config['filename'] : '';
         $namespace = is_string($config['namespace']) ? $config['namespace'] : '';
         $path = is_string($config['path']) ? $config['path'] : '';
@@ -317,10 +313,10 @@ final class MakeActionCommand extends Command
      */
     private function displaySuccessMessages(array $config): void
     {
-        $tFlag = is_bool($config['tFlag']) ? $config['tFlag'] : false;
-        $uFlag = is_bool($config['uFlag']) ? $config['uFlag'] : false;
-        $rFlag = is_bool($config['rFlag']) ? $config['rFlag'] : false;
-        $sFlag = is_bool($config['sFlag']) ? $config['sFlag'] : false;
+        $tFlag = is_bool($config['tFlag']) && $config['tFlag'];
+        $uFlag = is_bool($config['uFlag']) && $config['uFlag'];
+        $rFlag = is_bool($config['rFlag']) && $config['rFlag'];
+        $sFlag = is_bool($config['sFlag']) && $config['sFlag'];
         $filename = is_string($config['filename']) ? $config['filename'] : '';
         $relativePath = is_string($config['relative_path']) ? $config['relative_path'] : '';
 
@@ -338,7 +334,7 @@ final class MakeActionCommand extends Command
             $features[] = 'static method';
         }
 
-        $featuresText = empty($features) ? '.' : ' with '.implode(', ', $features).'.';
+        $featuresText = $features === [] ? '.' : ' with '.implode(', ', $features).'.';
         $this->info("Action {$filename} created successfully at app/{$relativePath} folder{$featuresText}");
     }
 }

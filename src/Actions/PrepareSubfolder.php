@@ -18,7 +18,7 @@ final class PrepareSubfolder
      */
     public static function handle(string $subfolder): array
     {
-        if (empty($subfolder)) {
+        if ($subfolder === '' || $subfolder === '0') {
             return [];
         }
 
@@ -54,10 +54,6 @@ final class PrepareSubfolder
             }
         }
 
-        if (preg_match('/^([a-z]:|\/)/i', $normalizedPath)) {
-            return true;
-        }
-
-        return false;
+        return (bool) preg_match('/^([a-z]:|\/)/i', $normalizedPath);
     }
 }
