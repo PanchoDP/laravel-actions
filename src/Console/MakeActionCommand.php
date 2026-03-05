@@ -92,7 +92,6 @@ final class MakeActionCommand extends Command
             $config = $this->validateAndPrepareConfig($input);
             $this->createDirectoryStructure($config);
 
-            // Generate Request class if --r flag is present
             if ($config['rFlag'] ?? false) {
                 $this->generateRequestFile($config);
             }
@@ -129,19 +128,13 @@ final class MakeActionCommand extends Command
         $subfolder = $this->argument('subfolder');
         $subfolder = is_string($subfolder) ? mb_trim($subfolder, '/\\') : '';
 
-        // Support Laravel-style syntax (e.g., Top/Topisima or Top\Topisima)
-        // This allows both "make:action Top/Topisima" and "make:action Topisima Top"
         if (preg_match('#[/\\\\]#', $name)) {
-            // Split by forward or backward slashes
             $parts = preg_split('#[/\\\\]+#', $name, -1, PREG_SPLIT_NO_EMPTY);
 
             if ($parts !== false && count($parts) > 1) {
-                // Last part is the class name
                 $className = array_pop($parts);
-                // Remaining parts form the subdirectory path
                 $pathFromName = implode('/', $parts);
 
-                // Combine with existing subfolder argument if present
                 if (! empty($subfolder)) {
                     $subfolder = $pathFromName.'/'.$subfolder;
                 } else {
@@ -152,10 +145,8 @@ final class MakeActionCommand extends Command
             }
         }
 
-        // Trim subfolder again after potential concatenation
         $subfolder = mb_trim($subfolder, '/\\');
 
-        // Check for 4-flag combinations first
         $tursFlag = (bool) ($this->option('turs') || $this->option('trsu') ||
                            $this->option('utrs') || $this->option('urts') ||
                            $this->option('rtus') || $this->option('ruts') ||
@@ -163,7 +154,6 @@ final class MakeActionCommand extends Command
                            $this->option('sutr') || $this->option('surt') ||
                            $this->option('srtu') || $this->option('srut'));
 
-        // Check for 3-flag combinations + inherit from 4-flag
         $tusFlag = (bool) ($this->option('tus') || $this->option('tsu') ||
                           $this->option('uts') || $this->option('ust') ||
                           $this->option('stu') || $this->option('sut') || $tursFlag);
@@ -180,7 +170,6 @@ final class MakeActionCommand extends Command
                           $this->option('utr') || $this->option('urt') ||
                           $this->option('rtu') || $this->option('rut') || $tursFlag);
 
-        // Check for 2-flag combinations + inherit from 3-flag
         $tsFlag = (bool) ($this->option('ts') || $this->option('st') || $tusFlag || $trsFlag);
         $usFlag = (bool) ($this->option('us') || $this->option('su') || $tusFlag || $ursFlag);
         $rsFlag = (bool) ($this->option('rs') || $this->option('sr') || $trsFlag || $ursFlag);
@@ -189,7 +178,6 @@ final class MakeActionCommand extends Command
         $trFlag = (bool) ($this->option('tr') || $this->option('rt') || $turFlag || $trsFlag);
         $urFlag = (bool) ($this->option('ur') || $this->option('ru') || $turFlag || $ursFlag);
 
-        // Individual flags or derived from combinations
         $tFlag = (bool) ($this->option('t') || $tuFlag || $trFlag || $tsFlag);
         $uFlag = (bool) ($this->option('u') || $tuFlag || $urFlag || $usFlag);
         $rFlag = (bool) ($this->option('r') || $trFlag || $urFlag || $rsFlag);

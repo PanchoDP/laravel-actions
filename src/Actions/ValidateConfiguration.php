@@ -37,12 +37,10 @@ final class ValidateConfiguration
             return 'Actions';
         }
 
-        // Security: Prevent path traversal in base folder
         if (self::containsPathTraversal($baseFolder)) {
             throw new InvalidArgumentException('Invalid base folder: path traversal sequences are not allowed.');
         }
 
-        // Validate folder name format
         if (! preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/', $baseFolder)) {
             throw new InvalidArgumentException('Invalid base folder: must start with a letter and contain only letters, numbers, and underscores.');
         }
@@ -61,12 +59,10 @@ final class ValidateConfiguration
             return 'handle';
         }
 
-        // Validate method name format (valid PHP method name)
         if (! preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $methodName)) {
             throw new InvalidArgumentException('Invalid method name: must be a valid PHP method name.');
         }
 
-        // Security: Prevent dangerous method names
         $dangerousMethods = ['__construct', '__destruct', '__call', '__callStatic', '__get', '__set', '__isset', '__unset', 'eval', 'exec', 'system'];
         if (in_array(mb_strtolower($methodName), $dangerousMethods, true)) {
             throw new InvalidArgumentException("Method name '{$methodName}' is not allowed for security reasons.");
@@ -80,10 +76,8 @@ final class ValidateConfiguration
      */
     private static function containsPathTraversal(string $path): bool
     {
-        // Normalize the path to detect various path traversal attempts
         $normalizedPath = str_replace('\\', '/', $path);
 
-        // Check for common path traversal patterns
         $dangerousPatterns = [
             '../',     // Standard path traversal
             '..\\',    // Windows path traversal

@@ -22,7 +22,6 @@ final class PrepareSubfolder
             return [];
         }
 
-        // Security: Prevent path traversal attacks
         if (self::containsPathTraversal($subfolder)) {
             throw new InvalidArgumentException('Invalid subfolder path: path traversal sequences are not allowed.');
         }
@@ -38,10 +37,8 @@ final class PrepareSubfolder
      */
     private static function containsPathTraversal(string $path): bool
     {
-        // Normalize the path to detect various path traversal attempts
         $normalizedPath = str_replace('\\', '/', $path);
 
-        // Check for common path traversal patterns
         $dangerousPatterns = [
             '../',     // Standard path traversal
             '..\\',    // Windows path traversal
@@ -57,7 +54,6 @@ final class PrepareSubfolder
             }
         }
 
-        // Check for absolute paths
         if (preg_match('/^([a-z]:|\/)/i', $normalizedPath)) {
             return true;
         }

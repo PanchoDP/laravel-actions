@@ -12,10 +12,8 @@ final class PrepareStub
     public static function handle(bool $tFlag, bool $uFlag, bool $rFlag, bool $sFlag, string $filename, string $namespace): string
     {
         try {
-            // Select appropriate stub based on flags
             $stubFile = self::selectStubFile($tFlag, $rFlag);
 
-            // Security: Validate stub file exists before reading
             if (! file_exists($stubFile) || ! is_readable($stubFile)) {
                 throw new RuntimeException("Stub file not found or not readable: {$stubFile}");
             }
@@ -26,7 +24,6 @@ final class PrepareStub
                 throw new RuntimeException("Failed to read stub file: {$stubFile}");
             }
 
-            // Handle Request class injection
             if ($rFlag) {
                 $requestClass = $filename.'Request';
                 $safeRequestClass = self::sanitizeForTemplate($requestClass);
@@ -41,15 +38,12 @@ final class PrepareStub
                 $stub = str_replace('{{ user }}', '', $stub);
             }
 
-            // Security: Sanitize filename and namespace for template injection
             $safeFilename = self::sanitizeForTemplate($filename);
             $safeNamespace = self::sanitizeForTemplate($namespace, true); // Allow backslashes for namespaces
 
             $stub = str_replace('{{ class }}', $safeFilename, $stub);
             $stub = str_replace('{{ namespace }}', $safeNamespace, $stub);
 
-            // Handle method static/instance logic
-            // Instance by default, static only when --s flag is used
             $methodType = $sFlag ? 'static ' : '';
             $stub = str_replace('{{ method_type }}', $methodType, $stub);
 
@@ -95,14 +89,11 @@ final class PrepareStub
     private static function sanitizeForTemplate(string $input, bool $allowBackslashes = false): string
     {
         if ($allowBackslashes) {
-            // Remove potential PHP tags and dangerous characters but allow backslashes for namespaces
             $sanitized = preg_replace('/[<>\'"`\$]/', '', $input);
         } else {
-            // Remove potential PHP tags and dangerous characters including backslashes
             $sanitized = preg_replace('/[<>\'"`\$\\\]/', '', $input);
         }
 
-        // Ensure the result is still valid for its intended use
         if ($sanitized === null) {
             throw new RuntimeException('Input sanitization failed');
         }

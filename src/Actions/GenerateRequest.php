@@ -23,7 +23,6 @@ final class GenerateRequest
             throw new InvalidArgumentException('Action name cannot be empty.');
         }
 
-        // Validate action name format
         if (! preg_match('/^[A-Z][a-zA-Z0-9]*$/', $actionName)) {
             throw new InvalidArgumentException('Invalid action name format. Must start with uppercase letter and contain only alphanumeric characters.');
         }
@@ -31,7 +30,6 @@ final class GenerateRequest
         $requestName = $actionName.'Request';
 
         try {
-            // Execute Laravel's make:request command
             $exitCode = Artisan::call('make:request', [
                 'name' => $requestName,
             ]);
