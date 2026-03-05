@@ -71,7 +71,8 @@ final class MakeActionCommand extends Command
     {--sutr : Make a DB transaction action with User, Request injection and static method}
     {--surt : Make a DB transaction action with User, Request injection and static method}
     {--srtu : Make a DB transaction action with User, Request injection and static method}
-    {--srut : Make a DB transaction action with User, Request injection and static method}';
+    {--srut : Make a DB transaction action with User, Request injection and static method}
+    {--force : Overwrite the action if it already exists}';
 
     protected $description = 'Create a new action class';
 
@@ -189,6 +190,7 @@ final class MakeActionCommand extends Command
             'uFlag' => $uFlag,
             'rFlag' => $rFlag,
             'sFlag' => $sFlag,
+            'force' => (bool) $this->option('force'),
         ];
     }
 
@@ -215,7 +217,8 @@ final class MakeActionCommand extends Command
         ValidateFolder::handle($folders);
 
         $folder_path = implode(DIRECTORY_SEPARATOR, $folders);
-        $path = PreparePath::handle($folder_path, $name, $validatedConfig['base_folder']);
+        $force = is_bool($input['force']) ? $input['force'] : false;
+        $path = PreparePath::handle($folder_path, $name, $validatedConfig['base_folder'], $force);
         $namespace = ObtainNamespace::handle($folder_path, $name, $validatedConfig['base_folder']);
         $relative_path = dirname("{$validatedConfig['base_folder']}/$folder_path/{$name}.php");
 

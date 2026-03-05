@@ -13,11 +13,11 @@ final class PreparePath
      *
      * @throws RuntimeException
      */
-    public static function handle(?string $folder_path, string $name, string $base_folder): string
+    public static function handle(?string $folder_path, string $name, string $base_folder, bool $force = false): string
     {
         $path = app_path("{$base_folder}/{$folder_path}/{$name}.php");
 
-        if (file_exists($path)) {
+        if (! $force && file_exists($path)) {
             throw new RuntimeException("Action {$name} already exists in the subfolder {$folder_path}.");
         }
 

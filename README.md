@@ -140,6 +140,7 @@ final class CreateAccount
 | `--u` | Injects `User $user` into the method |
 | `--r` | Generates a `Request` class and injects it into the method |
 | `--s` | Generates a `static` method instead of an instance method |
+| `--force` | Overwrites the action if it already exists |
 
 Flags can be combined in any order:
 
