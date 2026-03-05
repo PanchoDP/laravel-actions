@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.1] - 2026-03-05
+
+### 🐛 Bug Fixes
+
+- Change stubs directory
+
+
+### 🎨 Styling
+
+- Fix styles
+
+
 ## [2.2.0] - 2026-03-05
 
 ### 🚀 Features
