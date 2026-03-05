@@ -6,8 +6,7 @@ namespace Panchodp\LaravelAction\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use function Laravel\Prompts\confirm;
-use function Laravel\Prompts\text;
+use InvalidArgumentException;
 use Panchodp\LaravelAction\Actions\CreateDirectory;
 use Panchodp\LaravelAction\Actions\GenerateRequest;
 use Panchodp\LaravelAction\Actions\ObtainNamespace;
@@ -18,6 +17,9 @@ use Panchodp\LaravelAction\Actions\ValidateConfiguration;
 use Panchodp\LaravelAction\Actions\ValidateFolder;
 use Panchodp\LaravelAction\Actions\ValidateName;
 use Throwable;
+
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\text;
 
 final class MakeActionCommand extends Command
 {
@@ -118,7 +120,7 @@ final class MakeActionCommand extends Command
 
         if ($name === '') {
             if (! $this->input->isInteractive()) {
-                throw new \InvalidArgumentException('Action name is required.');
+                throw new InvalidArgumentException('Action name is required.');
             }
 
             return $this->askInteractive();
