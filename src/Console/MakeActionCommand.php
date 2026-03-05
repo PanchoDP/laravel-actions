@@ -6,6 +6,8 @@ namespace Panchodp\LaravelAction\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\text;
 use Panchodp\LaravelAction\Actions\CreateDirectory;
 use Panchodp\LaravelAction\Actions\GenerateRequest;
 use Panchodp\LaravelAction\Actions\ObtainNamespace;
@@ -19,7 +21,7 @@ use Throwable;
 
 final class MakeActionCommand extends Command
 {
-    protected $signature = 'make:action {name} {subfolder?}
+    protected $signature = 'make:action {name?} {subfolder?}
     {--t : Make a DB transaction action }
     {--u : Make a User injection}
     {--r : Generate a Request class and inject it into the action}
@@ -113,6 +115,14 @@ final class MakeActionCommand extends Command
     {
         $name = $this->argument('name');
         $name = is_string($name) ? mb_trim($name) : '';
+
+        if ($name === '') {
+            if (! $this->input->isInteractive()) {
+                throw new \InvalidArgumentException('Action name is required.');
+            }
+
+            return $this->askInteractive();
+        }
 
         $subfolder = $this->argument('subfolder');
         $subfolder = is_string($subfolder) ? mb_trim($subfolder, '/\\') : '';
@@ -278,6 +288,38 @@ final class MakeActionCommand extends Command
         );
 
         File::put($path, $stub);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function askInteractive(): array
+    {
+        $name = text(
+            label: 'Action name',
+            placeholder: 'e.g. CreateUser',
+            required: true,
+        );
+
+        $subfolder = text(
+            label: 'Subfolder (optional)',
+            placeholder: 'e.g. User or User/Auth',
+        );
+
+        $tFlag = confirm(label: 'Include DB transaction?', default: false);
+        $uFlag = confirm(label: 'Inject User?', default: false);
+        $rFlag = confirm(label: 'Generate Request class?', default: false);
+        $sFlag = confirm(label: 'Static method?', default: false);
+
+        return [
+            'name' => mb_trim($name),
+            'subfolder' => mb_trim($subfolder, '/\\'),
+            'tFlag' => $tFlag,
+            'uFlag' => $uFlag,
+            'rFlag' => $rFlag,
+            'sFlag' => $sFlag,
+            'force' => false,
+        ];
     }
 
     /**

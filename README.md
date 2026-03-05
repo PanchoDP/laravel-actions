@@ -82,6 +82,27 @@ public static function handle(array $attributes): void
 
 ## Usage
 
+### Interactive Mode
+
+Run `make:action` without arguments to launch an interactive wizard:
+
+```bash
+php artisan make:action
+```
+
+```
+ ┌ Action name ───────────────────────────────────────────────┐
+ │ e.g. CreateUser                                            │
+ └────────────────────────────────────────────────────────────┘
+ ┌ Subfolder (optional) ──────────────────────────────────────┐
+ │ e.g. User or User/Auth                                     │
+ └────────────────────────────────────────────────────────────┘
+ ┌ Include DB transaction? ───────────────────────────────────┐
+ │ ● Yes / ○ No                                               │
+ └────────────────────────────────────────────────────────────┘
+ ...
+```
+
 ### Creating Actions
 
 To create an action class, use the `make:action` command. You can specify the full path using forward slashes `/` or backslashes `\` (Laravel-style syntax):
