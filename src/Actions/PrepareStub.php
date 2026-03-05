@@ -84,7 +84,7 @@ final class PrepareStub
 
         $publishedStub = resource_path('stubs/vendor/laravel-actions/'.$stubName);
 
-        return file_exists($publishedStub) ? $publishedStub : __DIR__.'/../stubs/'.$stubName;
+        return file_exists($publishedStub) ? $publishedStub : __DIR__.'/../../stubs/'.$stubName;
     }
 
     /**
