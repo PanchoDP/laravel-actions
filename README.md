@@ -126,237 +126,33 @@ final class CreateAccount
 
 
 ### Flags
-- `--t` This flag prepare the action class with Database trasactions.
-For example, if you want to create an action class with transactions, you can use:
+
+| Flag | Description |
+|------|-------------|
+| `--t` | Wraps the action body in a `DB::transaction` |
+| `--u` | Injects `User $user` into the method |
+| `--r` | Generates a `Request` class and injects it into the method |
+| `--s` | Generates a `static` method instead of an instance method |
+
+Flags can be combined in any order:
 
 ```bash
-php artisan make:action MyAction --t
+php artisan make:action MyAction --tur   # transaction + user + request
+php artisan make:action MyAction --turs  # + static method
 ```
-will result in the following action class:
+
+Example output for `--turs`:
+
 ```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Actions;
-
-use Illuminate\Support\Facades\DB;
-
-use Throwable;
-
 final class MyAction
 {
-            public function handle(array $attributes): void
-            {
-                DB::transaction(function () use ($attributes) {
-                  // Logic to be executed within the transaction
-                });
-    }
-}
-```
-
-- `--u` This flag inyect User $user in the handle method.
-
-For example, if you want to create an action class with User injection, you can use:
-
-```bash
-php artisan make:action MyAction --u
-```
-will result in the following action class:
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Actions;
-
-use App\Models\User;
-use Throwable;
-
-final class MyAction
-{
-    public function handle(User $user,array $attributes): void
-    {
-        // This is where the action logic will be implemented.
-    }
-}
-```
-
-- `--tu` or `--ut`  Use both flags together to prepare the action class with Database transactions and User injection.
-
-```bash php artisan make:action MyAction --tu ``` or ```bash php artisan make:action MyAction --ut ```
-
-will result in the following action class:
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Actions;
-
-use Illuminate\Support\Facades\DB;
-use App\Models\User;
-use Throwable;
-
-final class MyAction
-{
-            public function handle(User $user,array $attributes): void
-            {
-                DB::transaction(function () use ($attributes) {
-                  // Logic to be executed within the transaction
-                });
-    }
-}
-
- 
-```
-
-- `--r` This flag generates a Laravel Request class and injects it into the action method.
-
-For example, if you want to create an action class with Request injection, you can use:
-
-```bash
-php artisan make:action MyAction --r
-```
-This will generate both an Action class and a Request class (`MyActionRequest`), and will result in:
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Actions;
-
-use App\Http\Requests\MyActionRequest;
-
-final class MyAction
-{
-    public function handle(MyActionRequest $request): void
-    {
-        // This is where the action logic will be implemented.
-    }
-}
-```
-
-- `--s` This flag generates static methods instead of instance methods.
-
-For example, if you want to create an action class with static methods, you can use:
-
-```bash
-php artisan make:action MyAction --s
-```
-will result in the following action class:
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Actions;
-
-final class MyAction
-{
-    public static function handle(array $attributes): void
-    {
-        // This is where the action logic will be implemented.
-    }
-}
-```
-
-### Advanced Flag Combinations
-
-You can combine multiple flags to create actions with different features. All possible combinations are supported:
-
-**Two-flag combinations:**
-- `--tr` or `--rt`: Database transactions with Request injection
-- `--ur` or `--ru`: User injection with Request injection
-- `--tu` or `--ut`: Database transactions with User injection (as shown above)
-- `--ts` or `--st`: Database transactions with static method
-- `--us` or `--su`: User injection with static method
-- `--rs` or `--sr`: Request injection with static method
-
-**Three-flag combinations:**
-- `--tur`, `--tru`, `--utr`, `--urt`, `--rtu`, `--rut`: All features combined (instance)
-- `--tus`, `--tsu`, `--uts`, `--ust`, `--stu`, `--sut`: Transactions + User + Static
-- `--trs`, `--tsr`, `--rts`, `--rst`, `--str`, `--srt`: Transactions + Request + Static
-- `--urs`, `--usr`, `--rus`, `--rsu`, `--sru`, `--sur`: User + Request + Static
-
-**Four-flag combinations (all features):**
-- `--turs`, `--trsu`, `--utrs`, `--urts`, `--rtus`, `--ruts`: All features with static method
-- `--stru`, `--stur`, `--sutr`, `--surt`, `--srtu`, `--srut`: All permutations supported
-
-For example with instance method (default):
-```bash
-php artisan make:action CompleteAction --tur
-```
-
-This will generate:
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Actions;
-
-use Illuminate\Support\Facades\DB;
-use App\Models\User;
-use App\Http\Requests\CompleteActionRequest;
-
-final class CompleteAction
-{
-    public function handle(User $user, CompleteActionRequest $request): void
+    public static function handle(User $user, MyActionRequest $request): void
     {
         DB::transaction(function () use ($request) {
             // Logic to be executed within the transaction
         });
     }
 }
-```
-
-For example with static method:
-```bash
-php artisan make:action CompleteAction --turs
-```
-
-This will generate a static method with all features:
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Actions;
-
-use Illuminate\Support\Facades\DB;
-use App\Models\User;
-use App\Http\Requests\CompleteActionRequest;
-
-final class CompleteAction
-{
-    public static function handle(User $user, CompleteActionRequest $request): void
-    {
-        DB::transaction(function () use ($request) {
-            // Logic to be executed within the transaction
-        });
-    }
-}
-```
-
-**Individual flags are also supported:**
-- `--t`: Only database transactions
-- `--u`: Only user injection
-- `--r`: Only request injection
-- `--s`: Only static method
-
-## Default Behavior
-
-By default, actions are generated as **instance methods**. Use the `--s` flag to generate static methods:
-
-```bash
-# Creates instance method (default)
-php artisan make:action MyAction
-
-# Creates static method
-php artisan make:action MyAction --s
 ```
 
 ## Other Userfull Commands:
