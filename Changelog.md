@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.0] - 2026-03-05
+
+### 🚀 Features
+
+- Add action test in actions for php8.5
+
+
+### ⚙️ Miscellaneous Tasks
+
+- Clean some comments
+
+- Add rector to verify code quality
+
+- Rector process to solve problems
+
+
 ## [2.2.1] - 2026-03-05
 
 ### 🐛 Bug Fixes
