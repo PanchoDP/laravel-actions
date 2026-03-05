@@ -105,23 +105,11 @@ test('PrepareStub sanitizes template variables', function () {
     expect($method->invoke(null, 'App\\Actions<?php', true))->toBe('App\\Actions?php');
 });
 
-test('CreateDirectory uses secure permissions', function () {
+test('CreateDirectory creates the directory', function () {
     $tempDir = sys_get_temp_dir().'/test_actions_security_'.uniqid();
     $testFile = $tempDir.'/TestAction.php';
 
-    CreateDirectory::handle($testFile, 0750);
-
-    expect(is_dir($tempDir))->toBeTrue();
-
-    // Clean up
-    rmdir($tempDir);
-});
-
-test('CreateDirectory respects custom permissions', function () {
-    $tempDir = sys_get_temp_dir().'/test_actions_permissions_'.uniqid();
-    $testFile = $tempDir.'/TestAction.php';
-
-    CreateDirectory::handle($testFile, 0755);
+    CreateDirectory::handle($testFile);
 
     expect(is_dir($tempDir))->toBeTrue();
 

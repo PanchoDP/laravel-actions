@@ -36,13 +36,11 @@ This will create a `config/laravel-actions.php` file in your application.
 return [
     'base_folder' => 'Actions',
     'method_name' => 'handle',
-    'directory_permissions' => 0750,
 ];
 ```
-There are three configuration options available:
-- `base_folder`: This is the base folder where your action classes will be created. By default, it is set to `Actions`, which means your action classes will be created in the `app/Actions` directory.
-- `method_name`: This is the name of the method that will be created in your action classes. By default, it is set to `handle`, which means your action classes will have a `handle` method where you can implement your action logic.
-- `directory_permissions`: This option defines the permissions for newly created actions folders. This option defines the permissions for newly directories created by the package.
+There are two configuration options available:
+- `base_folder`: Base folder where action classes are created. Defaults to `Actions` (`app/Actions`).
+- `method_name`: Method name generated in action classes. Defaults to `handle`.
 
 ## Method Types
 

@@ -234,14 +234,10 @@ final class MakeActionCommand extends Command
      */
     private function createDirectoryStructure(array $config): void
     {
-        $permissions = is_int(config('laravel-actions.directory_permissions'))
-            ? config('laravel-actions.directory_permissions')
-            : 0750;
-
         $path = is_string($config['path']) ? $config['path'] : '';
         $relativePath = is_string($config['relative_path']) ? $config['relative_path'] : '';
 
-        CreateDirectory::handle($path, $permissions);
+        CreateDirectory::handle($path);
         $this->info("Directory {$relativePath} created successfully...");
     }
 

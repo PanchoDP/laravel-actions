@@ -6,11 +6,11 @@ namespace Panchodp\LaravelAction\Actions;
 
 final class CreateDirectory
 {
-    public static function handle(string $path, int $permissions = 0750): void
+    public static function handle(string $path): void
     {
         $directory = dirname($path);
         if (! is_dir($directory)) {
-            mkdir($directory, $permissions, true);
+            mkdir($directory, 0755, true);
         }
     }
 }
