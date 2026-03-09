@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.1] - 2026-03-09
+
+### 🎨 Styling
+
+- Change the banner for the package
+
+
 ## [2.4.0] - 2026-03-09
 
 ### 🚀 Features
