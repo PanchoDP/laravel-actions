@@ -87,7 +87,7 @@ final class LaravelStyleSyntaxTest extends TestCase
     {
         File::deleteDirectory(app_path('Actions'));
 
-        $this->artisan('make:action', ['name' => 'Admin/CreatePost', '--t' => true])
+        $this->artisan('make:action', ['name' => 'Admin/CreatePost', '--transaction' => true])
             ->assertExitCode(0);
 
         $this->assertFileExists(app_path('Actions/Admin/CreatePost.php'));
@@ -102,7 +102,7 @@ final class LaravelStyleSyntaxTest extends TestCase
     {
         File::deleteDirectory(app_path('Actions'));
 
-        $this->artisan('make:action', ['name' => 'User/UpdateProfile', '--u' => true])
+        $this->artisan('make:action', ['name' => 'User/UpdateProfile', '--user' => true])
             ->assertExitCode(0);
 
         $this->assertFileExists(app_path('Actions/User/UpdateProfile.php'));
@@ -119,7 +119,7 @@ final class LaravelStyleSyntaxTest extends TestCase
         File::deleteDirectory(app_path('Actions'));
         File::deleteDirectory(app_path('Http/Requests'));
 
-        $this->artisan('make:action', ['name' => 'Post/Create', '--r' => true])
+        $this->artisan('make:action', ['name' => 'Post/Create', '--request' => true])
             ->assertExitCode(0);
 
         $this->assertFileExists(app_path('Actions/Post/Create.php'));
@@ -135,7 +135,7 @@ final class LaravelStyleSyntaxTest extends TestCase
         File::deleteDirectory(app_path('Actions'));
         File::deleteDirectory(app_path('Http/Requests'));
 
-        $this->artisan('make:action', ['name' => 'Order/Process', '--tur' => true])
+        $this->artisan('make:action', ['name' => 'Order/Process', '--transaction' => true, '--user' => true, '--request' => true])
             ->assertExitCode(0);
 
         $this->assertFileExists(app_path('Actions/Order/Process.php'));
@@ -152,7 +152,7 @@ final class LaravelStyleSyntaxTest extends TestCase
     {
         File::deleteDirectory(app_path('Actions'));
 
-        $this->artisan('make:action', ['name' => 'Util/FormatDate', '--s' => true])
+        $this->artisan('make:action', ['name' => 'Util/FormatDate', '--static' => true])
             ->assertExitCode(0);
 
         $this->assertFileExists(app_path('Actions/Util/FormatDate.php'));

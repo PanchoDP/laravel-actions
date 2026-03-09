@@ -155,19 +155,22 @@ final class CreateAccount
 
 ### Flags
 
-| Flag | Description |
-|------|-------------|
-| `--t` | Wraps the action body in a `DB::transaction` |
-| `--u` | Injects `User $user` into the method |
-| `--r` | Generates a `Request` class and injects it into the method |
-| `--s` | Generates a `static` method instead of an instance method |
-| `--force` | Overwrites the action if it already exists |
+| Flag | Shortcut | Description |
+|------|----------|-------------|
+| `--transaction` | `-t` | Wraps the action body in a `DB::transaction` |
+| `--user` | `-u` | Injects `User $user` into the method |
+| `--request` | `-r` | Generates a `Request` class and injects it into the method |
+| `--static` | `-s` | Generates a `static` method instead of an instance method |
+| `--force` | | Overwrites the action if it already exists |
 
-Flags can be combined in any order:
+Shortcuts can be combined in any order, just like `make:model`:
 
 ```bash
-php artisan make:action MyAction --tur   # transaction + user + request
-php artisan make:action MyAction --turs  # + static method
+php artisan make:action MyAction -tur    # transaction + user + request
+php artisan make:action MyAction -turs   # + static method
+
+# Long form works too
+php artisan make:action MyAction --transaction --user --request
 ```
 
 Example output for `--turs`:

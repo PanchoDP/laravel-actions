@@ -85,7 +85,7 @@ test('PrepareStub validates stub file existence', function (): void {
     $reflection = new ReflectionClass(PrepareStub::class);
 
     // This test checks that the method properly validates file existence
-    expect(fn (): string => PrepareStub::handle(false, false, false, 'TestAction', 'App\\Actions'))
+    expect(fn (): string => PrepareStub::handle(false, false, false, false, 'TestAction', 'App\\Actions'))
         ->not->toThrow(Exception::class);
 });
 

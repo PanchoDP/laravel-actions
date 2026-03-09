@@ -57,7 +57,7 @@ final class PublishedStubsTest extends TestCase
         File::makeDirectory($this->publishedStubsPath, 0755, true);
         File::put($this->publishedStubsPath.'/action.stub', '<?php // custom stub for {{ class }}');
 
-        $this->artisan('make:action', ['name' => 'MyAction', '--t' => true])
+        $this->artisan('make:action', ['name' => 'MyAction', '--transaction' => true])
             ->assertExitCode(0);
 
         $this->assertFileExists(app_path('Actions/MyAction.php'));

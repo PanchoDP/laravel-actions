@@ -48,7 +48,7 @@ final class LaravelActionTest extends TestCase
     {
         File::deleteDirectory(app_path('Actions'));
 
-        $this->artisan('make:action', ['name' => 'SimpleAction', '--u' => true])
+        $this->artisan('make:action', ['name' => 'SimpleAction', '--user' => true])
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Actions/SimpleAction.php'));
 
@@ -77,7 +77,7 @@ final class LaravelActionTest extends TestCase
     {
         File::deleteDirectory(app_path('Actions'));
 
-        $this->artisan('make:action', ['name' => 'SimpleAction', '--u' => true, '--t' => true])
+        $this->artisan('make:action', ['name' => 'SimpleAction', '--user' => true, '--transaction' => true])
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Actions/SimpleAction.php'));
 
@@ -111,7 +111,7 @@ final class LaravelActionTest extends TestCase
     {
         File::deleteDirectory(app_path('Actions'));
 
-        $this->artisan('make:action', ['name' => 'SimpleAction', '--tu' => true])
+        $this->artisan('make:action', ['name' => 'SimpleAction', '--transaction' => true, '--user' => true])
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Actions/SimpleAction.php'));
 
@@ -145,7 +145,7 @@ final class LaravelActionTest extends TestCase
     {
         File::deleteDirectory(app_path('Actions'));
         $this->assertFileDoesNotExist(app_path('Actions/SimpleAction.php'));
-        $this->artisan('make:action', ['name' => 'SimpleAction', '--u' => true])
+        $this->artisan('make:action', ['name' => 'SimpleAction', '--user' => true])
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Actions/SimpleAction.php'));
         $this->artisan('make:action', ['name' => 'SimpleAction'])
@@ -156,7 +156,7 @@ final class LaravelActionTest extends TestCase
     {
         File::deleteDirectory(app_path('Actions'));
 
-        $this->artisan('make:action', ['name' => 'SimpleAction', '--tu' => true])
+        $this->artisan('make:action', ['name' => 'SimpleAction', '--transaction' => true, '--user' => true])
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Actions/SimpleAction.php'));
 
@@ -190,7 +190,7 @@ final class LaravelActionTest extends TestCase
     {
         File::deleteDirectory(app_path('Actions'));
         $this->assertFileDoesNotExist(app_path('Actions/SimpleAction.php'));
-        $this->artisan('make:action', ['name' => 'SimpleAction', '--tu' => true])
+        $this->artisan('make:action', ['name' => 'SimpleAction', '--transaction' => true, '--user' => true])
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Actions/SimpleAction.php'));
         $this->artisan('make:action', ['name' => 'SimpleAction'])
@@ -201,7 +201,7 @@ final class LaravelActionTest extends TestCase
     {
         File::deleteDirectory(app_path('Actions'));
 
-        $this->artisan('make:action', ['name' => 'SimpleAction', '--s' => true])
+        $this->artisan('make:action', ['name' => 'SimpleAction', '--static' => true])
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Actions/SimpleAction.php'));
 

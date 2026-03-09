@@ -28,7 +28,7 @@ final class RequestFlagTest extends TestCase
     {
         $this->artisan('make:action', [
             'name' => 'LimpiarAction',
-            '--r' => true,
+            '--request' => true,
         ])->assertExitCode(0);
 
         // Assert Action file exists
@@ -55,8 +55,8 @@ final class RequestFlagTest extends TestCase
     {
         $this->artisan('make:action', [
             'name' => 'TransactionAction',
-            '--t' => true,
-            '--r' => true,
+            '--transaction' => true,
+            '--request' => true,
         ])->assertExitCode(0);
 
         // Assert both files exist
@@ -90,8 +90,8 @@ final class RequestFlagTest extends TestCase
     {
         $this->artisan('make:action', [
             'name' => 'UserAction',
-            '--u' => true,
-            '--r' => true,
+            '--user' => true,
+            '--request' => true,
         ])->assertExitCode(0);
 
         // Assert both files exist
@@ -123,9 +123,9 @@ final class RequestFlagTest extends TestCase
     {
         $this->artisan('make:action', [
             'name' => 'CompleteAction',
-            '--t' => true,
-            '--u' => true,
-            '--r' => true,
+            '--transaction' => true,
+            '--user' => true,
+            '--request' => true,
         ])->assertExitCode(0);
 
         // Assert both files exist
@@ -164,7 +164,7 @@ final class RequestFlagTest extends TestCase
         $this->artisan('make:action', [
             'name' => 'SubfolderAction',
             'subfolder' => 'Admin',
-            '--r' => true,
+            '--request' => true,
         ])->assertExitCode(0);
 
         // Assert Action file exists in subfolder
@@ -196,7 +196,8 @@ final class RequestFlagTest extends TestCase
     {
         $this->artisan('make:action', [
             'name' => 'TRAction',
-            '--tr' => true,
+            '--transaction' => true,
+            '--request' => true,
         ])->assertExitCode(0);
 
         // Assert both files exist
@@ -230,7 +231,8 @@ final class RequestFlagTest extends TestCase
     {
         $this->artisan('make:action', [
             'name' => 'URAction',
-            '--ur' => true,
+            '--user' => true,
+            '--request' => true,
         ])->assertExitCode(0);
 
         // Assert both files exist
@@ -262,7 +264,9 @@ final class RequestFlagTest extends TestCase
     {
         $this->artisan('make:action', [
             'name' => 'TURAction',
-            '--tur' => true,
+            '--transaction' => true,
+            '--user' => true,
+            '--request' => true,
         ])->assertExitCode(0);
 
         // Assert both files exist

@@ -24,58 +24,10 @@ use function Laravel\Prompts\text;
 final class MakeActionCommand extends Command
 {
     protected $signature = 'make:action {name?} {subfolder?}
-    {--t : Make a DB transaction action }
-    {--u : Make a User injection}
-    {--r : Generate a Request class and inject it into the action}
-    {--s : Make a static method}
-    {--tu : Make a DB transaction action with User injection}
-    {--ut : Make a DB transaction action with User injection}
-    {--tr : Make a DB transaction action with Request injection}
-    {--rt : Make a DB transaction action with Request injection}
-    {--ur : Make a User injection with Request injection}
-    {--ru : Make a User injection with Request injection}
-    {--ts : Make a DB transaction action with static method}
-    {--st : Make a DB transaction action with static method}
-    {--us : Make a User injection with static method}
-    {--su : Make a User injection with static method}
-    {--rs : Make a Request injection with static method}
-    {--sr : Make a Request injection with static method}
-    {--tur : Make a DB transaction action with User and Request injection}
-    {--tru : Make a DB transaction action with User and Request injection}
-    {--utr : Make a DB transaction action with User and Request injection}
-    {--urt : Make a DB transaction action with User and Request injection}
-    {--rtu : Make a DB transaction action with User and Request injection}
-    {--rut : Make a DB transaction action with User and Request injection}
-    {--tus : Make a DB transaction action with User injection and static method}
-    {--tsu : Make a DB transaction action with User injection and static method}
-    {--uts : Make a DB transaction action with User injection and static method}
-    {--ust : Make a DB transaction action with User injection and static method}
-    {--stu : Make a DB transaction action with User injection and static method}
-    {--sut : Make a DB transaction action with User injection and static method}
-    {--trs : Make a DB transaction action with Request injection and static method}
-    {--tsr : Make a DB transaction action with Request injection and static method}
-    {--rts : Make a DB transaction action with Request injection and static method}
-    {--rst : Make a DB transaction action with Request injection and static method}
-    {--str : Make a DB transaction action with Request injection and static method}
-    {--srt : Make a DB transaction action with Request injection and static method}
-    {--urs : Make a User injection with Request injection and static method}
-    {--usr : Make a User injection with Request injection and static method}
-    {--rus : Make a User injection with Request injection and static method}
-    {--rsu : Make a User injection with Request injection and static method}
-    {--sru : Make a User injection with Request injection and static method}
-    {--sur : Make a User injection with Request injection and static method}
-    {--turs : Make a DB transaction action with User, Request injection and static method}
-    {--trsu : Make a DB transaction action with User, Request injection and static method}
-    {--utrs : Make a DB transaction action with User, Request injection and static method}
-    {--urts : Make a DB transaction action with User, Request injection and static method}
-    {--rtus : Make a DB transaction action with User, Request injection and static method}
-    {--ruts : Make a DB transaction action with User, Request injection and static method}
-    {--stru : Make a DB transaction action with User, Request injection and static method}
-    {--stur : Make a DB transaction action with User, Request injection and static method}
-    {--sutr : Make a DB transaction action with User, Request injection and static method}
-    {--surt : Make a DB transaction action with User, Request injection and static method}
-    {--srtu : Make a DB transaction action with User, Request injection and static method}
-    {--srut : Make a DB transaction action with User, Request injection and static method}
+    {--t|transaction : Wrap the action in a DB transaction}
+    {--u|user : Inject the authenticated User}
+    {--r|request : Generate a Request class and inject it into the action}
+    {--s|static : Make the method static}
     {--force : Overwrite the action if it already exists}';
 
     protected $description = 'Create a new action class';
@@ -143,41 +95,10 @@ final class MakeActionCommand extends Command
 
         $subfolder = mb_trim($subfolder, '/\\');
 
-        $tursFlag = $this->option('turs') || $this->option('trsu') ||
-                           $this->option('utrs') || $this->option('urts') ||
-                           $this->option('rtus') || $this->option('ruts') ||
-                           $this->option('stru') || $this->option('stur') ||
-                           $this->option('sutr') || $this->option('surt') ||
-                           $this->option('srtu') || $this->option('srut');
-
-        $tusFlag = $this->option('tus') || $this->option('tsu') ||
-                          $this->option('uts') || $this->option('ust') ||
-                          $this->option('stu') || $this->option('sut') || $tursFlag;
-
-        $trsFlag = $this->option('trs') || $this->option('tsr') ||
-                          $this->option('rts') || $this->option('rst') ||
-                          $this->option('str') || $this->option('srt') || $tursFlag;
-
-        $ursFlag = $this->option('urs') || $this->option('usr') ||
-                          $this->option('rus') || $this->option('rsu') ||
-                          $this->option('sru') || $this->option('sur') || $tursFlag;
-
-        $turFlag = $this->option('tur') || $this->option('tru') ||
-                          $this->option('utr') || $this->option('urt') ||
-                          $this->option('rtu') || $this->option('rut') || $tursFlag;
-
-        $tsFlag = $this->option('ts') || $this->option('st') || $tusFlag || $trsFlag;
-        $usFlag = $this->option('us') || $this->option('su') || $tusFlag || $ursFlag;
-        $rsFlag = $this->option('rs') || $this->option('sr') || $trsFlag || $ursFlag;
-
-        $tuFlag = $this->option('tu') || $this->option('ut') || $turFlag || $tusFlag;
-        $trFlag = $this->option('tr') || $this->option('rt') || $turFlag || $trsFlag;
-        $urFlag = $this->option('ur') || $this->option('ru') || $turFlag || $ursFlag;
-
-        $tFlag = $this->option('t') || $tuFlag || $trFlag || $tsFlag;
-        $uFlag = $this->option('u') || $tuFlag || $urFlag || $usFlag;
-        $rFlag = $this->option('r') || $trFlag || $urFlag || $rsFlag;
-        $sFlag = $this->option('s') || $tsFlag || $usFlag || $rsFlag;
+        $tFlag = (bool) $this->option('transaction');
+        $uFlag = (bool) $this->option('user');
+        $rFlag = (bool) $this->option('request');
+        $sFlag = (bool) $this->option('static');
 
         return [
             'name' => $name,
