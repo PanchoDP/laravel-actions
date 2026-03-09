@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.0] - 2026-03-09
+
+### 🚀 Features
+
+- Better flags system
+
+
+### 🎨 Styling
+
+- Fix stubs indentation
+
+
+### ⚙️ Miscellaneous Tasks
+
+- Better namespace
+
+- Improve the PathGuard
+
+
+### 🏗️ Build
+
+- Better dependencies specification
+
+
 ## [2.3.0] - 2026-03-05
 
 ### 🚀 Features
