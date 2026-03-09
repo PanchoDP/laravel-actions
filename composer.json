@@ -31,12 +31,11 @@
         }
     ],
     "require": {
-        "php": "^8.3.0 | ^8.4.0 | ^8.5.0"
+        "php": "^8.3"
     },
     "require-dev": {
         "orchestra/testbench": "^10.9",
-        "spatie/ray": "^1.47",
-        "laravel/pint": "^1.27.1",
+"laravel/pint": "^1.27.1",
         "larastan/larastan": "^3.9.2",
         "pestphp/pest": "^3.8.5",
         "rector/rector": "^2.3"
