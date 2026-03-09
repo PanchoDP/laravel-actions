@@ -37,7 +37,7 @@ final class ValidateConfiguration
             return 'Actions';
         }
 
-        if (self::containsPathTraversal($baseFolder)) {
+        if (PathTraversalGuard::check($baseFolder)) {
             throw new InvalidArgumentException('Invalid base folder: path traversal sequences are not allowed.');
         }
 
@@ -69,29 +69,5 @@ final class ValidateConfiguration
         }
 
         return $methodName;
-    }
-
-    /**
-     * Check if the path contains path traversal sequences.
-     */
-    private static function containsPathTraversal(string $path): bool
-    {
-        $normalizedPath = str_replace('\\', '/', $path);
-
-        $dangerousPatterns = [
-            '../',     // Standard path traversal
-            '..\\',    // Windows path traversal
-            '..%2f',   // URL encoded forward slash
-            '..%5c',   // URL encoded backslash
-        ];
-
-        foreach ($dangerousPatterns as $pattern) {
-            if (mb_stripos($normalizedPath, $pattern) !== false) {
-                return true;
-            }
-        }
-
-        // Check for absolute paths
-        return (bool) preg_match('/^([a-z]:|\/)/i', $normalizedPath);
     }
 }

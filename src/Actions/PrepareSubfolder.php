@@ -22,38 +22,12 @@ final class PrepareSubfolder
             return [];
         }
 
-        if (self::containsPathTraversal($subfolder)) {
+        if (PathTraversalGuard::check($subfolder)) {
             throw new InvalidArgumentException('Invalid subfolder path: path traversal sequences are not allowed.');
         }
 
         $subfolder = str_replace(['/', '\\'], ' ', $subfolder);
 
         return preg_split('/\s+/', $subfolder, -1, PREG_SPLIT_NO_EMPTY) ?: [];
-
-    }
-
-    /**
-     * Check if the path contains path traversal sequences.
-     */
-    private static function containsPathTraversal(string $path): bool
-    {
-        $normalizedPath = str_replace('\\', '/', $path);
-
-        $dangerousPatterns = [
-            '../',     // Standard path traversal
-            '..\\',    // Windows path traversal
-            '..%2f',   // URL encoded forward slash
-            '..%5c',   // URL encoded backslash
-            '..%252f', // Double URL encoded forward slash
-            '..%255c', // Double URL encoded backslash
-        ];
-
-        foreach ($dangerousPatterns as $pattern) {
-            if (mb_stripos($normalizedPath, $pattern) !== false) {
-                return true;
-            }
-        }
-
-        return (bool) preg_match('/^([a-z]:|\/)/i', $normalizedPath);
     }
 }
