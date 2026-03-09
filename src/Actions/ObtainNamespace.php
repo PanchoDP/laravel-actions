@@ -9,7 +9,7 @@ final class ObtainNamespace
     public static function handle(?string $subfolder, string $name, string $base_folder): string
     {
         if (in_array($subfolder, [null, '', '0'], true)) {
-            return 'App\\'.$base_folder;
+            return mb_rtrim(app()->getNamespace().$base_folder);
         }
         $relative_path = dirname("{$base_folder}/{$subfolder}/{$name}.php");
         $namespace_type = str_replace('/', '\\', $relative_path);
