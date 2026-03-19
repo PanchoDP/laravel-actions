@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.2] - 2026-03-19
+
+### ⚙️ Miscellaneous Tasks
+
+- Adding compatibility tests with Laravel 13
+
+
 ## [2.4.1] - 2026-03-09
 
 ### 🎨 Styling
