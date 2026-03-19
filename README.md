@@ -15,6 +15,14 @@
 
 Make your Laravel actions classes fast and in a simple way.
 
+## Compatibility
+
+| Laravel | PHP    | Package |
+|---------|--------|---------|
+| 11.x    | 8.3+   | ^2.x    |
+| 12.x    | 8.3+   | ^2.x    |
+| 13.x    | 8.3+   | ^2.x    |
+
 ## Installation
 
 You can install the package via composer:
