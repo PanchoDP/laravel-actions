@@ -67,7 +67,7 @@ final class MakeActionCommand extends Command
     private function processInputs(): array
     {
         $name = $this->argument('name');
-        $name = is_string($name) ? mb_trim($name) : '';
+        $name = is_string($name) ? (string) mb_trim($name) : '';
 
         if ($name === '') {
             if (! $this->input->isInteractive()) {
@@ -78,7 +78,7 @@ final class MakeActionCommand extends Command
         }
 
         $subfolder = $this->argument('subfolder');
-        $subfolder = is_string($subfolder) ? mb_trim($subfolder, '/\\') : '';
+        $subfolder = is_string($subfolder) ? (string) mb_trim($subfolder, '/\\') : '';
 
         if (preg_match('#[/\\\\]#', $name)) {
             $parts = preg_split('#[/\\\\]+#', $name, -1, PREG_SPLIT_NO_EMPTY);
