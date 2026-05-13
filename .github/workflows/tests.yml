@@ -34,6 +34,7 @@ jobs:
         php-version: ${{ matrix.php-version }}
         extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
         coverage: none
+        tools: composer:2.9.8
 
     - name: Cache Composer packages
       id: composer-cache
@@ -43,6 +44,7 @@ jobs:
         key: ${{ runner.os }}-php-${{ matrix.php-version }}-laravel-${{ matrix.laravel }}-${{ hashFiles('**/composer.lock') }}
         restore-keys: |
           ${{ runner.os }}-php-${{ matrix.php-version }}-laravel-${{ matrix.laravel }}-
+      
 
     - name: Install dependencies
       run: |
