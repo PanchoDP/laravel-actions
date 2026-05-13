@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.6] - 2026-05-13
+
+### 🐛 Bug Fixes
+
+- Compatibility for php8.3 trims
+
+
 ## [2.4.5] - 2026-05-13
 
 ### 🐛 Bug Fixes
