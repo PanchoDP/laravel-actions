@@ -53,7 +53,7 @@ final class MakeActionCommand extends Command
 
             return 0;
         } catch (Throwable $e) {
-            $this-rror($e->getMessage());
+            $this->error($e->getMessage());
 
             return 1;
         }
