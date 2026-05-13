@@ -67,7 +67,7 @@ final class MakeActionCommand extends Command
     private function processInputs(): array
     {
         $name = $this->argument('name');
-        $name = is_string($name) ? (string) mb_trim($name) : '';
+        $name = is_string($name) ? trim($name) : '';
 
         if ($name === '') {
             if (! $this->input->isInteractive()) {
@@ -78,7 +78,7 @@ final class MakeActionCommand extends Command
         }
 
         $subfolder = $this->argument('subfolder');
-        $subfolder = is_string($subfolder) ? (string) mb_trim($subfolder, '/\\') : '';
+        $subfolder = is_string($subfolder) ? trim($subfolder, '/\\') : '';
 
         if (preg_match('#[/\\\\]#', $name)) {
             $parts = preg_split('#[/\\\\]+#', $name, -1, PREG_SPLIT_NO_EMPTY);
@@ -93,7 +93,7 @@ final class MakeActionCommand extends Command
             }
         }
 
-        $subfolder = mb_trim($subfolder, '/\\');
+        $subfolder = trim($subfolder, '/\\');
 
         $tFlag = (bool) $this->option('transaction');
         $uFlag = (bool) $this->option('user');
@@ -219,8 +219,8 @@ final class MakeActionCommand extends Command
         $sFlag = confirm(label: 'Static method?', default: false);
 
         return [
-            'name' => mb_trim($name),
-            'subfolder' => mb_trim($subfolder, '/\\'),
+            'name' => trim($name),
+            'subfolder' => trim($subfolder, '/\\'),
             'tFlag' => $tFlag,
             'uFlag' => $uFlag,
             'rFlag' => $rFlag,

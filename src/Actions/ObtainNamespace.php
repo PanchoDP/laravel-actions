@@ -8,15 +8,16 @@ final class ObtainNamespace
 {
     public static function handle(?string $subfolder, string $name, string $base_folder): string
     {
-        $appNamespace = (string) app()->getNamespace();
+        /** @var string $appNamespace */
+        $appNamespace = app()->getNamespace();
 
         if (in_array($subfolder, [null, '', '0'], true)) {
-            return mb_rtrim($appNamespace.$base_folder);
+            return rtrim($appNamespace.$base_folder);
         }
         $relative_path = dirname("{$base_folder}/{$subfolder}/{$name}.php");
         $namespace_type = str_replace('/', '\\', $relative_path);
 
-        return mb_rtrim($appNamespace.$namespace_type);
+        return rtrim($appNamespace.$namespace_type);
 
     }
 }
