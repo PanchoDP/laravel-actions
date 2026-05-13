@@ -2,11 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.4] - 2026-05-13
+
+### 🐛 Bug Fixes
+
+- Fix a type error
+
+
 ## [2.4.3] - 2026-05-13
 
 ### 🐛 Bug Fixes
 
 - Composer version 2.9.8
+
+
+### ⚙️ Miscellaneous Tasks
+
+- *(release)* Prepare for version 2.4.3
 
 
 ## [2.4.2] - 2026-03-19
