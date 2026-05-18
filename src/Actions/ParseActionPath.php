@@ -17,7 +17,7 @@ final class ParseActionPath
      */
     public static function handle(string $name, string $subfolder): array
     {
-        $subfolder = mb_trim($subfolder, '/\\');
+        $subfolder = (string) mb_trim($subfolder, '/\\');
 
         if (! preg_match('#[/\\\\]#', $name)) {
             return ['name' => $name, 'subfolder' => $subfolder];
