@@ -136,7 +136,7 @@ final class MakeActionCommand extends Command
         $folder_path = implode(DIRECTORY_SEPARATOR, $folders);
         $force = is_bool($input['force']) && $input['force'];
         $path = PreparePath::handle($folder_path, $name, $validatedConfig['base_folder'], $force);
-        $namespace = ObtainNamespace::handle($folder_path, $name, $validatedConfig['base_folder']);
+        $namespace = ObtainNamespace::handle($folder_path, $validatedConfig['base_folder']);
         $relative_path = dirname("{$validatedConfig['base_folder']}/$folder_path/{$name}.php");
 
         return array_merge($input, [

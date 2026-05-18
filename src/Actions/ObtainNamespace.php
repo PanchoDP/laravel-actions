@@ -6,18 +6,14 @@ namespace Panchodp\LaravelAction\Actions;
 
 final class ObtainNamespace
 {
-    public static function handle(?string $subfolder, string $name, string $base_folder): string
+    public static function handle(?string $subfolder, string $base_folder): string
     {
         /** @var string $appNamespace */
         $appNamespace = app()->getNamespace();
 
-        if (in_array($subfolder, [null, '', '0'], true)) {
-            return mb_rtrim($appNamespace.$base_folder);
-        }
-        $relative_path = dirname("{$base_folder}/{$subfolder}/{$name}.php");
-        $namespace_type = str_replace('/', '\\', $relative_path);
+        $subfolder = str_replace('/', '\\', $subfolder ?? '');
+        $parts = array_filter([$base_folder, $subfolder], static fn (string $part): bool => $part !== '');
 
-        return mb_rtrim($appNamespace.$namespace_type);
-
+        return $appNamespace.implode('\\', $parts);
     }
 }
