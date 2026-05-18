@@ -10,6 +10,7 @@ use InvalidArgumentException;
 use Panchodp\LaravelAction\Actions\CreateDirectory;
 use Panchodp\LaravelAction\Actions\GenerateRequest;
 use Panchodp\LaravelAction\Actions\ObtainNamespace;
+use Panchodp\LaravelAction\Actions\ParseActionPath;
 use Panchodp\LaravelAction\Actions\PreparePath;
 use Panchodp\LaravelAction\Actions\PrepareStub;
 use Panchodp\LaravelAction\Actions\PrepareSubfolder;
@@ -78,35 +79,17 @@ final class MakeActionCommand extends Command
         }
 
         $subfolder = $this->argument('subfolder');
-        $subfolder = is_string($subfolder) ? mb_trim($subfolder, '/\\') : '';
+        $subfolder = is_string($subfolder) ? $subfolder : '';
 
-        if (preg_match('#[/\\\\]#', $name)) {
-            $parts = preg_split('#[/\\\\]+#', $name, -1, PREG_SPLIT_NO_EMPTY);
-
-            if ($parts !== false && count($parts) > 1) {
-                $className = array_pop($parts);
-                $pathFromName = implode('/', $parts);
-
-                $subfolder = $subfolder === '' || $subfolder === '0' ? $pathFromName : $pathFromName.'/'.$subfolder;
-
-                $name = $className;
-            }
-        }
-
-        $subfolder = mb_trim($subfolder, '/\\');
-
-        $tFlag = (bool) $this->option('transaction');
-        $uFlag = (bool) $this->option('user');
-        $rFlag = (bool) $this->option('request');
-        $sFlag = (bool) $this->option('static');
+        $parsed = ParseActionPath::handle($name, $subfolder);
 
         return [
-            'name' => $name,
-            'subfolder' => $subfolder,
-            'tFlag' => $tFlag,
-            'uFlag' => $uFlag,
-            'rFlag' => $rFlag,
-            'sFlag' => $sFlag,
+            'name' => $parsed['name'],
+            'subfolder' => $parsed['subfolder'],
+            'tFlag' => (bool) $this->option('transaction'),
+            'uFlag' => (bool) $this->option('user'),
+            'rFlag' => (bool) $this->option('request'),
+            'sFlag' => (bool) $this->option('static'),
             'force' => (bool) $this->option('force'),
         ];
     }
