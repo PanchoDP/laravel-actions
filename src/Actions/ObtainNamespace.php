@@ -12,12 +12,12 @@ final class ObtainNamespace
         $appNamespace = app()->getNamespace();
 
         if (in_array($subfolder, [null, '', '0'], true)) {
-            return rtrim($appNamespace.$base_folder);
+            return mb_rtrim($appNamespace.$base_folder);
         }
         $relative_path = dirname("{$base_folder}/{$subfolder}/{$name}.php");
         $namespace_type = str_replace('/', '\\', $relative_path);
 
-        return rtrim($appNamespace.$namespace_type);
+        return mb_rtrim($appNamespace.$namespace_type);
 
     }
 }
