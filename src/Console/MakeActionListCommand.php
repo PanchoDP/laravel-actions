@@ -48,7 +48,7 @@ final class MakeActionListCommand extends Command
         } elseif (is_dir($path)) {
             $this->line("{$prefix}{$connector}<fg=green>{$baseName}/</>");
         } else {
-            $className = $this->extractClassName($path);
+            $className = pathinfo($path, PATHINFO_FILENAME);
             $this->line("{$prefix}{$connector}<fg=cyan>{$className}</>");
         }
 
@@ -70,17 +70,16 @@ final class MakeActionListCommand extends Command
      */
     private function getDirectoryContents(string $path): array
     {
-        $items = [];
-
         if (! is_readable($path)) {
-            return $items;
+            return [];
         }
 
         $files = scandir($path);
         if ($files === false) {
-            return $items;
+            return [];
         }
 
+        $items = [];
         foreach ($files as $file) {
             if ($file === '.' || $file === '..') {
                 continue;
@@ -88,59 +87,23 @@ final class MakeActionListCommand extends Command
 
             $fullPath = $path.DIRECTORY_SEPARATOR.$file;
 
-            if (is_dir($fullPath) || $this->isPhpActionFile($fullPath)) {
+            if (is_dir($fullPath) || str_ends_with($file, '.php')) {
                 $items[] = $fullPath;
             }
         }
 
         // Sort: directories first, then files
-        usort($items, function ($a, $b): int {
+        usort($items, function (string $a, string $b): int {
             $aIsDir = is_dir($a);
             $bIsDir = is_dir($b);
 
-            if ($aIsDir && ! $bIsDir) {
-                return -1;
-            }
-            if (! $aIsDir && $bIsDir) {
-                return 1;
+            if ($aIsDir !== $bIsDir) {
+                return $aIsDir ? -1 : 1;
             }
 
             return strcasecmp(basename($a), basename($b));
         });
 
         return $items;
-    }
-
-    private function isPhpActionFile(string $path): bool
-    {
-        return is_file($path) &&
-               pathinfo($path, PATHINFO_EXTENSION) === 'php' &&
-               $this->containsActionClass($path);
-    }
-
-    private function containsActionClass(string $path): bool
-    {
-        $content = @file_get_contents($path);
-
-        if ($content === false) {
-            return false;
-        }
-
-        return str_contains($content, 'class ');
-    }
-
-    private function extractClassName(string $path): string
-    {
-        $content = @file_get_contents($path);
-
-        if ($content === false) {
-            return pathinfo($path, PATHINFO_FILENAME);
-        }
-
-        if (preg_match('/class\s+(\w+)/', $content, $matches)) {
-            return $matches[1];
-        }
-
-        return pathinfo($path, PATHINFO_FILENAME);
     }
 }
