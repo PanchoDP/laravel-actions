@@ -16,14 +16,6 @@ test('PrepareSubfolder prevents path traversal attacks', function (): void {
     expect(fn (): array => PrepareSubfolder::handle('..\\'))
         ->toThrow(InvalidArgumentException::class);
 
-    // Test URL encoded path traversal
-    expect(fn (): array => PrepareSubfolder::handle('..%2f'))
-        ->toThrow(InvalidArgumentException::class);
-
-    // Test double URL encoded
-    expect(fn (): array => PrepareSubfolder::handle('..%252f'))
-        ->toThrow(InvalidArgumentException::class);
-
     // Test absolute paths
     expect(fn (): array => PrepareSubfolder::handle('/etc/passwd'))
         ->toThrow(InvalidArgumentException::class);

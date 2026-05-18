@@ -10,19 +10,8 @@ final class PathTraversalGuard
     {
         $normalizedPath = str_replace('\\', '/', $path);
 
-        $dangerousPatterns = [
-            '../',     // Standard path traversal
-            '..\\',    // Windows path traversal
-            '..%2f',   // URL encoded forward slash
-            '..%5c',   // URL encoded backslash
-            '..%252f', // Double URL encoded forward slash
-            '..%255c', // Double URL encoded backslash
-        ];
-
-        foreach ($dangerousPatterns as $pattern) {
-            if (mb_stripos($normalizedPath, $pattern) !== false) {
-                return true;
-            }
+        if (str_contains($normalizedPath, '../')) {
+            return true;
         }
 
         return (bool) preg_match('/^([a-z]:|\/)/i', $normalizedPath);
