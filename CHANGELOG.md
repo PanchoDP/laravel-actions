@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.7] - 2026-05-18
+
+### 🐛 Bug Fixes
+
+- Pint fix style
+
+
+### 🚜 Refactor
+
+- Replace mixed-array payload with ActionConfig DTO
+
+
+### ⚙️ Miscellaneous Tasks
+
+- Simplify ObtainNamespace
+
+- Simplify PrepareStub with strtr
+
+- Remove URL-encoded patterns from PathTraversalGuard
+
+- Simplify  MakeActionListCommand
+
+- Extract the parser
+
+
 ## [2.4.6] - 2026-05-13
 
 ### 🐛 Bug Fixes
