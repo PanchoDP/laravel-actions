@@ -141,6 +141,7 @@ final class MakeActionCommand extends Command
 
         return array_merge($input, [
             'base_folder' => $validatedConfig['base_folder'],
+            'method_name' => $validatedConfig['method_name'],
             'folder_path' => $folder_path,
             'path' => $path,
             'namespace' => $namespace,
@@ -184,6 +185,7 @@ final class MakeActionCommand extends Command
         $filename = is_string($config['filename']) ? $config['filename'] : '';
         $namespace = is_string($config['namespace']) ? $config['namespace'] : '';
         $path = is_string($config['path']) ? $config['path'] : '';
+        $methodName = is_string($config['method_name']) ? $config['method_name'] : 'handle';
 
         $stub = PrepareStub::handle(
             $tFlag,
@@ -191,7 +193,8 @@ final class MakeActionCommand extends Command
             $rFlag,
             $sFlag,
             $filename,
-            $namespace
+            $namespace,
+            $methodName,
         );
 
         File::put($path, $stub);

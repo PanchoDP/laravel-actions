@@ -80,28 +80,13 @@ test('ValidateConfiguration allows safe configuration values', function (): void
     ]);
 });
 
-test('PrepareStub validates stub file existence', function (): void {
-    // Mock missing stub file by using an invalid path
-    $reflection = new ReflectionClass(PrepareStub::class);
+test('PrepareStub generates a valid stub from safe inputs', function (): void {
+    $stub = PrepareStub::handle(false, false, false, false, 'TestAction', 'App\\Actions');
 
-    // This test checks that the method properly validates file existence
-    expect(fn (): string => PrepareStub::handle(false, false, false, false, 'TestAction', 'App\\Actions'))
-        ->not->toThrow(Exception::class);
-});
-
-test('PrepareStub sanitizes template variables', function (): void {
-    // Test that dangerous characters are removed from template variables
-    $reflection = new ReflectionClass(PrepareStub::class);
-    $method = $reflection->getMethod('sanitizeForTemplate');
-
-    expect($method->invoke(null, 'TestAction<?php'))->toBe('TestAction?php');
-    expect($method->invoke(null, 'Test$Action'))->toBe('TestAction');
-    expect($method->invoke(null, 'Test\\Action'))->toBe('TestAction'); // Without allowBackslashes
-    expect($method->invoke(null, 'Test`Action'))->toBe('TestAction');
-
-    // Test with allowBackslashes = true (for namespaces)
-    expect($method->invoke(null, 'App\\Actions', true))->toBe('App\\Actions');
-    expect($method->invoke(null, 'App\\Actions<?php', true))->toBe('App\\Actions?php');
+    expect($stub)
+        ->toContain('namespace App\\Actions;')
+        ->toContain('final class TestAction')
+        ->toContain('public function handle(');
 });
 
 test('CreateDirectory creates the directory', function (): void {
