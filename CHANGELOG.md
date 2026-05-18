@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.9] - 2026-05-18
+
+### 🐛 Bug Fixes
+
+- Phpstan problem
+
+
 ## [2.4.8] - 2026-05-18
 
 ### 🐛 Bug Fixes
