@@ -22,6 +22,17 @@ use Throwable;
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\text;
 
+/**
+ * @phpstan-type RawInput array{
+ *     name: string,
+ *     subfolder: string,
+ *     transaction: bool,
+ *     user: bool,
+ *     request: bool,
+ *     static: bool,
+ *     force: bool,
+ * }
+ */
 final class MakeActionCommand extends Command
 {
     protected $signature = 'make:action {name?} {subfolder?}
@@ -41,11 +52,10 @@ final class MakeActionCommand extends Command
     public function handle(): int
     {
         try {
-            $input = $this->processInputs();
-            $config = $this->validateAndPrepareConfig($input);
+            $config = $this->buildConfig($this->processInputs());
             $this->createDirectoryStructure($config);
 
-            if ($config['rFlag'] ?? false) {
+            if ($config->request) {
                 $this->generateRequestFile($config);
             }
 
@@ -61,14 +71,12 @@ final class MakeActionCommand extends Command
     }
 
     /**
-     * Process and sanitize command inputs.
-     *
-     * @return array<string, mixed>
+     * @return RawInput
      */
     private function processInputs(): array
     {
-        $name = $this->argument('name');
-        $name = is_string($name) ? mb_trim($name) : '';
+        $nameArg = $this->argument('name');
+        $name = is_string($nameArg) ? mb_trim($nameArg) : '';
 
         if ($name === '') {
             if (! $this->input->isInteractive()) {
@@ -78,113 +86,91 @@ final class MakeActionCommand extends Command
             return $this->askInteractive();
         }
 
-        $subfolder = $this->argument('subfolder');
-        $subfolder = is_string($subfolder) ? $subfolder : '';
+        $subfolderArg = $this->argument('subfolder');
+        $subfolder = is_string($subfolderArg) ? $subfolderArg : '';
 
         $parsed = ParseActionPath::handle($name, $subfolder);
 
         return [
             'name' => $parsed['name'],
             'subfolder' => $parsed['subfolder'],
-            'tFlag' => (bool) $this->option('transaction'),
-            'uFlag' => (bool) $this->option('user'),
-            'rFlag' => (bool) $this->option('request'),
-            'sFlag' => (bool) $this->option('static'),
+            'transaction' => (bool) $this->option('transaction'),
+            'user' => (bool) $this->option('user'),
+            'request' => (bool) $this->option('request'),
+            'static' => (bool) $this->option('static'),
             'force' => (bool) $this->option('force'),
         ];
     }
 
     /**
-     * @param  array<string, mixed>  $input
-     * @return array<string, mixed>
+     * @param  RawInput  $input
      */
-    private function validateAndPrepareConfig(array $input): array
+    private function buildConfig(array $input): ActionConfig
     {
-        $name = is_string($input['name']) ? $input['name'] : '';
-        $subfolder = is_string($input['subfolder']) ? $input['subfolder'] : '';
+        ValidateName::handle($input['name']);
 
-        ValidateName::handle($name);
-
-        // Security: Validate configuration values
-        $baseFolder = config('laravel-actions.base_folder');
-        $methodName = config('laravel-actions.method_name');
-        $validatedConfig = ValidateConfiguration::handle(
-            is_string($baseFolder) ? $baseFolder : null,
-            is_string($methodName) ? $methodName : null
+        $baseFolderConfig = config('laravel-actions.base_folder');
+        $methodNameConfig = config('laravel-actions.method_name');
+        $validated = ValidateConfiguration::handle(
+            is_string($baseFolderConfig) ? $baseFolderConfig : null,
+            is_string($methodNameConfig) ? $methodNameConfig : null,
         );
 
-        $folders = PrepareSubfolder::handle($subfolder);
+        $folders = PrepareSubfolder::handle($input['subfolder']);
         ValidateFolder::handle($folders);
+        $folderPath = implode(DIRECTORY_SEPARATOR, $folders);
 
-        $folder_path = implode(DIRECTORY_SEPARATOR, $folders);
-        $force = is_bool($input['force']) && $input['force'];
-        $path = PreparePath::handle($folder_path, $name, $validatedConfig['base_folder'], $force);
-        $namespace = ObtainNamespace::handle($folder_path, $validatedConfig['base_folder']);
-        $relative_path = dirname("{$validatedConfig['base_folder']}/$folder_path/{$name}.php");
+        $path = PreparePath::handle($folderPath, $input['name'], $validated['base_folder'], $input['force']);
+        $namespace = ObtainNamespace::handle($folderPath, $validated['base_folder']);
+        $relativePath = dirname("{$validated['base_folder']}/{$folderPath}/{$input['name']}.php");
 
-        return array_merge($input, [
-            'base_folder' => $validatedConfig['base_folder'],
-            'method_name' => $validatedConfig['method_name'],
-            'folder_path' => $folder_path,
-            'path' => $path,
-            'namespace' => $namespace,
-            'relative_path' => $relative_path,
-            'filename' => pathinfo($path, PATHINFO_FILENAME),
-        ]);
+        return new ActionConfig(
+            name: $input['name'],
+            subfolder: $input['subfolder'],
+            baseFolder: $validated['base_folder'],
+            methodName: $validated['method_name'],
+            folderPath: $folderPath,
+            path: $path,
+            namespace: $namespace,
+            relativePath: $relativePath,
+            filename: pathinfo($path, PATHINFO_FILENAME),
+            transaction: $input['transaction'],
+            user: $input['user'],
+            request: $input['request'],
+            static: $input['static'],
+            force: $input['force'],
+        );
     }
 
-    /**
-     * @param  array<string, mixed>  $config
-     */
-    private function createDirectoryStructure(array $config): void
+    private function createDirectoryStructure(ActionConfig $config): void
     {
-        $path = is_string($config['path']) ? $config['path'] : '';
-        $relativePath = is_string($config['relative_path']) ? $config['relative_path'] : '';
-
-        CreateDirectory::handle($path);
-        $this->info("Directory {$relativePath} created successfully...");
+        CreateDirectory::handle($config->path);
+        $this->info("Directory {$config->relativePath} created successfully...");
     }
 
-    /**
-     * @param  array<string, mixed>  $config
-     */
-    private function generateRequestFile(array $config): void
+    private function generateRequestFile(ActionConfig $config): void
     {
-        $filename = is_string($config['filename']) ? $config['filename'] : '';
-
-        $requestName = GenerateRequest::handle($filename);
+        $requestName = GenerateRequest::handle($config->filename);
         $this->info("Request {$requestName} created successfully...");
     }
 
-    /**
-     * @param  array<string, mixed>  $config
-     */
-    private function generateActionFile(array $config): void
+    private function generateActionFile(ActionConfig $config): void
     {
-        $tFlag = is_bool($config['tFlag']) && $config['tFlag'];
-        $uFlag = is_bool($config['uFlag']) && $config['uFlag'];
-        $rFlag = is_bool($config['rFlag']) && $config['rFlag'];
-        $sFlag = is_bool($config['sFlag']) && $config['sFlag'];
-        $filename = is_string($config['filename']) ? $config['filename'] : '';
-        $namespace = is_string($config['namespace']) ? $config['namespace'] : '';
-        $path = is_string($config['path']) ? $config['path'] : '';
-        $methodName = is_string($config['method_name']) ? $config['method_name'] : 'handle';
-
         $stub = PrepareStub::handle(
-            $tFlag,
-            $uFlag,
-            $rFlag,
-            $sFlag,
-            $filename,
-            $namespace,
-            $methodName,
+            $config->transaction,
+            $config->user,
+            $config->request,
+            $config->static,
+            $config->filename,
+            $config->namespace,
+            $config->methodName,
         );
 
-        File::put($path, $stub);
+        File::put($config->path, $stub);
     }
 
     /**
-     * @return array<string, mixed>
+     * @return RawInput
      */
     private function askInteractive(): array
     {
@@ -199,49 +185,27 @@ final class MakeActionCommand extends Command
             placeholder: 'e.g. User or User/Auth',
         );
 
-        $tFlag = confirm(label: 'Include DB transaction?', default: false);
-        $uFlag = confirm(label: 'Inject User?', default: false);
-        $rFlag = confirm(label: 'Generate Request class?', default: false);
-        $sFlag = confirm(label: 'Static method?', default: false);
-
         return [
             'name' => mb_trim($name),
             'subfolder' => mb_trim($subfolder, '/\\'),
-            'tFlag' => $tFlag,
-            'uFlag' => $uFlag,
-            'rFlag' => $rFlag,
-            'sFlag' => $sFlag,
+            'transaction' => confirm(label: 'Include DB transaction?', default: false),
+            'user' => confirm(label: 'Inject User?', default: false),
+            'request' => confirm(label: 'Generate Request class?', default: false),
+            'static' => confirm(label: 'Static method?', default: false),
             'force' => false,
         ];
     }
 
-    /**
-     * @param  array<string, mixed>  $config
-     */
-    private function displaySuccessMessages(array $config): void
+    private function displaySuccessMessages(ActionConfig $config): void
     {
-        $tFlag = is_bool($config['tFlag']) && $config['tFlag'];
-        $uFlag = is_bool($config['uFlag']) && $config['uFlag'];
-        $rFlag = is_bool($config['rFlag']) && $config['rFlag'];
-        $sFlag = is_bool($config['sFlag']) && $config['sFlag'];
-        $filename = is_string($config['filename']) ? $config['filename'] : '';
-        $relativePath = is_string($config['relative_path']) ? $config['relative_path'] : '';
-
-        $features = [];
-        if ($tFlag) {
-            $features[] = 'DB transaction';
-        }
-        if ($uFlag) {
-            $features[] = 'User injection';
-        }
-        if ($rFlag) {
-            $features[] = 'Request injection';
-        }
-        if ($sFlag) {
-            $features[] = 'static method';
-        }
+        $features = array_keys(array_filter([
+            'DB transaction' => $config->transaction,
+            'User injection' => $config->user,
+            'Request injection' => $config->request,
+            'static method' => $config->static,
+        ]));
 
         $featuresText = $features === [] ? '.' : ' with '.implode(', ', $features).'.';
-        $this->info("Action {$filename} created successfully at app/{$relativePath} folder{$featuresText}");
+        $this->info("Action {$config->filename} created successfully at app/{$config->relativePath} folder{$featuresText}");
     }
 }
