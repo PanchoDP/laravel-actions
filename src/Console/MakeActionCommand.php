@@ -76,7 +76,7 @@ final class MakeActionCommand extends Command
     private function processInputs(): array
     {
         $nameArg = $this->argument('name');
-        $name = is_string($nameArg) ? mb_trim($nameArg) : '';
+        $name = is_string($nameArg) ? (string) mb_trim($nameArg) : '';
 
         if ($name === '') {
             if (! $this->input->isInteractive()) {
@@ -186,8 +186,8 @@ final class MakeActionCommand extends Command
         );
 
         return [
-            'name' => mb_trim($name),
-            'subfolder' => mb_trim($subfolder, '/\\'),
+            'name' => (string) mb_trim($name),
+            'subfolder' => (string) mb_trim($subfolder, '/\\'),
             'transaction' => confirm(label: 'Include DB transaction?', default: false),
             'user' => confirm(label: 'Inject User?', default: false),
             'request' => confirm(label: 'Generate Request class?', default: false),
