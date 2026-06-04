@@ -220,17 +220,20 @@ Actions/
 
 ## Laravel Boost
 
-This package ships an [Agent Skill](https://laravel.com/docs/13.x/boost#agent-skills) for [Laravel Boost](https://laravel.com/docs/13.x/boost). If your project uses Boost, your AI agent (Claude Code, Cursor, Copilot, etc.) can learn how to scaffold actions correctly with `make:action`.
+This package ships an [Agent Skill](https://laravel.com/docs/13.x/boost#agent-skills) and a guideline for [Laravel Boost](https://laravel.com/docs/13.x/boost). If your project uses Boost, your AI agent (Claude Code, Cursor, Copilot, etc.) can learn how to scaffold actions correctly with `make:action`.
 
-The skill is installed automatically — no extra commands from this package. Once Boost is set up in your project, run:
+The skill is **not** copied automatically when you install or update this package — Boost only writes skills to your agents when you run one of its commands and the package is selected in your `boost.json`:
 
 ```bash
+# Fresh setup: select panchodp/laravel-actions in the package list
 php artisan boost:install
-# or, to discover newly installed packages:
+
+# Already using Boost? Use --discover so Boost finds this newly added
+# package and prompts you to add it (a plain `boost:update` won't).
 php artisan boost:update --discover
 ```
 
-Boost detects this package and copies the `laravel-actions-development` skill into the directories of every agent you have configured (`.claude/skills/`, `.cursor/`, etc.).
+> When prompted *"New packages with guidelines/skills discovered!"*, make sure to **select `panchodp/laravel-actions`**. As a third-party package it must be listed under `packages` in `boost.json`; only then does Boost copy the `laravel-actions-development` skill into the directories of every agent you have configured (`.claude/skills/`, `.cursor/`, etc.) and merge the guideline into `AGENTS.md`/`CLAUDE.md`.
 
 ## Contributing
 
