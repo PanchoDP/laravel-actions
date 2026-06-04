@@ -63,6 +63,8 @@ This publishes the 4 stubs to `resources/stubs/vendor/laravel-actions/`. Once pu
 
 By default, Laravel Actions generates **instance methods** for better flexibility and dependency injection support. However, you can create **static methods** when needed for simpler usage.
 
+> **Recommendation:** Prefer instance methods (the default) and resolve them from the container with `app(MyAction::class)->handle(...)`. Instance methods support constructor dependency injection, are easier to mock and test, and can implement contracts. Reserve `--static` / `-s` for genuinely stateless, dependency-free helpers such as a pure calculation.
+
 ### Instance Methods (Default)
 ```php
 // Usage
@@ -216,6 +218,20 @@ Actions/
 ```
 
 
+
+## Laravel Boost
+
+This package ships an [Agent Skill](https://laravel.com/docs/13.x/boost#agent-skills) for [Laravel Boost](https://laravel.com/docs/13.x/boost). If your project uses Boost, your AI agent (Claude Code, Cursor, Copilot, etc.) can learn how to scaffold actions correctly with `make:action`.
+
+The skill is installed automatically — no extra commands from this package. Once Boost is set up in your project, run:
+
+```bash
+php artisan boost:install
+# or, to discover newly installed packages:
+php artisan boost:update --discover
+```
+
+Boost detects this package and copies the `laravel-actions-development` skill into the directories of every agent you have configured (`.claude/skills/`, `.cursor/`, etc.).
 
 ## Contributing
 
