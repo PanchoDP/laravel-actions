@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.0] - 2026-06-04
+
+### 🚀 Features
+
+- Add skills and guidelines for boost discover
+
+
 ## [2.4.10] - 2026-05-18
 
 ### 🐛 Bug Fixes
