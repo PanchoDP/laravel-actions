@@ -19,7 +19,6 @@ Make your Laravel actions classes fast and in a simple way.
 
 | Laravel | PHP    | Package |
 |---------|--------|---------|
-| 11.x    | 8.3+   | ^2.x    |
 | 12.x    | 8.3+   | ^2.x    |
 | 13.x    | 8.3+   | ^2.x    |
 
