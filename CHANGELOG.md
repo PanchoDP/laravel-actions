@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.0] - 2026-08-08
+
+### 🚀 Features
+
+- [**breaking**] Require PHP 8.4 and Laravel 13
+**BREAKING CHANGE:** The package now requires PHP 8.4+ and Laravel 13+. Projects on PHP 8.3 or Laravel 12 should stay on the 2.x branch.
+
+
+### 🐛 Bug Fixes
+
+- Declare the illuminate dependencies explicitly
+
+- Normalize the generated action files to PSR-12
+
+- Validate the request name before creating any directory
+
+- Fail loudly when the directory or the action file cannot be written
+
+- Reject PHP reserved words as action names
+
+- Propagate --force to the generated request class
+
+
+### ⚙️ Miscellaneous Tasks
+
+- Upgrade the dev toolchain to Pest 5
+
+- Check formatting with pint --test and run rector
+
+
 ## [2.5.2] - 2026-06-04
 
 ### 📚 Documentation
