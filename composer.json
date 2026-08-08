@@ -31,7 +31,10 @@
         }
     ],
     "require": {
-        "php": "^8.4"
+        "php": "^8.4",
+        "illuminate/console": "^13.0",
+        "illuminate/filesystem": "^13.0",
+        "illuminate/support": "^13.0"
     },
     "require-dev": {
         "orchestra/testbench": "^11.0",
