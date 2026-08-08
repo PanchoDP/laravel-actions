@@ -111,7 +111,7 @@ final class LaravelStyleSyntaxTest extends TestCase
         $this->assertStringContainsString('namespace App\Actions\User;', $content);
         $this->assertStringContainsString('class UpdateProfile', $content);
         $this->assertStringContainsString('use App\Models\User;', $content);
-        $this->assertStringContainsString('public function handle(User $user,array $attributes): void', $content);
+        $this->assertStringContainsString('public function handle(User $user, array $attributes): void', $content);
     }
 
     public function test_laravel_style_syntax_with_request_flag(): void

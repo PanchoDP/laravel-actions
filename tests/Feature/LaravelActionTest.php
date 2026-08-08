@@ -68,7 +68,7 @@ final class LaravelActionTest extends TestCase
         );
 
         $this->assertStringContainsString(
-            'public function handle(User $user,array $attributes): void',
+            'public function handle(User $user, array $attributes): void',
             file_get_contents(app_path('Actions/SimpleAction.php'))
         );
     }
@@ -97,7 +97,7 @@ final class LaravelActionTest extends TestCase
         );
 
         $this->assertStringContainsString(
-            'public function handle(User $user,array $attributes): void',
+            'public function handle(User $user, array $attributes): void',
             file_get_contents(app_path('Actions/SimpleAction.php'))
         );
 
@@ -131,7 +131,7 @@ final class LaravelActionTest extends TestCase
         );
 
         $this->assertStringContainsString(
-            'public function handle(User $user,array $attributes): void',
+            'public function handle(User $user, array $attributes): void',
             file_get_contents(app_path('Actions/SimpleAction.php'))
         );
 
@@ -176,7 +176,7 @@ final class LaravelActionTest extends TestCase
         );
 
         $this->assertStringContainsString(
-            'public function handle(User $user,array $attributes): void',
+            'public function handle(User $user, array $attributes): void',
             file_get_contents(app_path('Actions/SimpleAction.php'))
         );
 

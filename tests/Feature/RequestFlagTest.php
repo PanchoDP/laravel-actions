@@ -114,7 +114,7 @@ final class RequestFlagTest extends TestCase
 
         // Assert method has both User and Request parameters
         $this->assertStringContainsString(
-            'User $user,UserActionRequest $request',
+            'User $user, UserActionRequest $request',
             $actionContent
         );
     }
@@ -150,7 +150,7 @@ final class RequestFlagTest extends TestCase
 
         // Assert method has all parameters and transaction
         $this->assertStringContainsString(
-            'User $user,CompleteActionRequest $request',
+            'User $user, CompleteActionRequest $request',
             $actionContent
         );
         $this->assertStringContainsString(
@@ -255,7 +255,7 @@ final class RequestFlagTest extends TestCase
 
         // Assert method has both User and Request parameters
         $this->assertStringContainsString(
-            'User $user,URActionRequest $request',
+            'User $user, URActionRequest $request',
             $actionContent
         );
     }
@@ -291,7 +291,7 @@ final class RequestFlagTest extends TestCase
 
         // Assert method has all parameters and transaction
         $this->assertStringContainsString(
-            'User $user,TURActionRequest $request',
+            'User $user, TURActionRequest $request',
             $actionContent
         );
         $this->assertStringContainsString(

@@ -29,16 +29,31 @@ final class PrepareStub
             throw new RuntimeException("Failed to read stub file: {$stubFile}");
         }
 
-        return strtr($stub, [
+        $rendered = strtr($stub, [
             '{{ namespace }}' => $namespace,
             '{{ class }}' => $filename,
             '{{ method }}' => $methodName,
             '{{ name_action }}' => ucfirst($methodName),
             '{{ method_type }}' => $sFlag ? 'static ' : '',
             '{{ import_model }}' => $uFlag ? 'use App\Models\User;' : '',
-            '{{ user }}' => $uFlag ? 'User $user,' : '',
+            '{{ user }}' => $uFlag ? 'User $user, ' : '',
             '{{ request_class }}' => $rFlag ? $filename.'Request' : '',
         ]);
+
+        return self::normalize($rendered);
+    }
+
+    /**
+     * Clean up the gaps left by empty placeholders so the generated file is
+     * PSR-12 compliant: no runs of blank lines and a single trailing newline.
+     */
+    private static function normalize(string $stub): string
+    {
+        $stub = str_replace(["\r\n", "\r"], "\n", $stub);
+        $stub = preg_replace("/\n{3,}/", "\n\n", $stub) ?? $stub;
+        $stub = preg_replace("/[ \t]+$/m", '', $stub) ?? $stub;
+
+        return mb_rtrim($stub, "\n")."\n";
     }
 
     /**
