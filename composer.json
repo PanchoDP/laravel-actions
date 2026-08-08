@@ -50,6 +50,9 @@
         "pint": [
             "./vendor/bin/pint"
         ],
+        "pint:test": [
+            "./vendor/bin/pint --test"
+        ],
         "analyse": [
             "./vendor/bin/phpstan analyse"
         ],

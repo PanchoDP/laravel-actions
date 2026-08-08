@@ -51,7 +51,10 @@ jobs:
       run: composer test
 
     - name: Run code formatting check
-      run: composer pint
+      run: composer pint:test
 
     - name: Run static analysis
       run: composer analyse
+
+    - name: Run Rector (dry run)
+      run: composer dry
