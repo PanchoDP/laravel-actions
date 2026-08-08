@@ -35,3 +35,11 @@ test('published stubs are normalized too', function (): void {
         ->toEndWith("\n")
         ->not->toEndWith("\n\n");
 });
+
+test('an invalid request name fails before any directory is created', function (): void {
+    $this->artisan('make:action', ['name' => 'invalid_name', 'subfolder' => 'Deep', '--request' => true])
+        ->assertExitCode(1);
+
+    expect(is_dir(app_path('Actions/Deep')))->toBeFalse()
+        ->and(is_dir(app_path('Actions')))->toBeFalse();
+});

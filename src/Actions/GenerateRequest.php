@@ -6,41 +6,55 @@ namespace Panchodp\LaravelAction\Actions;
 
 use Illuminate\Support\Facades\Artisan;
 use InvalidArgumentException;
+use RuntimeException;
 use Throwable;
 
 final class GenerateRequest
 {
     /**
-     * Generate a Laravel Request class using Artisan command
+     * Build and validate the Request class name for a given action name.
      *
-     * @param  string  $actionName  The base name for the action (e.g., 'Limpiar')
+     * Call this before touching the filesystem so an invalid name never
+     * leaves a half-created directory structure behind.
+     *
+     * @param  string  $actionName  The base name for the action (e.g., 'CreateUser')
      *
      * @throws InvalidArgumentException
      */
-    public static function handle(string $actionName): string
+    public static function requestNameFor(string $actionName): string
     {
-        if ($actionName === '' || $actionName === '0') {
+        if ($actionName === '') {
             throw new InvalidArgumentException('Action name cannot be empty.');
         }
 
         if (! preg_match('/^[A-Z][a-zA-Z0-9]*$/', $actionName)) {
-            throw new InvalidArgumentException('Invalid action name format. Must start with uppercase letter and contain only alphanumeric characters.');
+            throw new InvalidArgumentException("Cannot generate a Request class for '{$actionName}'. Names used with --request must start with an uppercase letter and contain only letters and numbers.");
         }
 
-        $requestName = $actionName.'Request';
+        return $actionName.'Request';
+    }
+
+    /**
+     * Generate a Laravel Request class using Artisan command
+     *
+     * @param  string  $actionName  The base name for the action (e.g., 'CreateUser')
+     *
+     * @throws InvalidArgumentException|RuntimeException
+     */
+    public static function handle(string $actionName): string
+    {
+        $requestName = self::requestNameFor($actionName);
 
         try {
-            $exitCode = Artisan::call('make:request', [
-                'name' => $requestName,
-            ]);
-
-            if ($exitCode !== 0) {
-                throw new InvalidArgumentException("Failed to generate Request class: {$requestName}");
-            }
-
-            return $requestName;
+            $exitCode = Artisan::call('make:request', ['name' => $requestName]);
         } catch (Throwable $e) {
-            throw new InvalidArgumentException('Error generating Request class: '.$e->getMessage(), $e->getCode(), $e);
+            throw new RuntimeException("Error generating Request class {$requestName}: ".$e->getMessage(), 0, $e);
         }
+
+        if ($exitCode !== 0) {
+            throw new RuntimeException("Failed to generate Request class: {$requestName}");
+        }
+
+        return $requestName;
     }
 }

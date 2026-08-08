@@ -120,6 +120,12 @@ final class MakeActionCommand extends Command
         ValidateFolder::handle($folders);
         $folderPath = implode(DIRECTORY_SEPARATOR, $folders);
 
+        // Validated up front so an unusable Request name never leaves a
+        // half-created directory structure behind.
+        if ($input['request']) {
+            GenerateRequest::requestNameFor($input['name']);
+        }
+
         $path = PreparePath::handle($folderPath, $input['name'], $validated['base_folder'], $input['force']);
         $namespace = ObtainNamespace::handle($folderPath, $validated['base_folder']);
         $relativePath = dirname("{$validated['base_folder']}/{$folderPath}/{$input['name']}.php");
