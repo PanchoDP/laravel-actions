@@ -41,12 +41,18 @@ final class GenerateRequest
      *
      * @throws InvalidArgumentException|RuntimeException
      */
-    public static function handle(string $actionName): string
+    public static function handle(string $actionName, bool $force = false): string
     {
         $requestName = self::requestNameFor($actionName);
 
+        $parameters = ['name' => $requestName];
+
+        if ($force) {
+            $parameters['--force'] = true;
+        }
+
         try {
-            $exitCode = Artisan::call('make:request', ['name' => $requestName]);
+            $exitCode = Artisan::call('make:request', $parameters);
         } catch (Throwable $e) {
             throw new RuntimeException("Error generating Request class {$requestName}: ".$e->getMessage(), 0, $e);
         }

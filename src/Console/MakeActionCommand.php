@@ -158,7 +158,7 @@ final class MakeActionCommand extends Command
 
     private function generateRequestFile(ActionConfig $config): void
     {
-        $requestName = GenerateRequest::handle($config->filename);
+        $requestName = GenerateRequest::handle($config->filename, $config->force);
         $this->info("Request {$requestName} created successfully...");
     }
 
