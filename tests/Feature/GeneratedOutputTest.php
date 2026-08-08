@@ -37,6 +37,14 @@ test('published stubs are normalized too', function (): void {
         ->not->toEndWith("\n\n");
 });
 
+test('reserved PHP names are rejected', function (string $name): void {
+    $this->artisan('make:action', ['name' => $name])
+        ->expectsOutputToContain('reserved by PHP')
+        ->assertExitCode(1);
+
+    expect(file_exists(app_path("Actions/{$name}.php")))->toBeFalse();
+})->with(['List', 'Class', 'Match', 'Static', 'echo']);
+
 test('an invalid request name fails before any directory is created', function (): void {
     $this->artisan('make:action', ['name' => 'invalid_name', 'subfolder' => 'Deep', '--request' => true])
         ->assertExitCode(1);
