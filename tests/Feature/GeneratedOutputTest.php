@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Panchodp\LaravelAction\Actions\CreateDirectory;
 use Panchodp\LaravelAction\Actions\PrepareStub;
 
 test('generated file has no consecutive blank lines and a single trailing newline', function (): void {
@@ -42,4 +43,25 @@ test('an invalid request name fails before any directory is created', function (
 
     expect(is_dir(app_path('Actions/Deep')))->toBeFalse()
         ->and(is_dir(app_path('Actions')))->toBeFalse();
+});
+
+test('the directory message is only shown when the directory is actually created', function (): void {
+    $this->artisan('make:action', ['name' => 'FirstAction', 'subfolder' => 'Shared'])
+        ->expectsOutputToContain('Directory Actions/Shared created successfully')
+        ->assertExitCode(0);
+
+    $this->artisan('make:action', ['name' => 'SecondAction', 'subfolder' => 'Shared'])
+        ->doesntExpectOutputToContain('created successfully...')
+        ->assertExitCode(0);
+});
+
+test('CreateDirectory reports whether it created the directory', function (): void {
+    $tempDir = sys_get_temp_dir().'/test_actions_create_'.uniqid();
+    $testFile = $tempDir.'/TestAction.php';
+
+    expect(CreateDirectory::handle($testFile))->toBeTrue()
+        ->and(is_dir($tempDir))->toBeTrue()
+        ->and(CreateDirectory::handle($testFile))->toBeFalse();
+
+    rmdir($tempDir);
 });

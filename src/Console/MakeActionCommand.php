@@ -17,6 +17,7 @@ use Panchodp\LaravelAction\Actions\PrepareSubfolder;
 use Panchodp\LaravelAction\Actions\ValidateConfiguration;
 use Panchodp\LaravelAction\Actions\ValidateFolder;
 use Panchodp\LaravelAction\Actions\ValidateName;
+use RuntimeException;
 use Throwable;
 
 use function Laravel\Prompts\confirm;
@@ -150,8 +151,9 @@ final class MakeActionCommand extends Command
 
     private function createDirectoryStructure(ActionConfig $config): void
     {
-        CreateDirectory::handle($config->path);
-        $this->info("Directory {$config->relativePath} created successfully...");
+        if (CreateDirectory::handle($config->path)) {
+            $this->info("Directory {$config->relativePath} created successfully...");
+        }
     }
 
     private function generateRequestFile(ActionConfig $config): void
@@ -172,7 +174,9 @@ final class MakeActionCommand extends Command
             $config->methodName,
         );
 
-        File::put($config->path, $stub);
+        if (File::put($config->path, $stub) === false) {
+            throw new RuntimeException("Failed to write the action file at {$config->path}. Check the directory permissions.");
+        }
     }
 
     /**
