@@ -8,13 +8,3 @@ parameters:
     level: max
 
     reportUnmatchedIgnoredErrors: false
-
-    ignoreErrors:
-        # mb_trim is a PHP 8.4 native function; on PHP 8.3 it comes from the
-        # symfony/polyfill-mbstring stubs which declare a mixed return type.
-        # The (string) cast keeps the runtime behavior portable across 8.3/8.4.
-        -
-            identifier: cast.string
-            paths:
-                - src/Actions/ParseActionPath.php
-                - src/Console/MakeActionCommand.php

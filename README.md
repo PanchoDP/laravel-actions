@@ -2,7 +2,7 @@
 <p align="center"><a target="_blank"> <img alt="Logo for Laravel Action" src="art/laravel-action.webp"></a></p>
 
 <p align="center">
-<a ><img src="https://img.shields.io/badge/PHP-8.3%2B-blue" alt="Php"></a>
+<a ><img src="https://img.shields.io/badge/PHP-8.4%2B-blue" alt="Php"></a>
 <a ><img src="https://img.shields.io/packagist/dt/panchodp/laravel-actions?" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/panchodp/laravel-actions"><img src="https://img.shields.io/packagist/v/panchodp/laravel-actions.svg?" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/panchodp/laravel-actions"><img src="https://img.shields.io/badge/License-MIT-green" alt="License"></a>
@@ -19,8 +19,10 @@ Make your Laravel actions classes fast and in a simple way.
 
 | Laravel | PHP    | Package |
 |---------|--------|---------|
+| 13.x    | 8.4+   | ^3.x    |
 | 12.x    | 8.3+   | ^2.x    |
-| 13.x    | 8.3+   | ^2.x    |
+
+> **Upgrading from 2.x:** version 3.0 drops PHP 8.3 and Laravel 12. If you are still on either, stay on `^2.5`.
 
 ## Installation
 
