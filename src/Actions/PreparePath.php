@@ -15,10 +15,12 @@ final class PreparePath
      */
     public static function handle(?string $folder_path, string $name, string $base_folder, bool $force = false): string
     {
-        $path = app_path("{$base_folder}/{$folder_path}/{$name}.php");
+        $parts = array_filter([$base_folder, $folder_path ?? '', "{$name}.php"], static fn (string $part): bool => $part !== '');
+        $relativePath = implode('/', $parts);
+        $path = app_path($relativePath);
 
         if (! $force && file_exists($path)) {
-            throw new RuntimeException("Action {$name} already exists in the subfolder {$folder_path}.");
+            throw new RuntimeException("Action {$name} already exists at app/{$relativePath}. Use --force to overwrite it.");
         }
 
         return $path;

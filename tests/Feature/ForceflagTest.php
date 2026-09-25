@@ -37,6 +37,17 @@ final class ForceFlagTest extends TestCase
         $this->assertFileExists(app_path('Actions/SimpleAction.php'));
 
         $this->artisan('make:action', ['name' => 'SimpleAction'])
+            ->expectsOutputToContain('Action SimpleAction already exists at app/Actions/SimpleAction.php. Use --force to overwrite it.')
+            ->assertExitCode(1);
+    }
+
+    public function test_already_exists_message_includes_the_subfolder(): void
+    {
+        $this->artisan('make:action', ['name' => 'SimpleAction', 'subfolder' => 'User'])
+            ->assertExitCode(0);
+
+        $this->artisan('make:action', ['name' => 'SimpleAction', 'subfolder' => 'User'])
+            ->expectsOutputToContain('Action SimpleAction already exists at app/Actions/User/SimpleAction.php.')
             ->assertExitCode(1);
     }
 }
