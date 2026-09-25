@@ -59,9 +59,10 @@ final class ValidateConfiguration
             throw new InvalidArgumentException('Invalid method name: must be a valid PHP method name.');
         }
 
-        $dangerousMethods = ['__construct', '__destruct', '__call', '__callStatic', '__get', '__set', '__isset', '__unset', 'eval', 'exec', 'system'];
-        if (in_array(mb_strtolower($methodName), $dangerousMethods, true)) {
-            throw new InvalidArgumentException("Method name '{$methodName}' is not allowed for security reasons.");
+        // Names starting with "__" are reserved by PHP for magic methods
+        // (__construct, __invoke, __get...), which would change how the class behaves.
+        if (str_starts_with($methodName, '__')) {
+            throw new InvalidArgumentException("Method name '{$methodName}' is not allowed: names starting with '__' are reserved for PHP magic methods.");
         }
 
         return $methodName;

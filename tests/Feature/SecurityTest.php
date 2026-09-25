@@ -44,18 +44,16 @@ test('ValidateConfiguration prevents dangerous base folder names', function (): 
         ->toThrow(InvalidArgumentException::class, 'Invalid base folder: must start with a letter');
 });
 
-test('ValidateConfiguration prevents dangerous method names', function (): void {
-    // Test dangerous method names
-    expect(fn (): array => ValidateConfiguration::handle('Actions', '__construct'))
-        ->toThrow(InvalidArgumentException::class, 'Method name \'__construct\' is not allowed for security reasons.');
+test('ValidateConfiguration rejects magic method names', function (string $methodName): void {
+    expect(fn (): array => ValidateConfiguration::handle('Actions', $methodName))
+        ->toThrow(InvalidArgumentException::class, "Method name '{$methodName}' is not allowed: names starting with '__' are reserved for PHP magic methods.");
+})->with(['__construct', '__invoke', '__callStatic', '__get', '__custom']);
 
-    expect(fn (): array => ValidateConfiguration::handle('Actions', 'eval'))
-        ->toThrow(InvalidArgumentException::class, 'Method name \'eval\' is not allowed for security reasons.');
+test('ValidateConfiguration allows regular method names', function (string $methodName): void {
+    expect(ValidateConfiguration::handle('Actions', $methodName)['method_name'])->toBe($methodName);
+})->with(['handle', 'execute', 'run', '_private', 'exec']);
 
-    expect(fn (): array => ValidateConfiguration::handle('Actions', 'exec'))
-        ->toThrow(InvalidArgumentException::class, 'Method name \'exec\' is not allowed for security reasons.');
-
-    // Test invalid method name format
+test('ValidateConfiguration rejects invalid method name formats', function (): void {
     expect(fn (): array => ValidateConfiguration::handle('Actions', '123method'))
         ->toThrow(InvalidArgumentException::class, 'Invalid method name: must be a valid PHP method name.');
 });
