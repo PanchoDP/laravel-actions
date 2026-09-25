@@ -76,31 +76,59 @@ final class MakeActionCommand extends Command
      */
     private function processInputs(): array
     {
-        $nameArg = $this->argument('name');
-        $name = is_string($nameArg) ? mb_trim($nameArg) : '';
+        $name = $this->stringArgument('name');
+        $subfolder = $this->stringArgument('subfolder');
+        $interactive = false;
 
         if ($name === '') {
             if (! $this->input->isInteractive()) {
                 throw new InvalidArgumentException('Action name is required.');
             }
 
-            return $this->askInteractive();
-        }
+            $name = mb_trim(text(
+                label: 'Action name',
+                placeholder: 'e.g. CreateUser or User/CreateUser',
+                required: true,
+            ));
 
-        $subfolderArg = $this->argument('subfolder');
-        $subfolder = is_string($subfolderArg) ? $subfolderArg : '';
+            $subfolder = text(
+                label: 'Subfolder (optional)',
+                placeholder: 'e.g. User or User/Auth',
+            );
+
+            $interactive = true;
+        }
 
         $parsed = ParseActionPath::handle($name, $subfolder);
 
         return [
             'name' => $parsed['name'],
             'subfolder' => $parsed['subfolder'],
-            'transaction' => (bool) $this->option('transaction'),
-            'user' => (bool) $this->option('user'),
-            'request' => (bool) $this->option('request'),
-            'static' => (bool) $this->option('static'),
+            'transaction' => $this->flag('transaction', 'Include DB transaction?', $interactive),
+            'user' => $this->flag('user', 'Inject User?', $interactive),
+            'request' => $this->flag('request', 'Generate Request class?', $interactive),
+            'static' => $this->flag('static', 'Static method?', $interactive),
             'force' => (bool) $this->option('force'),
         ];
+    }
+
+    private function stringArgument(string $key): string
+    {
+        $value = $this->argument($key);
+
+        return is_string($value) ? mb_trim($value) : '';
+    }
+
+    /**
+     * A flag passed on the command line always wins; otherwise ask only when prompting.
+     */
+    private function flag(string $option, string $question, bool $ask): bool
+    {
+        if ((bool) $this->option($option)) {
+            return true;
+        }
+
+        return $ask && confirm(label: $question, default: false);
     }
 
     /**
@@ -177,33 +205,6 @@ final class MakeActionCommand extends Command
         if (File::put($config->path, $stub) === false) {
             throw new RuntimeException("Failed to write the action file at {$config->path}. Check the directory permissions.");
         }
-    }
-
-    /**
-     * @return RawInput
-     */
-    private function askInteractive(): array
-    {
-        $name = text(
-            label: 'Action name',
-            placeholder: 'e.g. CreateUser',
-            required: true,
-        );
-
-        $subfolder = text(
-            label: 'Subfolder (optional)',
-            placeholder: 'e.g. User or User/Auth',
-        );
-
-        return [
-            'name' => mb_trim($name),
-            'subfolder' => mb_trim($subfolder, '/\\'),
-            'transaction' => confirm(label: 'Include DB transaction?', default: false),
-            'user' => confirm(label: 'Inject User?', default: false),
-            'request' => confirm(label: 'Generate Request class?', default: false),
-            'static' => confirm(label: 'Static method?', default: false),
-            'force' => false,
-        ];
     }
 
     private function displaySuccessMessages(ActionConfig $config): void
