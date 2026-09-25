@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Panchodp\LaravelAction\Actions;
 
 use InvalidArgumentException;
-use Throwable;
 
 final class ValidateName
 {
@@ -29,11 +28,11 @@ final class ValidateName
     /**
      * Handle the action.
      *
-     * @throws Throwable
+     * @throws InvalidArgumentException
      */
-    public static function handle(?string $name): void
+    public static function handle(string $name): void
     {
-        if (in_array($name, [null, '', '0'], true)) {
+        if ($name === '') {
             throw new InvalidArgumentException('Please input the name of the action class.');
         }
 

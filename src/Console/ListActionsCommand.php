@@ -8,8 +8,9 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use InvalidArgumentException;
 use Panchodp\LaravelAction\Actions\ValidateConfiguration;
+use Symfony\Component\Finder\SplFileInfo;
 
-final class MakeActionListCommand extends Command
+final class ListActionsCommand extends Command
 {
     protected $signature = 'actions:list';
 
@@ -22,20 +23,20 @@ final class MakeActionListCommand extends Command
         } catch (InvalidArgumentException $e) {
             $this->error($e->getMessage());
 
-            return 1;
+            return self::FAILURE;
         }
 
         if (! File::exists($actionsPath)) {
             $this->error("Actions directory not found: {$actionsPath}");
 
-            return 1;
+            return self::FAILURE;
         }
 
         $this->info('Actions Directory Tree:');
-        $this->line('');
+        $this->newLine();
         $this->displayTree($actionsPath);
 
-        return 0;
+        return self::SUCCESS;
     }
 
     /**
@@ -53,14 +54,14 @@ final class MakeActionListCommand extends Command
 
         if ($depth === 0) {
             $this->line("<fg=green>{$baseName}/</>");
-        } elseif (is_dir($path)) {
+        } elseif (File::isDirectory($path)) {
             $this->line("{$prefix}{$connector}<fg=green>{$baseName}/</>");
         } else {
             $className = pathinfo($path, PATHINFO_FILENAME);
             $this->line("{$prefix}{$connector}<fg=cyan>{$className}</>");
         }
 
-        if (is_dir($path)) {
+        if (File::isDirectory($path)) {
             $items = $this->getDirectoryContents($path);
             $totalItems = count($items);
 
@@ -74,44 +75,28 @@ final class MakeActionListCommand extends Command
     }
 
     /**
-     * @return array<string>
+     * Subdirectories first, then PHP files, each group sorted case-insensitively.
+     *
+     * @return list<string>
      */
     private function getDirectoryContents(string $path): array
     {
-        if (! is_readable($path)) {
+        if (! File::isReadable($path)) {
             return [];
         }
 
-        $files = scandir($path);
-        if ($files === false) {
-            return [];
-        }
+        // File::directories() is typed as a plain array; keep only the string paths it returns.
+        $directories = array_values(array_filter(File::directories($path), is_string(...)));
 
-        $items = [];
-        foreach ($files as $file) {
-            if ($file === '.' || $file === '..') {
-                continue;
-            }
+        $files = array_map(
+            static fn (SplFileInfo $file): string => $file->getPathname(),
+            array_filter(File::files($path), static fn (SplFileInfo $file): bool => $file->getExtension() === 'php'),
+        );
 
-            $fullPath = $path.DIRECTORY_SEPARATOR.$file;
+        $byName = static fn (string $a, string $b): int => strcasecmp(basename($a), basename($b));
+        usort($directories, $byName);
+        usort($files, $byName);
 
-            if (is_dir($fullPath) || str_ends_with($file, '.php')) {
-                $items[] = $fullPath;
-            }
-        }
-
-        // Sort: directories first, then files
-        usort($items, function (string $a, string $b): int {
-            $aIsDir = is_dir($a);
-            $bIsDir = is_dir($b);
-
-            if ($aIsDir !== $bIsDir) {
-                return $aIsDir ? -1 : 1;
-            }
-
-            return strcasecmp(basename($a), basename($b));
-        });
-
-        return $items;
+        return [...$directories, ...$files];
     }
 }

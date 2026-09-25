@@ -47,8 +47,6 @@ final class MakeActionCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @throws Throwable
      */
     public function handle(): int
     {
@@ -63,11 +61,11 @@ final class MakeActionCommand extends Command
             $this->generateActionFile($config);
             $this->displaySuccessMessages($config);
 
-            return 0;
+            return self::SUCCESS;
         } catch (Throwable $e) {
             $this->error($e->getMessage());
 
-            return 1;
+            return self::FAILURE;
         }
     }
 

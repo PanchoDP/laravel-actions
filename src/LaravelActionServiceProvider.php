@@ -6,8 +6,8 @@ namespace Panchodp\LaravelAction;
 
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Panchodp\LaravelAction\Console\ListActionsCommand;
 use Panchodp\LaravelAction\Console\MakeActionCommand;
-use Panchodp\LaravelAction\Console\MakeActionListCommand;
 
 final class LaravelActionServiceProvider extends ServiceProvider
 {
@@ -19,7 +19,7 @@ final class LaravelActionServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 MakeActionCommand::class,
-                MakeActionListCommand::class,
+                ListActionsCommand::class,
             ]);
         }
 
@@ -30,7 +30,6 @@ final class LaravelActionServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../stubs' => resource_path('stubs/vendor/laravel-actions'),
         ], 'laravel-actions-stubs');
-
     }
 
     /**
@@ -39,7 +38,6 @@ final class LaravelActionServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-
         $this->mergeConfigFrom(
             __DIR__.'/../config/laravel-actions.php',
             'laravel-actions'
