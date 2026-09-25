@@ -37,10 +37,6 @@ final class ValidateConfiguration
             return 'Actions';
         }
 
-        if (PathTraversalGuard::check($baseFolder)) {
-            throw new InvalidArgumentException('Invalid base folder: path traversal sequences are not allowed.');
-        }
-
         if (! preg_match('/^[a-zA-Z]\w*$/', $baseFolder)) {
             throw new InvalidArgumentException('Invalid base folder: must start with a letter and contain only letters, numbers, and underscores.');
         }

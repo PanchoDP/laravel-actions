@@ -79,7 +79,7 @@ it('rejects an invalid base folder instead of listing outside the app directory'
     config(['laravel-actions.base_folder' => '../../config']);
 
     $this->artisan('actions:list')
-        ->expectsOutputToContain('Invalid base folder: path traversal sequences are not allowed.')
+        ->expectsOutputToContain('Invalid base folder: must start with a letter')
         ->assertExitCode(1);
 });
 
