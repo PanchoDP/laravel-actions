@@ -60,6 +60,21 @@ php artisan vendor:publish --provider="Panchodp\LaravelAction\LaravelActionServi
 
 This publishes the 4 stubs to `resources/stubs/vendor/laravel-actions/`. Once published, the package will use your custom stubs instead of the defaults. You can customize each stub independently — any stub not found in your published directory will fall back to the package default.
 
+Available placeholders:
+
+| Placeholder | Replaced with |
+|-------------|---------------|
+| `{{ namespace }}` | Namespace of the action (e.g. `App\Actions\User`) |
+| `{{ root_namespace }}` | Root namespace of your application, with trailing backslash (e.g. `App\`) |
+| `{{ class }}` | Action class name |
+| `{{ method }}` | Method name (`method_name` config) |
+| `{{ method_type }}` | `static ` when `--static` is used, empty otherwise |
+| `{{ import_model }}` | `use {root namespace}Models\User;` when `--user` is used, empty otherwise |
+| `{{ user }}` | `User $user, ` when `--user` is used, empty otherwise |
+| `{{ request_class }}` | Request class name (e.g. `CreateUserRequest`) when `--request` is used |
+
+> **Upgrading published stubs:** generated imports now use your application's root namespace instead of a hardcoded `App\`. If you published the stubs with an earlier version and your app does not use the `App\` namespace, re-publish them with `--force` or replace `App\Http\Requests\` with `{{ root_namespace }}Http\Requests\`.
+
 ## Method Types
 
 By default, Laravel Actions generates **instance methods** for better flexibility and dependency injection support. However, you can create **static methods** when needed for simpler usage.
@@ -103,7 +118,7 @@ php artisan make:action
 
 ```
  ┌ Action name ───────────────────────────────────────────────┐
- │ e.g. CreateUser                                            │
+ │ e.g. CreateUser or User/CreateUser                         │
  └────────────────────────────────────────────────────────────┘
  ┌ Subfolder (optional) ──────────────────────────────────────┐
  │ e.g. User or User/Auth                                     │
@@ -113,6 +128,8 @@ php artisan make:action
  └────────────────────────────────────────────────────────────┘
  ...
 ```
+
+The action name accepts the same path syntax as the command line (`User/Auth/Login`). Flags passed on the command line are applied without being asked again, so `php artisan make:action -t` only prompts for the remaining options. `--force` is honored as well.
 
 ### Creating Actions
 
@@ -142,6 +159,14 @@ php artisan make:action Admin\DeletePost
 ```
 This creates the action in `app/Actions/Admin/DeletePost.php`.
 
+**Passing the subfolder as a second argument:**
+```bash
+php artisan make:action CreateAccount User/Profile
+```
+This creates the action in `app/Actions/User/Profile/CreateAccount.php`.
+
+Folder names must start with a letter or underscore and contain only letters, numbers and underscores. Spaces are not allowed inside a folder name (`"User Auth"` is rejected instead of being turned into `User/Auth`).
+
 The generated class will have a `handle` method where you can implement your action logic:
 ```php
 <?php
@@ -149,8 +174,6 @@ The generated class will have a `handle` method where you can implement your act
 declare(strict_types=1);
 
 namespace App\Actions\User;
-
-use Throwable;
 
 final class CreateAccount
 {
@@ -198,7 +221,7 @@ final class MyAction
 }
 ```
 
-## Other Userfull Commands:
+## Other Useful Commands
 
 You can show the Actions directory tree in the terminal with the following command:
 
