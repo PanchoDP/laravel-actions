@@ -74,3 +74,23 @@ it('properly filters non-action php files', function (): void {
     // Clean up
     File::deleteDirectory($actionsPath);
 });
+
+it('rejects an invalid base folder instead of listing outside the app directory', function (): void {
+    config(['laravel-actions.base_folder' => '../../config']);
+
+    $this->artisan('actions:list')
+        ->expectsOutputToContain('Invalid base folder: path traversal sequences are not allowed.')
+        ->assertExitCode(1);
+});
+
+it('falls back to the Actions folder when the base folder is empty', function (?string $baseFolder): void {
+    File::ensureDirectoryExists(app_path('Actions'));
+    File::put(app_path('Actions/FirstAction.php'), '<?php');
+    config(['laravel-actions.base_folder' => $baseFolder]);
+
+    $this->artisan('actions:list')
+        ->expectsOutputToContain('FirstAction')
+        ->assertExitCode(0);
+
+    File::deleteDirectory(app_path('Actions'));
+})->with([null, '']);

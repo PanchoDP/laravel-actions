@@ -6,6 +6,8 @@ namespace Panchodp\LaravelAction\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use InvalidArgumentException;
+use Panchodp\LaravelAction\Actions\ValidateConfiguration;
 
 final class MakeActionListCommand extends Command
 {
@@ -15,7 +17,13 @@ final class MakeActionListCommand extends Command
 
     public function handle(): int
     {
-        $actionsPath = $this->getActionsPath();
+        try {
+            $actionsPath = $this->getActionsPath();
+        } catch (InvalidArgumentException $e) {
+            $this->error($e->getMessage());
+
+            return 1;
+        }
 
         if (! File::exists($actionsPath)) {
             $this->error("Actions directory not found: {$actionsPath}");
@@ -30,12 +38,15 @@ final class MakeActionListCommand extends Command
         return 0;
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     private function getActionsPath(): string
     {
-        $baseFolder = config('laravel-actions.base_folder', 'Actions');
-        assert(is_string($baseFolder));
+        $baseFolder = config('laravel-actions.base_folder');
+        $validated = ValidateConfiguration::handle(is_string($baseFolder) ? $baseFolder : null, null);
 
-        return app_path($baseFolder);
+        return app_path($validated['base_folder']);
     }
 
     private function displayTree(string $path, string $prefix = '', bool $isLast = true, int $depth = 0): void
