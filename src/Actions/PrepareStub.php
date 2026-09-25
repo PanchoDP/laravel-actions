@@ -37,7 +37,6 @@ final class PrepareStub
             '{{ root_namespace }}' => $rootNamespace,
             '{{ class }}' => $class,
             '{{ method }}' => $methodName,
-            '{{ name_action }}' => ucfirst($methodName),
             '{{ method_type }}' => $static ? 'static ' : '',
             '{{ import_model }}' => $user ? "use {$rootNamespace}Models\\User;" : '',
             '{{ user }}' => $user ? 'User $user, ' : '',
