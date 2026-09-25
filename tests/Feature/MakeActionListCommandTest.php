@@ -94,3 +94,15 @@ it('falls back to the Actions folder when the base folder is empty', function (?
 
     File::deleteDirectory(app_path('Actions'));
 })->with([null, '']);
+
+it('ignores an invalid method name because it only needs the base folder', function (): void {
+    File::ensureDirectoryExists(app_path('Actions'));
+    File::put(app_path('Actions/FirstAction.php'), '<?php');
+    config(['laravel-actions.method_name' => '__invoke']);
+
+    $this->artisan('actions:list')
+        ->expectsOutputToContain('FirstAction')
+        ->assertExitCode(0);
+
+    File::deleteDirectory(app_path('Actions'));
+});

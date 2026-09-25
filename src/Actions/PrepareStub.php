@@ -11,7 +11,7 @@ final class PrepareStub
     public static function handle(
         string $class,
         string $namespace,
-        string $methodName = 'handle',
+        string $methodName = ValidateConfiguration::DEFAULT_METHOD_NAME,
         bool $transaction = false,
         bool $user = false,
         bool $request = false,

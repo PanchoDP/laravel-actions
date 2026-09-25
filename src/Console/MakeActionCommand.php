@@ -138,24 +138,20 @@ final class MakeActionCommand extends Command
     {
         ValidateName::handle($input['name']);
 
-        $baseFolderConfig = config('laravel-actions.base_folder');
-        $methodNameConfig = config('laravel-actions.method_name');
-        $validated = ValidateConfiguration::handle(
-            is_string($baseFolderConfig) ? $baseFolderConfig : null,
-            is_string($methodNameConfig) ? $methodNameConfig : null,
-        );
+        $baseFolder = ValidateConfiguration::configuredBaseFolder();
+        $methodName = ValidateConfiguration::configuredMethodName();
 
         $folders = PrepareSubfolder::handle($input['subfolder']);
         ValidateFolder::handle($folders);
         $folderPath = implode(DIRECTORY_SEPARATOR, $folders);
 
-        $path = PreparePath::handle($folderPath, $input['name'], $validated['base_folder'], $input['force']);
-        $namespace = ObtainNamespace::handle($folderPath, $validated['base_folder']);
-        $relativePath = dirname("{$validated['base_folder']}/{$folderPath}/{$input['name']}.php");
+        $path = PreparePath::handle($folderPath, $input['name'], $baseFolder, $input['force']);
+        $namespace = ObtainNamespace::handle($folderPath, $baseFolder);
+        $relativePath = dirname("{$baseFolder}/{$folderPath}/{$input['name']}.php");
 
         return new ActionConfig(
             name: $input['name'],
-            methodName: $validated['method_name'],
+            methodName: $methodName,
             path: $path,
             namespace: $namespace,
             relativePath: $relativePath,

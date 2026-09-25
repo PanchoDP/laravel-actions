@@ -101,3 +101,10 @@ test('subfolders with spaces inside a folder name are rejected', function (): vo
 
     expect(app_path('Actions/User/Auth/CreateUser.php'))->not->toBeFile();
 });
+
+test('configured values fall back to the defaults when missing or not strings', function (mixed $value): void {
+    config(['laravel-actions.base_folder' => $value, 'laravel-actions.method_name' => $value]);
+
+    expect(ValidateConfiguration::configuredBaseFolder())->toBe(ValidateConfiguration::DEFAULT_BASE_FOLDER)
+        ->and(ValidateConfiguration::configuredMethodName())->toBe(ValidateConfiguration::DEFAULT_METHOD_NAME);
+})->with([null, '', 123, false]);

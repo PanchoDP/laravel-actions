@@ -43,10 +43,7 @@ final class MakeActionListCommand extends Command
      */
     private function getActionsPath(): string
     {
-        $baseFolder = config('laravel-actions.base_folder');
-        $validated = ValidateConfiguration::handle(is_string($baseFolder) ? $baseFolder : null, null);
-
-        return app_path($validated['base_folder']);
+        return app_path(ValidateConfiguration::configuredBaseFolder());
     }
 
     private function displayTree(string $path, string $prefix = '', bool $isLast = true, int $depth = 0): void

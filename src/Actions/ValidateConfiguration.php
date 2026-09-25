@@ -8,6 +8,30 @@ use InvalidArgumentException;
 
 final class ValidateConfiguration
 {
+    public const string DEFAULT_BASE_FOLDER = 'Actions';
+
+    public const string DEFAULT_METHOD_NAME = 'handle';
+
+    /**
+     * Read and validate the configured base folder.
+     *
+     * @throws InvalidArgumentException
+     */
+    public static function configuredBaseFolder(): string
+    {
+        return self::validateBaseFolder(self::configValue('base_folder'));
+    }
+
+    /**
+     * Read and validate the configured method name.
+     *
+     * @throws InvalidArgumentException
+     */
+    public static function configuredMethodName(): string
+    {
+        return self::validateMethodName(self::configValue('method_name'));
+    }
+
     /**
      * Validate and sanitize configuration values.
      *
@@ -34,7 +58,7 @@ final class ValidateConfiguration
     private static function validateBaseFolder(?string $baseFolder): string
     {
         if ($baseFolder === null || $baseFolder === '') {
-            return 'Actions';
+            return self::DEFAULT_BASE_FOLDER;
         }
 
         if (! preg_match('/^[a-zA-Z]\w*$/', $baseFolder)) {
@@ -52,7 +76,7 @@ final class ValidateConfiguration
     private static function validateMethodName(?string $methodName): string
     {
         if ($methodName === null || $methodName === '') {
-            return 'handle';
+            return self::DEFAULT_METHOD_NAME;
         }
 
         if (! preg_match('/^[a-zA-Z_]\w*$/', $methodName)) {
@@ -66,5 +90,12 @@ final class ValidateConfiguration
         }
 
         return $methodName;
+    }
+
+    private static function configValue(string $key): ?string
+    {
+        $value = config("laravel-actions.{$key}");
+
+        return is_string($value) ? $value : null;
     }
 }
