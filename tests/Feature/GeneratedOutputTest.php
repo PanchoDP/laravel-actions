@@ -73,3 +73,15 @@ test('CreateDirectory reports whether it created the directory', function (): vo
 
     rmdir($tempDir);
 });
+
+test('generated imports use the application root namespace', function (): void {
+    (fn (): string => $this->namespace = 'Acme\\')->call(app());
+
+    $stub = PrepareStub::handle(false, true, true, false, 'TestAction', 'Acme\\Actions');
+
+    expect($stub)
+        ->toContain('namespace Acme\\Actions;')
+        ->toContain('use Acme\\Http\\Requests\\TestActionRequest;')
+        ->toContain('use Acme\\Models\\User;')
+        ->not->toContain('App\\');
+});

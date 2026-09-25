@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace {{ namespace }};
 
-use App\Http\Requests\{{ request_class }};
+use {{ root_namespace }}Http\Requests\{{ request_class }};
 {{ import_model }}
 
 final class {{ class }}

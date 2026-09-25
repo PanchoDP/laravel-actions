@@ -29,13 +29,17 @@ final class PrepareStub
             throw new RuntimeException("Failed to read stub file: {$stubFile}");
         }
 
+        /** @var string $rootNamespace */
+        $rootNamespace = app()->getNamespace();
+
         $rendered = strtr($stub, [
             '{{ namespace }}' => $namespace,
+            '{{ root_namespace }}' => $rootNamespace,
             '{{ class }}' => $filename,
             '{{ method }}' => $methodName,
             '{{ name_action }}' => ucfirst($methodName),
             '{{ method_type }}' => $sFlag ? 'static ' : '',
-            '{{ import_model }}' => $uFlag ? 'use App\Models\User;' : '',
+            '{{ import_model }}' => $uFlag ? "use {$rootNamespace}Models\\User;" : '',
             '{{ user }}' => $uFlag ? 'User $user, ' : '',
             '{{ request_class }}' => $rFlag ? $filename.'Request' : '',
         ]);
