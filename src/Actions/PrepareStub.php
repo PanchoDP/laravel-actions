@@ -9,15 +9,15 @@ use RuntimeException;
 final class PrepareStub
 {
     public static function handle(
-        bool $tFlag,
-        bool $uFlag,
-        bool $rFlag,
-        bool $sFlag,
-        string $filename,
+        string $class,
         string $namespace,
         string $methodName = 'handle',
+        bool $transaction = false,
+        bool $user = false,
+        bool $request = false,
+        bool $static = false,
     ): string {
-        $stubFile = self::selectStubFile($tFlag, $rFlag);
+        $stubFile = self::selectStubFile($transaction, $request);
 
         if (! is_readable($stubFile)) {
             throw new RuntimeException("Stub file not found or not readable: {$stubFile}");
@@ -35,13 +35,13 @@ final class PrepareStub
         $rendered = strtr($stub, [
             '{{ namespace }}' => $namespace,
             '{{ root_namespace }}' => $rootNamespace,
-            '{{ class }}' => $filename,
+            '{{ class }}' => $class,
             '{{ method }}' => $methodName,
             '{{ name_action }}' => ucfirst($methodName),
-            '{{ method_type }}' => $sFlag ? 'static ' : '',
-            '{{ import_model }}' => $uFlag ? "use {$rootNamespace}Models\\User;" : '',
-            '{{ user }}' => $uFlag ? 'User $user, ' : '',
-            '{{ request_class }}' => $rFlag ? $filename.'Request' : '',
+            '{{ method_type }}' => $static ? 'static ' : '',
+            '{{ import_model }}' => $user ? "use {$rootNamespace}Models\\User;" : '',
+            '{{ user }}' => $user ? 'User $user, ' : '',
+            '{{ request_class }}' => $request ? $class.'Request' : '',
         ]);
 
         return self::normalize($rendered);
@@ -64,13 +64,13 @@ final class PrepareStub
      * Select the appropriate stub file based on flags.
      * Checks for published user stubs first, falls back to package stubs.
      */
-    private static function selectStubFile(bool $tFlag, bool $rFlag): string
+    private static function selectStubFile(bool $transaction, bool $request): string
     {
-        if ($tFlag && $rFlag) {
+        if ($transaction && $request) {
             $stubName = 'action_transaction_request.stub';
-        } elseif ($rFlag) {
+        } elseif ($request) {
             $stubName = 'action_request.stub';
-        } elseif ($tFlag) {
+        } elseif ($transaction) {
             $stubName = 'action_transaction.stub';
         } else {
             $stubName = 'action.stub';

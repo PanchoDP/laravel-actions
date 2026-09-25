@@ -73,7 +73,7 @@ test('ValidateConfiguration allows safe configuration values', function (): void
 });
 
 test('PrepareStub generates a valid stub from safe inputs', function (): void {
-    $stub = PrepareStub::handle(false, false, false, false, 'TestAction', 'App\\Actions');
+    $stub = PrepareStub::handle('TestAction', 'App\\Actions');
 
     expect($stub)
         ->toContain('namespace App\\Actions;')

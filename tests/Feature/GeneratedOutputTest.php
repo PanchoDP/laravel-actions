@@ -29,7 +29,7 @@ test('generated file with user import keeps a single blank line around the impor
 });
 
 test('published stubs are normalized too', function (): void {
-    $stub = PrepareStub::handle(false, false, false, false, 'TestAction', 'App\\Actions');
+    $stub = PrepareStub::handle('TestAction', 'App\\Actions');
 
     expect($stub)
         ->not->toMatch('/\n{3,}/')
@@ -77,7 +77,7 @@ test('CreateDirectory reports whether it created the directory', function (): vo
 test('generated imports use the application root namespace', function (): void {
     (fn (): string => $this->namespace = 'Acme\\')->call(app());
 
-    $stub = PrepareStub::handle(false, true, true, false, 'TestAction', 'Acme\\Actions');
+    $stub = PrepareStub::handle('TestAction', 'Acme\\Actions', user: true, request: true);
 
     expect($stub)
         ->toContain('namespace Acme\\Actions;')

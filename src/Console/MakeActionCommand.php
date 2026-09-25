@@ -193,13 +193,13 @@ final class MakeActionCommand extends Command
     private function generateActionFile(ActionConfig $config): void
     {
         $stub = PrepareStub::handle(
-            $config->transaction,
-            $config->user,
-            $config->request,
-            $config->static,
-            $config->filename,
-            $config->namespace,
-            $config->methodName,
+            class: $config->filename,
+            namespace: $config->namespace,
+            methodName: $config->methodName,
+            transaction: $config->transaction,
+            user: $config->user,
+            request: $config->request,
+            static: $config->static,
         );
 
         if (File::put($config->path, $stub) === false) {
