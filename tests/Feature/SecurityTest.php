@@ -29,6 +29,8 @@ test('PrepareSubfolder allows safe paths', function (): void {
     expect(PrepareSubfolder::handle('User/Auth'))->toBe(['User', 'Auth']);
     expect(PrepareSubfolder::handle('Admin'))->toBe(['Admin']);
     expect(PrepareSubfolder::handle(''))->toBe([]);
+    expect(PrepareSubfolder::handle('User\\Auth'))->toBe(['User', 'Auth']);
+    expect(PrepareSubfolder::handle(' User / Auth '))->toBe(['User', 'Auth']);
 });
 
 test('ValidateConfiguration prevents dangerous base folder names', function (): void {
@@ -91,4 +93,12 @@ test('CreateDirectory creates the directory', function (): void {
 
     // Clean up
     rmdir($tempDir);
+});
+
+test('subfolders with spaces inside a folder name are rejected', function (): void {
+    $this->artisan('make:action', ['name' => 'CreateUser', 'subfolder' => 'User Auth'])
+        ->expectsOutputToContain('Invalid folder name: User Auth.')
+        ->assertExitCode(1);
+
+    expect(app_path('Actions/User/Auth/CreateUser.php'))->not->toBeFile();
 });

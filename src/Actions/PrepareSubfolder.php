@@ -9,7 +9,7 @@ use InvalidArgumentException;
 final class PrepareSubfolder
 {
     /**
-     * Prepare the subfolder string by replacing slashes with spaces and splitting it into an array.
+     * Split the subfolder string on forward or back slashes into its folder names.
      *
      * @param  string  $subfolder  The subfolder string to process.
      * @return array<string> An array of subfolder names.
@@ -26,8 +26,12 @@ final class PrepareSubfolder
             throw new InvalidArgumentException('Invalid subfolder path: path traversal sequences are not allowed.');
         }
 
-        $subfolder = str_replace(['/', '\\'], ' ', $subfolder);
+        $segments = preg_split('#[/\\\\]+#', $subfolder, -1, PREG_SPLIT_NO_EMPTY) ?: [];
 
-        return preg_split('/\s+/', $subfolder, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        // Surrounding spaces are forgiven; spaces inside a segment are left for ValidateFolder to reject.
+        return array_values(array_filter(
+            array_map(mb_trim(...), $segments),
+            static fn (string $segment): bool => $segment !== '',
+        ));
     }
 }
