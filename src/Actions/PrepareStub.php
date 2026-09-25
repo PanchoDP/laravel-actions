@@ -41,7 +41,7 @@ final class PrepareStub
             '{{ method_type }}' => $static ? 'static ' : '',
             '{{ import_model }}' => $user ? "use {$rootNamespace}Models\\User;" : '',
             '{{ user }}' => $user ? 'User $user, ' : '',
-            '{{ request_class }}' => $request ? $class.'Request' : '',
+            '{{ request_class }}' => $request ? GenerateRequest::requestNameFor($class) : '',
         ]);
 
         return self::normalize($rendered);

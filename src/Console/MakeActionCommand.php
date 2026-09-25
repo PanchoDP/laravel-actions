@@ -161,14 +161,10 @@ final class MakeActionCommand extends Command
 
         return new ActionConfig(
             name: $input['name'],
-            subfolder: $input['subfolder'],
-            baseFolder: $validated['base_folder'],
             methodName: $validated['method_name'],
-            folderPath: $folderPath,
             path: $path,
             namespace: $namespace,
             relativePath: $relativePath,
-            filename: pathinfo($path, PATHINFO_FILENAME),
             transaction: $input['transaction'],
             user: $input['user'],
             request: $input['request'],
@@ -186,14 +182,14 @@ final class MakeActionCommand extends Command
 
     private function generateRequestFile(ActionConfig $config): void
     {
-        $requestName = GenerateRequest::handle($config->filename, $config->force);
+        $requestName = GenerateRequest::handle($config->name, $config->force);
         $this->info("Request {$requestName} created successfully...");
     }
 
     private function generateActionFile(ActionConfig $config): void
     {
         $stub = PrepareStub::handle(
-            class: $config->filename,
+            class: $config->name,
             namespace: $config->namespace,
             methodName: $config->methodName,
             transaction: $config->transaction,
@@ -217,6 +213,6 @@ final class MakeActionCommand extends Command
         ]));
 
         $featuresText = $features === [] ? '.' : ' with '.implode(', ', $features).'.';
-        $this->info("Action {$config->filename} created successfully at app/{$config->relativePath} folder{$featuresText}");
+        $this->info("Action {$config->name} created successfully at app/{$config->relativePath} folder{$featuresText}");
     }
 }
