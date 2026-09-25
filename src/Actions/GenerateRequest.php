@@ -12,10 +12,10 @@ use Throwable;
 final class GenerateRequest
 {
     /**
-     * Build and validate the Request class name for a given action name.
+     * Build the Request class name for a given action name.
      *
-     * Call this before touching the filesystem so an invalid name never
-     * leaves a half-created directory structure behind.
+     * Accepts exactly the names ValidateName accepts, so any valid action
+     * name can be combined with --request.
      *
      * @param  string  $actionName  The base name for the action (e.g., 'CreateUser')
      *
@@ -23,13 +23,7 @@ final class GenerateRequest
      */
     public static function requestNameFor(string $actionName): string
     {
-        if ($actionName === '') {
-            throw new InvalidArgumentException('Action name cannot be empty.');
-        }
-
-        if (! preg_match('/^[A-Z][a-zA-Z0-9]*$/', $actionName)) {
-            throw new InvalidArgumentException("Cannot generate a Request class for '{$actionName}'. Names used with --request must start with an uppercase letter and contain only letters and numbers.");
-        }
+        ValidateName::handle($actionName);
 
         return $actionName.'Request';
     }

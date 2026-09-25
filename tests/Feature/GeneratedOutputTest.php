@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Facades\File;
 use Panchodp\LaravelAction\Actions\CreateDirectory;
 use Panchodp\LaravelAction\Actions\PrepareStub;
 
@@ -45,8 +46,21 @@ test('reserved PHP names are rejected', function (string $name): void {
     expect(file_exists(app_path("Actions/{$name}.php")))->toBeFalse();
 })->with(['List', 'Class', 'Match', 'Static', 'echo']);
 
-test('an invalid request name fails before any directory is created', function (): void {
-    $this->artisan('make:action', ['name' => 'invalid_name', 'subfolder' => 'Deep', '--request' => true])
+test('any valid action name can be combined with --request', function (): void {
+    try {
+        $this->artisan('make:action', ['name' => 'create_user', '--request' => true])->assertExitCode(0);
+
+        expect(app_path('Http/Requests/create_userRequest.php'))->toBeFile()
+            ->and(file_get_contents(app_path('Actions/create_user.php')))
+            ->toContain('use App\\Http\\Requests\\create_userRequest;')
+            ->toContain('create_userRequest $request');
+    } finally {
+        File::deleteDirectory(app_path('Http/Requests'));
+    }
+});
+
+test('an invalid name fails before any directory is created', function (): void {
+    $this->artisan('make:action', ['name' => '1nvalid', 'subfolder' => 'Deep', '--request' => true])
         ->assertExitCode(1);
 
     expect(is_dir(app_path('Actions/Deep')))->toBeFalse()
