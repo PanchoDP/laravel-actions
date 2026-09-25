@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.1] - 2026-09-25
+
+### 🐛 Bug Fixes
+
+- App()->getNamespace() to get the Namespaces for the stubs
+
+- Interactive mode process names and flags
+
+- Clean up the invalid folder and already exists error messages
+
+- Stop splitting subfolder names on whitespace
+
+- Accept every valid action name when generating a Request
+
+- Validate the base folder in actions:list
+
+- Reject magic method names instead of a fixed blocklist
+
+
+### 🚜 Refactor
+
+- Replace boolean flag parameters in PrepareStub with named arguments
+
+- Drop redundant ActionConfig fields and centralize the Request naming rule
+
+- Remove the unused {{ name_action }} stub placeholder
+
+- Remove PathTraversalGuard in favour of identifier validation
+
+- Centralize config defaults and reading in ValidateConfiguration
+
+- Rename MakeActionListCommand to ListActionsCommand and use the File facade
+
+
+### 📚 Documentation
+
+- Update Readme
+
+
 ## [3.0.0] - 2026-08-08
 
 ### 🚀 Features
