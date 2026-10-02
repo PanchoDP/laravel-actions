@@ -47,6 +47,9 @@ jobs:
         composer require --dev "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-update
         composer update --prefer-dist --no-progress
 
+    - name: Audit dependencies
+      run: composer audit --no-interaction
+
     - name: Run tests
       run: composer test
 
