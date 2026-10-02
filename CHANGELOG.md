@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.2] - 2026-10-02
+
+### 📚 Documentation
+
+- Add security policy
+
+
+### ⚙️ Miscellaneous Tasks
+
+- Pin GitHub Actions to commit SHAs
+
+- Harden workflow security
+
+
 ## [3.0.1] - 2026-09-25
 
 ### 🐛 Bug Fixes
