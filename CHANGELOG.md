@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.3] - 2026-10-23
+
+### 🐛 Bug Fixes
+
+- Fix config github actions
+
+
+### ⚙️ Miscellaneous Tasks
+
+- Bump shivammathur/setup-php from 2.37.2 to 2.40.0
+**Signed-off-by:** dependabot[bot] <support@github.com>
+
+
 ## [3.0.2] - 2026-10-02
 
 ### 📚 Documentation
